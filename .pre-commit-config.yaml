@@ -1,0 +1,124 @@
+# Pre-commit configuration for GAN Cyber Range Simulator
+# See https://pre-commit.com for more information
+
+repos:
+  # Python code formatting and linting
+  - repo: https://github.com/psf/black
+    rev: 23.9.1
+    hooks:
+      - id: black
+        language_version: python3.10
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        args: ["--profile", "black"]
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8
+        additional_dependencies: [flake8-docstrings]
+        args: ["--max-line-length=88", "--extend-ignore=E203,W503"]
+
+  # Type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.6.0
+    hooks:
+      - id: mypy
+        additional_dependencies: [types-requests, types-PyYAML]
+        args: ["--ignore-missing-imports"]
+
+  # Security scanning
+  - repo: https://github.com/pycqa/bandit
+    rev: 1.7.5
+    hooks:
+      - id: bandit
+        args: ["-r", "src/", "-x", "tests/"]
+        exclude: ^tests/
+
+  # General code quality
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: ["--unsafe"]  # Allow custom YAML tags
+      - id: check-added-large-files
+        args: ["--maxkb=500"]
+      - id: check-merge-conflict
+      - id: check-json
+      - id: check-toml
+      - id: debug-statements
+      - id: detect-private-key
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
+
+  # Dockerfile linting
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+      - id: hadolint-docker
+        args: ["--ignore", "DL3008", "--ignore", "DL3009"]
+
+  # Shell script linting
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.9.0.6
+    hooks:
+      - id: shellcheck
+
+  # Kubernetes manifest validation
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.33.0
+    hooks:
+      - id: yamllint
+        args: ["-d", "{extends: default, rules: {line-length: {max: 120}}}"]
+        files: \.(yaml|yml)$
+
+  # Security policy validation
+  - repo: local
+    hooks:
+      - id: security-policy-check
+        name: Security Policy Validation
+        entry: python scripts/validate_security_policies.py
+        language: system
+        files: ^(config/|deployments/|src/gan_cyber_range/security/)
+        pass_filenames: false
+
+  # Secrets detection
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ["--baseline", ".secrets.baseline"]
+        exclude: ^(tests/|docs/examples/)
+
+  # Documentation validation
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.37.0
+    hooks:
+      - id: markdownlint
+        args: ["--fix"]
+        exclude: ^(CHANGELOG\.md|\.github/)
+
+  # Python dependency safety check
+  - repo: https://github.com/pyupio/safety
+    rev: 2.3.4
+    hooks:
+      - id: safety
+        args: ["--ignore", "70612"]  # Ignore specific known issues if needed
+
+# Configuration for specific tools
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: [security-policy-check]  # Skip custom hooks in CI
+  submodules: false
