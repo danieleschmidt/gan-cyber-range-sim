@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  cyber-range:
+    build:
+      context: .
+      target: development
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app/src
+      - ENVIRONMENT=development
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - cyber-range-net
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=100m
+
+  redis:
+    image: redis:7-alpine
+    networks:
+      - cyber-range-net
+    security_opt:
+      - no-new-privileges:true
+
+  monitoring:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    networks:
+      - cyber-range-net
+    security_opt:
+      - no-new-privileges:true
+
+networks:
+  cyber-range-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
