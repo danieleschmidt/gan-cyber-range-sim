@@ -205,3 +205,52 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Security & Cybersecurity Research
+# Sensitive security tools and configurations
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+config/secrets.yaml
+.secrets/
+credentials.json
+api_keys.json
+tokens/
+
+# Kubernetes & Container configs
+*.kubeconfig
+kubeconfig
+.kube/
+docker-compose.override.yml
+
+# Terraform & Infrastructure
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Vulnerability databases and scan results
+vulndb/
+scan_results/
+*.sarif
+*.xml
+security_reports/
+
+# Exploit code and payloads (for research isolation)
+exploits/generated/
+payloads/custom/
+attack_logs/
+
+# ML models and training data
+models/
+training_data/
+*.h5
+*.pkl
+*.joblib
+
+# Monitoring and metrics
+metrics/
+logs/local/
+prometheus_data/
