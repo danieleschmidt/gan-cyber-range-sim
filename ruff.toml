@@ -1,0 +1,163 @@
+# Ruff configuration for GAN Cyber Range Simulator
+# Modern Python linter and formatter with security-focused rules
+
+# Target Python version
+target-version = "py310"
+
+# Line length to match black configuration
+line-length = 88
+
+# Enable specific rule categories
+select = [
+    # Pyflakes (F)
+    "F",
+    # pycodestyle errors (E) and warnings (W)
+    "E", "W",
+    # isort (I)
+    "I",
+    # pydocstyle (D)
+    "D",
+    # pyupgrade (UP)
+    "UP",
+    # flake8-bugbear (B)
+    "B",
+    # flake8-simplify (SIM)
+    "SIM",
+    # flake8-comprehensions (C4)
+    "C4",
+    # flake8-pie (PIE)
+    "PIE",
+    # flake8-pytest-style (PT)
+    "PT",
+    # flake8-return (RET)
+    "RET",
+    # flake8-self (SLF)
+    "SLF",
+    # flake8-use-pathlib (PTH)
+    "PTH",
+    # pandas-vet (PD)
+    "PD",
+    # NumPy-specific rules (NPY)
+    "NPY",
+    # Ruff-specific rules (RUF)
+    "RUF",
+    # Security-focused rules
+    # flake8-bandit (S)
+    "S",
+    # flake8-logging-format (LOG)
+    "LOG",
+    # flake8-print (T20)
+    "T20",
+    # flake8-raise (RSE)
+    "RSE",
+    # flake8-assert (A)
+    "A",
+]
+
+# Rules to ignore
+ignore = [
+    # Allow print statements (common in research tools)
+    "T201",
+    # Allow assert statements (used in tests and research)
+    "S101",
+    # Allow hardcoded bind all interfaces (for development)
+    "S104",
+    # Allow subprocess call without shell=True check (context dependent)
+    "S603",
+    # Allow use of shell=True (context dependent for research tools)
+    "S602",
+    # Allow missing docstrings for certain function types
+    "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107",
+    # Allow long lines in docstrings
+    "E501",
+]
+
+# Files to exclude from linting
+exclude = [
+    ".git",
+    ".mypy_cache", 
+    ".pytest_cache",
+    ".ruff_cache",
+    "__pycache__",
+    "build",
+    "dist",
+    "venv",
+    ".venv",
+    "env",
+    ".env",
+    "node_modules",
+    # Test files may have different standards
+    "tests/",
+    # Generated files
+    "docs/_build/",
+    # Configuration files
+    "setup.py",
+]
+
+# Allow fix to be applied
+fix = true
+
+# Allow unsafe fixes (be careful with these)
+unsafe-fixes = false
+
+# Show fixes that were applied
+show-fixes = true
+
+# Grouping of imports
+[isort]
+profile = "black"
+known-first-party = ["gan_cyber_range"]
+force-sort-within-sections = true
+
+# McCabe complexity checking
+[mccabe]
+max-complexity = 10
+
+# Flake8-quotes configuration
+[flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "double"
+
+# Per-file ignores for specific security considerations
+[per-file-ignores]
+# Allow certain security patterns in test files
+"tests/**/*.py" = [
+    "S105",  # Hardcoded password in tests
+    "S106",  # Hardcoded password in function argument
+    "S107",  # Hardcoded password in function default
+    "S108",  # Hardcoded temp file
+    "S311",  # Standard pseudo-random generators (OK for tests)
+    "S324",  # Insecure hash functions (OK for tests)
+    "S501",  # Requests without timeout (OK for tests)
+    "S602",  # Shell injection (controlled in tests)
+    "S603",  # Subprocess without shell check (controlled in tests)
+]
+
+# Security research code may have intentional vulnerabilities for testing
+"src/gan_cyber_range/vulnerabilities/**/*.py" = [
+    "S501",  # Requests without timeout (intentional for vuln simulation)
+    "S324",  # Insecure hash (intentional for vuln examples)
+]
+
+# Scripts may need more permissive security rules
+"scripts/**/*.py" = [
+    "T201",  # Print statements allowed in scripts
+    "S603",  # Subprocess calls (common in deployment scripts)
+    "S607",  # Subprocess with partial path (common in scripts)
+]
+
+# Configuration files
+"**/config.py" = [
+    "S105",  # Hardcoded password (may be defaults)
+]
+
+# Allow more flexibility in example code
+"docs/examples/**/*.py" = [
+    "D",     # Documentation not required in examples
+    "T201",  # Print statements in examples
+    "S101",  # Assert statements in examples
+]
+
+# Development and setup files
+"setup.py" = ["ALL"]
+"conftest.py" = ["ALL"]

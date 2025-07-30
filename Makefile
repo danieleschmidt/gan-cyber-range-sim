@@ -187,6 +187,26 @@ scan-containers: ## Scan container images for vulnerabilities
 	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
 		aquasec/trivy image gan-cyber-range:latest
 
+scan-secrets: ## Scan for committed secrets and credentials
+	detect-secrets scan --baseline .secrets.baseline
+
+security-policy-check: ## Validate security policies and configurations
+	python scripts/validate_security_policies.py
+
+security-full: scan-deps scan-code scan-secrets security-policy-check ## Run comprehensive security scan
+	@echo "✅ Full security scan completed"
+
+compliance-check: ## Check compliance with security frameworks
+	@echo "Running compliance validation..."
+	python scripts/validate_security_policies.py
+	detect-secrets scan --baseline .secrets.baseline --force-use-all-plugins
+	bandit -r src/ -f json -o security_reports/bandit-report.json || true
+	@echo "✅ Compliance check completed"
+
+isolation-test: ## Test cyber range isolation mechanisms
+	pytest tests/security/test_isolation.py -v -m isolation
+	@echo "✅ Isolation tests completed"
+
 # Backup and restore
 backup: ## Create backup of important data
 	./scripts/backup.sh
