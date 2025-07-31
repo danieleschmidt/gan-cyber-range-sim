@@ -1,4 +1,5 @@
-# Dependabot configuration for automated dependency updates
+# Dependabot configuration for GAN Cyber Range Simulator
+# Advanced dependency management with security-focused grouping
 # https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 
 version: 2
@@ -9,10 +10,11 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "09:00"
+      time: "06:00"
+      timezone: "UTC"
     open-pull-requests-limit: 10
     reviewers:
-      - "maintainers"
+      - "security-team"
     assignees:
       - "maintainers"
     commit-message:
@@ -21,16 +23,62 @@ updates:
       include: "scope"
     labels:
       - "dependencies"
+      - "security"
       - "automated"
     allow:
-      - dependency-type: "direct"
-      - dependency-type: "indirect"
+      - dependency-type: "all"
+    # Group related updates together for easier review
+    groups:
+      security-updates:
+        patterns:
+          - "bandit*"
+          - "safety*"
+          - "semgrep*"
+          - "cryptography*"
+        update-types:
+          - "minor"
+          - "patch"
+      ai-ml-frameworks:
+        patterns:
+          - "openai*"
+          - "anthropic*"
+          - "langchain*"
+          - "torch*"
+          - "stable-baselines3*"
+          - "numpy*"
+          - "pandas*"
+        update-types:
+          - "minor"
+          - "patch"
+      testing-frameworks:
+        patterns:
+          - "pytest*"
+          - "coverage*"
+        update-types:
+          - "minor"
+          - "patch"
+      development-tools:
+        patterns:
+          - "black*"
+          - "ruff*"
+          - "mypy*"
+          - "pre-commit*"
+        update-types:
+          - "minor"
+          - "patch"
     ignore:
-      # Ignore major version updates for critical security tools
-      - dependency-name: "bandit"
+      # Ignore major version updates for AI frameworks (breaking changes)
+      - dependency-name: "openai"
         update-types: ["version-update:semver-major"]
-      - dependency-name: "safety"
+      - dependency-name: "anthropic"
         update-types: ["version-update:semver-major"]
+      - dependency-name: "torch"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "langchain"
+        update-types: ["version-update:semver-major"]
+      # Ignore beta/pre-release versions
+      - dependency-name: "*"
+        update-types: ["version-update:semver-prerelease"]
 
   # Docker dependencies
   - package-ecosystem: "docker"
