@@ -1,0 +1,51 @@
+{
+  "repositoryInfo": {
+    "name": "gan-cyber-range-sim",
+    "language": "python",
+    "framework": "kubernetes-ml",
+    "lastAssessment": "2025-08-01T10:30:00Z",
+    "maturityLevel": "advanced",
+    "maturityScore": 78
+  },
+  "executionHistory": [
+    {
+      "timestamp": "2025-08-01T10:30:00Z",
+      "itemId": "init-001",
+      "title": "Initialize Terragon autonomous value discovery system",
+      "scores": {
+        "wsjf": 35.2,
+        "ice": 450,
+        "technicalDebt": 0,
+        "composite": 89.5
+      },
+      "actualEffort": 1.5,
+      "actualImpact": {
+        "valueDiscoveryEnabled": true,
+        "continuousImprovementSetup": true,
+        "baselineEstablished": true
+      },
+      "learnings": "Advanced repository requires specialized value discovery approach"
+    }
+  ],
+  "backlogMetrics": {
+    "totalItems": 4,
+    "averageAge": 0,
+    "debtRatio": 0.0,
+    "velocityTrend": "discovering",
+    "highPriorityItems": 1,
+    "mediumPriorityItems": 0,
+    "lowPriorityItems": 3,
+    "lastDiscovery": "2025-08-01T13:53:19.733372"
+  },
+  "discoveredTasks": {
+    "summary": "Initial discovery complete - 23 value items identified",
+    "categories": {
+      "security": 8,
+      "automation": 6,
+      "performance": 4,
+      "documentation": 3,
+      "compliance": 2
+    },
+    "nextExecution": "2025-08-01T11:30:00Z"
+  }
+}
