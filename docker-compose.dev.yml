@@ -1,0 +1,163 @@
+version: '3.8'
+
+services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+      args:
+        - PYTHON_VERSION=3.11
+    volumes:
+      - .:/workspace:cached
+      - /var/run/docker.sock:/var/run/docker.sock
+      - devcontainer-vscode:/home/vscode/.vscode-server
+    environment:
+      - PYTHONPATH=/workspace/src
+      - ENVIRONMENT=development
+    command: sleep infinity
+    networks:
+      - cyber-range-dev
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: cyber_range_dev
+      POSTGRES_USER: cyber_range
+      POSTGRES_PASSWORD: dev_password_change_in_production
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - cyber-range-dev
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cyber_range -d cyber_range_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - cyber-range-dev
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  prometheus:
+    image: prom/prometheus:latest
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - cyber-range-dev
+    depends_on:
+      - postgres
+      - redis
+
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin_dev_password
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./config/grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "3001:3000"
+    networks:
+      - cyber-range-dev
+    depends_on:
+      - prometheus
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+    networks:
+      - cyber-range-dev
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./config/nginx/dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+      - "8443:443"
+    networks:
+      - cyber-range-dev
+    depends_on:
+      - devcontainer
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin123
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - cyber-range-dev
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - cyber-range-dev
+
+  localstack:
+    image: localstack/localstack:latest
+    environment:
+      - SERVICES=s3,lambda,dynamodb,secretsmanager
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+    volumes:
+      - localstack_data:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+    networks:
+      - cyber-range-dev
+
+volumes:
+  devcontainer-vscode:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+  minio_data:
+  localstack_data:
+
+networks:
+  cyber-range-dev:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

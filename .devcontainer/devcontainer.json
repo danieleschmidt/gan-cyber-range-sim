@@ -1,0 +1,126 @@
+{
+  "name": "GAN Cyber Range Simulator",
+  "dockerComposeFile": "../docker-compose.dev.yml",
+  "service": "devcontainer",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/kubernetes-helm:1": {
+      "version": "latest",
+      "kubectl": "latest",
+      "helm": "latest"
+    },
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "version": "latest",
+      "enableNonRootDocker": "true"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "installDirectlyFromGitHubRelease": true
+    }
+  },
+  
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.flake8",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "ms-python.mypy-type-checker",
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml",
+        "ms-vscode.makefile-tools",
+        "GitHub.vscode-github-actions",
+        "GitHub.copilot",
+        "ms-vscode.vscode-json",
+        "tamasfe.even-better-toml",
+        "davidanson.vscode-markdownlint",
+        "yzhang.markdown-all-in-one",
+        "ms-vscode-remote.remote-containers",
+        "ms-vscode.test-adapter-converter",
+        "littlefoxteam.vscode-python-test-adapter",
+        "formulahendry.auto-rename-tag",
+        "bradlc.vscode-tailwindcss"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.flake8Enabled": true,
+        "python.linting.mypyEnabled": true,
+        "python.linting.banditEnabled": true,
+        "python.formatting.provider": "black",
+        "python.sortImports.args": ["--profile", "black"],
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit"
+        },
+        "files.exclude": {
+          "**/__pycache__": true,
+          "**/.pytest_cache": true,
+          "**/.mypy_cache": true,
+          "**/.coverage": true,
+          "**/htmlcov": true,
+          "**/.ruff_cache": true
+        },
+        "yaml.schemas": {
+          "kubernetes": [
+            "deployments/**/*.yaml",
+            "deployments/**/*.yml",
+            "k8s/**/*.yaml",
+            "k8s/**/*.yml"
+          ]
+        },
+        "kubernetes.kubectl-path": "/usr/local/bin/kubectl",
+        "kubernetes.helm-path": "/usr/local/bin/helm"
+      }
+    }
+  },
+  
+  "remoteEnv": {
+    "PYTHONPATH": "/workspace/src",
+    "KUBECONFIG": "/workspace/.kube/config",
+    "ENVIRONMENT": "development"
+  },
+  
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "bash .devcontainer/post-start.sh",
+  
+  "forwardPorts": [
+    8000,
+    8080,
+    3000,
+    9090,
+    3001
+  ],
+  
+  "portsAttributes": {
+    "8000": {
+      "label": "FastAPI Application",
+      "onAutoForward": "notify"
+    },
+    "8080": {
+      "label": "Dashboard/UI",
+      "onAutoForward": "openBrowser"
+    },
+    "3000": {
+      "label": "Frontend Dev Server",
+      "onAutoForward": "openBrowser"
+    },
+    "9090": {
+      "label": "Prometheus Metrics",
+      "onAutoForward": "notify"
+    },
+    "3001": {
+      "label": "Documentation Server",
+      "onAutoForward": "notify"
+    }
+  },
+  
+  "mounts": [
+    "source=${localWorkspaceFolder}/.kube,target=/workspace/.kube,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached",
+    "source=gan-cyber-range-vscode-extensions,target=/home/vscode/.vscode-server/extensions,type=volume"
+  ]
+}
