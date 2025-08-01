@@ -1,0 +1,439 @@
+# CD/Deployment Workflow Template for GAN Cyber Range Simulator
+# Place this file in .github/workflows/cd.yml after proper GitHub App permissions
+
+name: Continuous Deployment
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  release:
+    types: [ published ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+      force_deploy:
+        description: 'Force deployment even if tests fail'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  HELM_VERSION: 'v3.12.0'
+  KUBECTL_VERSION: 'v1.28.0'
+
+jobs:
+  # =============================================================================
+  # PRE-DEPLOYMENT CHECKS
+  # =============================================================================
+  pre-deployment:
+    name: Pre-deployment Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    outputs:
+      should_deploy: ${{ steps.check.outputs.should_deploy }}
+      target_env: ${{ steps.check.outputs.target_env }}
+      image_tag: ${{ steps.check.outputs.image_tag }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Determine deployment parameters
+        id: check
+        run: |
+          # Determine target environment
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            TARGET_ENV="${{ github.event.inputs.environment }}"
+          elif [[ "${{ github.ref }}" == "refs/tags/v"* ]]; then
+            TARGET_ENV="production"
+          else
+            TARGET_ENV="staging"
+          fi
+          
+          # Determine image tag
+          if [[ "${{ github.ref }}" == "refs/tags/v"* ]]; then
+            IMAGE_TAG="${{ github.ref_name }}"
+          else
+            IMAGE_TAG="main-${{ github.sha }}"
+          fi
+          
+          # Check if we should deploy
+          SHOULD_DEPLOY="true"
+          if [[ "${{ github.event.inputs.force_deploy }}" != "true" ]] && [[ "$TARGET_ENV" == "production" ]]; then
+            # Additional production checks
+            echo "Performing production readiness checks..."
+            # Add your production readiness logic here
+          fi
+          
+          echo "should_deploy=$SHOULD_DEPLOY" >> $GITHUB_OUTPUT
+          echo "target_env=$TARGET_ENV" >> $GITHUB_OUTPUT  
+          echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+          
+          echo "🎯 Target Environment: $TARGET_ENV"
+          echo "🏷️ Image Tag: $IMAGE_TAG"
+          echo "🚀 Should Deploy: $SHOULD_DEPLOY"
+
+  # =============================================================================
+  # STAGING DEPLOYMENT
+  # =============================================================================
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: pre-deployment
+    if: needs.pre-deployment.outputs.should_deploy == 'true' && needs.pre-deployment.outputs.target_env == 'staging'
+    
+    environment:
+      name: staging
+      url: https://staging.gan-cyber-range.example.com
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: ${{ env.KUBECTL_VERSION }}
+      
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: ${{ env.HELM_VERSION }}
+      
+      - name: Configure kubectl for staging
+        run: |
+          # Configure kubectl context for staging cluster
+          echo "${{ secrets.STAGING_KUBECONFIG }}" | base64 -d > kubeconfig
+          export KUBECONFIG=kubeconfig
+          kubectl config current-context
+          kubectl get nodes
+      
+      - name: Deploy to staging
+        env:
+          KUBECONFIG: kubeconfig
+          IMAGE_TAG: ${{ needs.pre-deployment.outputs.image_tag }}
+        run: |
+          # Deploy using Helm
+          helm upgrade --install gan-cyber-range-staging ./charts/gan-cyber-range \
+            --namespace gan-cyber-range-staging \
+            --create-namespace \
+            --set image.tag=$IMAGE_TAG \
+            --set environment=staging \
+            --set ingress.hostname=staging.gan-cyber-range.example.com \
+            --set resources.limits.memory=8Gi \
+            --set resources.limits.cpu=4 \
+            --set replicaCount=2 \
+            --wait --timeout=10m
+      
+      - name: Run smoke tests
+        env:
+          KUBECONFIG: kubeconfig
+          STAGING_URL: https://staging.gan-cyber-range.example.com
+        run: |
+          # Wait for deployment to be ready
+          kubectl wait --for=condition=available --timeout=300s deployment/gan-cyber-range-staging -n gan-cyber-range-staging
+          
+          # Run smoke tests
+          python scripts/smoke-tests.py --url $STAGING_URL --timeout 300
+      
+      - name: Notify deployment status
+        if: always()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+          message: |
+            Staging deployment ${{ job.status }}
+            Environment: staging
+            Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.pre-deployment.outputs.image_tag }}
+            URL: https://staging.gan-cyber-range.example.com
+
+  # =============================================================================
+  # PRODUCTION DEPLOYMENT
+  # =============================================================================
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [pre-deployment, deploy-staging]
+    if: |
+      always() && 
+      needs.pre-deployment.outputs.should_deploy == 'true' && 
+      needs.pre-deployment.outputs.target_env == 'production' &&
+      (needs.deploy-staging.result == 'success' || needs.deploy-staging.result == 'skipped')
+    
+    environment:
+      name: production
+      url: https://gan-cyber-range.example.com
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: ${{ env.KUBECTL_VERSION }}
+      
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: ${{ env.HELM_VERSION }}
+      
+      - name: Configure kubectl for production
+        run: |
+          # Configure kubectl context for production cluster
+          echo "${{ secrets.PRODUCTION_KUBECONFIG }}" | base64 -d > kubeconfig
+          export KUBECONFIG=kubeconfig
+          kubectl config current-context
+          kubectl get nodes
+      
+      - name: Pre-production validation
+        env:
+          KUBECONFIG: kubeconfig
+        run: |
+          # Check cluster health
+          kubectl get nodes -o wide
+          kubectl top nodes
+          
+          # Check existing deployment status
+          if kubectl get deployment gan-cyber-range -n gan-cyber-range-production 2>/dev/null; then
+            kubectl rollout status deployment/gan-cyber-range -n gan-cyber-range-production --timeout=60s
+          fi
+          
+          # Validate production configuration
+          python scripts/validate-production-config.py
+      
+      - name: Create backup
+        env:
+          KUBECONFIG: kubeconfig
+        run: |
+          # Create backup of current production state
+          timestamp=$(date +%Y%m%d-%H%M%S)
+          backup_name="gan-cyber-range-backup-$timestamp"
+          
+          # Backup Helm release
+          helm get all gan-cyber-range-production -n gan-cyber-range-production > "${backup_name}-helm.yaml"
+          
+          # Backup database (if applicable)
+          if kubectl get statefulset gan-cyber-range-db -n gan-cyber-range-production 2>/dev/null; then
+            kubectl exec -n gan-cyber-range-production gan-cyber-range-db-0 -- \
+              pg_dump gan_cyber_range > "${backup_name}-database.sql"
+          fi
+          
+          # Store backup in secure storage
+          aws s3 cp "${backup_name}-helm.yaml" "s3://gan-cyber-range-backups/production/$backup_name/"
+          if [ -f "${backup_name}-database.sql" ]; then
+            aws s3 cp "${backup_name}-database.sql" "s3://gan-cyber-range-backups/production/$backup_name/"
+          fi
+      
+      - name: Blue-Green Deployment
+        env:
+          KUBECONFIG: kubeconfig
+          IMAGE_TAG: ${{ needs.pre-deployment.outputs.image_tag }}
+        run: |
+          # Deploy new version with blue-green strategy
+          helm upgrade --install gan-cyber-range-production ./charts/gan-cyber-range \
+            --namespace gan-cyber-range-production \
+            --create-namespace \
+            --set image.tag=$IMAGE_TAG \
+            --set environment=production \
+            --set ingress.hostname=gan-cyber-range.example.com \
+            --set resources.limits.memory=16Gi \
+            --set resources.limits.cpu=8 \
+            --set replicaCount=5 \
+            --set autoscaling.enabled=true \
+            --set autoscaling.minReplicas=3 \
+            --set autoscaling.maxReplicas=10 \
+            --set deployment.strategy.type=RollingUpdate \
+            --set deployment.strategy.rollingUpdate.maxUnavailable=1 \
+            --set deployment.strategy.rollingUpdate.maxSurge=2 \
+            --wait --timeout=15m
+      
+      - name: Production health checks
+        env:
+          KUBECONFIG: kubeconfig
+          PRODUCTION_URL: https://gan-cyber-range.example.com
+        run: |
+          # Wait for deployment to be ready
+          kubectl wait --for=condition=available --timeout=600s deployment/gan-cyber-range-production -n gan-cyber-range-production
+          
+          # Comprehensive health checks
+          python scripts/production-health-check.py \
+            --url $PRODUCTION_URL \
+            --timeout 600 \
+            --check-database \
+            --check-redis \
+            --check-ai-services \
+            --check-kubernetes-integration
+          
+          # Load testing
+          python scripts/load-test.py \
+            --url $PRODUCTION_URL \
+            --users 100 \
+            --duration 300 \
+            --success-rate 99.5
+      
+      - name: Update monitoring and alerting
+        env:
+          KUBECONFIG: kubeconfig
+        run: |
+          # Update Prometheus monitoring rules
+          kubectl apply -f monitoring/prometheus-rules.yaml -n monitoring
+          
+          # Update Grafana dashboards
+          kubectl apply -f monitoring/grafana-dashboards.yaml -n monitoring
+          
+          # Configure alerting for new deployment
+          python scripts/configure-alerts.py --environment production --version ${{ needs.pre-deployment.outputs.image_tag }}
+      
+      - name: Notify stakeholders
+        if: always()
+        run: |
+          # Send deployment notification
+          curl -X POST ${{ secrets.SLACK_WEBHOOK }} \
+            -H 'Content-type: application/json' \
+            --data '{
+              "text": "🚀 Production Deployment Complete",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Production Deployment Status: ${{ job.status }}*\n\n• Environment: Production\n• Version: ${{ needs.pre-deployment.outputs.image_tag }}\n• URL: https://gan-cyber-range.example.com\n• Deployment Time: $(date -u)"
+                  }
+                }
+              ]
+            }'
+          
+          # Send email notification to stakeholders
+          python scripts/send-deployment-notification.py \
+            --environment production \
+            --status ${{ job.status }} \
+            --version ${{ needs.pre-deployment.outputs.image_tag }}
+
+  # =============================================================================
+  # POST-DEPLOYMENT MONITORING
+  # =============================================================================
+  post-deployment-monitoring:
+    name: Post-deployment Monitoring
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    needs: [deploy-staging, deploy-production]
+    if: always() && (needs.deploy-staging.result == 'success' || needs.deploy-production.result == 'success')
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up monitoring
+        run: |
+          # Determine which environment was deployed
+          if [[ "${{ needs.deploy-production.result }}" == "success" ]]; then
+            ENVIRONMENT="production"
+            URL="https://gan-cyber-range.example.com"
+          else
+            ENVIRONMENT="staging"
+            URL="https://staging.gan-cyber-range.example.com"
+          fi
+          
+          echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_ENV
+          echo "URL=$URL" >> $GITHUB_ENV
+      
+      - name: Extended monitoring
+        run: |
+          # Monitor deployment for extended period
+          python scripts/extended-monitoring.py \
+            --environment $ENVIRONMENT \
+            --url $URL \
+            --duration 3600 \
+            --check-interval 60 \
+            --alert-threshold 5 \
+            --performance-baseline performance-baseline.json
+      
+      - name: Generate deployment report
+        if: always()
+        run: |
+          # Generate comprehensive deployment report
+          python scripts/generate-deployment-report.py \
+            --environment $ENVIRONMENT \
+            --version ${{ needs.pre-deployment.outputs.image_tag }} \
+            --output deployment-report.html
+      
+      - name: Upload deployment report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: deployment-report-${{ env.ENVIRONMENT }}
+          path: deployment-report.html
+
+  # =============================================================================
+  # ROLLBACK (if needed)
+  # =============================================================================
+  rollback:
+    name: Emergency Rollback
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: failure() && (needs.deploy-staging.result == 'failure' || needs.deploy-production.result == 'failure')
+    needs: [deploy-staging, deploy-production]
+    
+    environment:
+      name: rollback-approval
+    
+    steps:
+      - name: Rollback deployment
+        env:
+          KUBECONFIG_STAGING: ${{ secrets.STAGING_KUBECONFIG }}
+          KUBECONFIG_PRODUCTION: ${{ secrets.PRODUCTION_KUBECONFIG }}
+        run: |
+          # Determine which environment needs rollback
+          if [[ "${{ needs.deploy-production.result }}" == "failure" ]]; then
+            echo "$KUBECONFIG_PRODUCTION" | base64 -d > kubeconfig
+            NAMESPACE="gan-cyber-range-production"
+            RELEASE_NAME="gan-cyber-range-production"
+          else
+            echo "$KUBECONFIG_STAGING" | base64 -d > kubeconfig
+            NAMESPACE="gan-cyber-range-staging"
+            RELEASE_NAME="gan-cyber-range-staging"
+          fi
+          
+          export KUBECONFIG=kubeconfig
+          
+          # Perform rollback
+          helm rollback $RELEASE_NAME 0 -n $NAMESPACE
+          
+          # Wait for rollback to complete
+          kubectl rollout status deployment/$RELEASE_NAME -n $NAMESPACE --timeout=300s
+          
+          # Verify rollback success
+          kubectl get pods -n $NAMESPACE
+          
+      - name: Notify rollback
+        if: always()
+        run: |
+          curl -X POST ${{ secrets.SLACK_WEBHOOK }} \
+            -H 'Content-type: application/json' \
+            --data '{
+              "text": "🔄 Emergency Rollback Executed",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Emergency Rollback Completed*\n\nThe previous version has been restored due to deployment failure. Please investigate the issue before attempting to redeploy."
+                  }
+                }
+              ]
+            }'
