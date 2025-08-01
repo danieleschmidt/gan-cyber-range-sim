@@ -1,0 +1,418 @@
+# CI/CD Workflow Template for GAN Cyber Range Simulator
+# Place this file in .github/workflows/ci.yml after proper GitHub App permissions
+
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main, develop, 'feature/*', 'terragon/*' ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run nightly builds to catch dependency issues
+    - cron: '0 6 * * *'
+
+env:
+  PYTHON_VERSION: '3.11'
+  NODE_VERSION: '18'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # =============================================================================
+  # CODE QUALITY AND SECURITY CHECKS
+  # =============================================================================
+  code-quality:
+    name: Code Quality & Security
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better analysis
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -e ".[dev,security]"
+      
+      - name: Code formatting check (Black)
+        run: black --check src/ tests/
+      
+      - name: Import sorting check (isort)
+        run: isort --check-only src/ tests/
+      
+      - name: Linting (Flake8)
+        run: flake8 src/ tests/
+      
+      - name: Type checking (MyPy)
+        run: mypy src/
+      
+      - name: Security scan (Bandit)
+        run: bandit -r src/ -f json -o bandit-report.json
+      
+      - name: Dependency security check (Safety)
+        run: safety check --json --output safety-report.json
+      
+      - name: Secret detection (detect-secrets)
+        run: detect-secrets scan --baseline .secrets.baseline
+      
+      - name: Dockerfile linting (Hadolint)
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+          format: sarif
+          output-file: hadolint-results.sarif
+      
+      - name: Upload security reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: security-reports
+          path: |
+            bandit-report.json
+            safety-report.json
+            hadolint-results.sarif
+
+  # =============================================================================
+  # UNIT AND INTEGRATION TESTS
+  # =============================================================================
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+        test-group: ['unit', 'integration', 'security']
+    
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: cyber_range_test
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -e ".[dev,security,testing]"
+      
+      - name: Set up test environment
+        env:
+          TEST_DATABASE_URL: postgresql://test_user:test_password@localhost:5432/cyber_range_test
+          TEST_REDIS_URL: redis://localhost:6379/0
+          TESTING: true
+          MOCK_LLM_APIS: true
+          MOCK_SECURITY_TOOLS: true
+        run: |
+          # Initialize test database
+          python scripts/init-test-db.py
+          
+          # Create test configuration
+          cp .env.example .env.test
+          echo "TESTING=true" >> .env.test
+      
+      - name: Run ${{ matrix.test-group }} tests
+        env:
+          TEST_DATABASE_URL: postgresql://test_user:test_password@localhost:5432/cyber_range_test
+          TEST_REDIS_URL: redis://localhost:6379/0
+          TESTING: true
+          MOCK_LLM_APIS: true
+          MOCK_SECURITY_TOOLS: true
+        run: |
+          pytest tests/${{ matrix.test-group }}/ \
+            -m ${{ matrix.test-group }} \
+            --cov=src/gan_cyber_range \
+            --cov-report=xml:coverage-${{ matrix.test-group }}.xml \
+            --cov-report=html:htmlcov-${{ matrix.test-group }} \
+            --junit-xml=pytest-${{ matrix.test-group }}.xml \
+            --timeout=300
+      
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          file: coverage-${{ matrix.test-group }}.xml
+          flags: ${{ matrix.test-group }}
+          name: coverage-${{ matrix.python-version }}-${{ matrix.test-group }}
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-results-${{ matrix.python-version }}-${{ matrix.test-group }}
+          path: |
+            pytest-${{ matrix.test-group }}.xml
+            htmlcov-${{ matrix.test-group }}/
+
+  # =============================================================================
+  # PERFORMANCE TESTS
+  # =============================================================================
+  performance:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs: [code-quality]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -e ".[dev,performance]"
+      
+      - name: Run performance tests
+        run: |
+          pytest tests/performance/ \
+            -m performance \
+            --benchmark-only \
+            --benchmark-json=benchmark-results.json \
+            --benchmark-html=benchmark-report.html
+      
+      - name: Performance regression check
+        run: |
+          # Compare with baseline performance metrics
+          python scripts/check-performance-regression.py \
+            --current benchmark-results.json \
+            --baseline performance-baseline.json \
+            --threshold 10  # 10% regression threshold
+      
+      - name: Upload performance reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-reports
+          path: |
+            benchmark-results.json
+            benchmark-report.html
+
+  # =============================================================================
+  # CONTAINER BUILD AND SECURITY SCAN
+  # =============================================================================
+  build:
+    name: Build & Scan Container
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [test]
+    
+    permissions:
+      contents: read
+      packages: write
+      security-events: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+      
+      - name: Build container image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BUILD_DATE=${{ github.event.head_commit.timestamp }}
+            VCS_REF=${{ github.sha }}
+            VERSION=${{ steps.meta.outputs.version }}
+      
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+      
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+      
+      - name: Container structure test
+        run: |
+          # Install container-structure-test
+          curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64
+          chmod +x container-structure-test-linux-amd64
+          
+          # Run structure tests
+          ./container-structure-test-linux-amd64 test \
+            --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            --config container-structure-test.yaml
+
+  # =============================================================================
+  # KUBERNETES MANIFESTS VALIDATION
+  # =============================================================================
+  k8s-validation:
+    name: Kubernetes Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.28.0'
+      
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 'v3.12.0'
+      
+      - name: Validate Kubernetes manifests
+        run: |
+          # Validate YAML syntax
+          find deployments/ -name "*.yaml" -o -name "*.yml" | xargs -I {} kubectl apply --dry-run=client -f {}
+          
+          # Lint Helm charts if present
+          if [ -d "charts/" ]; then
+            helm lint charts/*/
+          fi
+      
+      - name: Security policy validation
+        run: |
+          # Install OPA Conftest
+          curl -L https://github.com/open-policy-agent/conftest/releases/latest/download/conftest_linux_x86_64.tar.gz | tar xz
+          chmod +x conftest
+          
+          # Run security policy tests
+          ./conftest test --policy policies/ deployments/
+
+  # =============================================================================
+  # DOCUMENTATION BUILD
+  # =============================================================================
+  docs:
+    name: Documentation Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install documentation dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[docs]"
+      
+      - name: Build documentation
+        run: |
+          mkdocs build --strict
+      
+      - name: Check documentation links
+        run: |
+          # Install and run link checker
+          pip install linkchecker
+          linkchecker site/
+      
+      - name: Upload documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: documentation
+          path: site/
+
+  # =============================================================================
+  # INTEGRATION STATUS CHECK
+  # =============================================================================
+  ci-success:
+    name: CI Success
+    runs-on: ubuntu-latest
+    needs: [code-quality, test, performance, build, k8s-validation, docs]
+    if: always()
+    
+    steps:
+      - name: Check CI status
+        if: |
+          needs.code-quality.result != 'success' ||
+          needs.test.result != 'success' ||
+          needs.performance.result != 'success' ||
+          needs.build.result != 'success' ||
+          needs.k8s-validation.result != 'success' ||
+          needs.docs.result != 'success'
+        run: |
+          echo "CI pipeline failed. Check the logs above."
+          exit 1
+      
+      - name: CI Success
+        run: |
+          echo "✅ All CI checks passed successfully!"
+          echo "The code is ready for deployment or merge."

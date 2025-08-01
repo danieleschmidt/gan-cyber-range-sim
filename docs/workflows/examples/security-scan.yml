@@ -1,0 +1,593 @@
+# Security Scanning Workflow Template for GAN Cyber Range Simulator
+# Place this file in .github/workflows/security-scan.yml after proper GitHub App permissions
+
+name: Security Scanning
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run comprehensive security scans daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      scan_type:
+        description: 'Type of security scan to run'
+        required: true
+        default: 'comprehensive'
+        type: choice
+        options:
+          - comprehensive
+          - dependency-only
+          - code-only
+          - container-only
+
+env:
+  PYTHON_VERSION: '3.11'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # =============================================================================
+  # STATIC CODE ANALYSIS
+  # =============================================================================
+  static-analysis:
+    name: Static Code Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    
+    permissions:
+      contents: read
+      security-events: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better analysis
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -e ".[dev,security]"
+      
+      - name: Run Bandit security linter
+        run: |
+          bandit -r src/ -f sarif -o bandit-results.sarif
+          bandit -r src/ -f json -o bandit-results.json
+      
+      - name: Run Semgrep static analysis
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/secrets
+            p/python
+            p/dockerfile
+            p/kubernetes
+          sarif_file: semgrep-results.sarif
+          severity: ERROR
+      
+      - name: Upload Bandit results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: bandit-results.sarif
+          category: bandit
+      
+      - name: Upload Semgrep results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: semgrep-results.sarif
+          category: semgrep
+      
+      - name: Custom security checks
+        run: |
+          # Check for hardcoded secrets patterns
+          python scripts/check-secrets.py --path src/ --strict
+          
+          # Validate security configurations
+          python scripts/validate_security_policies.py
+          
+          # Check for insecure dependencies in requirements
+          python scripts/check-insecure-deps.py requirements.txt
+      
+      - name: Upload security artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: static-analysis-results
+          path: |
+            bandit-results.sarif
+            bandit-results.json
+            semgrep-results.sarif
+
+  # =============================================================================
+  # DEPENDENCY SECURITY SCANNING
+  # =============================================================================
+  dependency-scan:
+    name: Dependency Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    permissions:
+      contents: read
+      security-events: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install safety pip-audit
+      
+      - name: Run Safety dependency scan
+        run: |
+          safety check --json --output safety-results.json
+          safety check --output safety-results.txt
+      
+      - name: Run pip-audit vulnerability scan
+        run: |
+          pip-audit --format=json --output=pip-audit-results.json
+          pip-audit --format=cyclonedx-json --output=sbom.json
+      
+      - name: Generate SBOM (Software Bill of Materials)
+        run: |
+          # Install CycloneDX Python
+          pip install cyclonedx-bom
+          
+          # Generate SBOM
+          cyclonedx-py requirements -o sbom-cyclonedx.json
+          
+          # Generate SPDX SBOM
+          pip install spdx-tools
+          python scripts/generate-spdx-sbom.py --output sbom-spdx.json
+      
+      - name: OSV Scanner
+        uses: google/osv-scanner-action@v1
+        with:
+          scan-args: |-
+            --output=osv-results.json
+            --format=json
+            ./
+      
+      - name: Snyk dependency scan
+        uses: snyk/actions/python@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --json-file-output=snyk-results.json
+      
+      - name: Upload dependency scan results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: dependency-scan-results
+          path: |
+            safety-results.json
+            safety-results.txt
+            pip-audit-results.json
+            sbom.json
+            sbom-cyclonedx.json
+            sbom-spdx.json
+            osv-results.json
+            snyk-results.json
+
+  # =============================================================================
+  # CONTAINER SECURITY SCANNING
+  # =============================================================================
+  container-scan:
+    name: Container Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    
+    permissions:
+      contents: read
+      packages: write
+      security-events: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build container image for scanning
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          load: true
+          tags: ${{ env.IMAGE_NAME }}:scan
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.IMAGE_NAME }}:scan
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+      
+      - name: Run Trivy filesystem scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-fs-results.sarif'
+      
+      - name: Run Grype vulnerability scanner
+        uses: anchore/scan-action@v3
+        with:
+          image: ${{ env.IMAGE_NAME }}:scan
+          output-format: sarif
+          output-file: grype-results.sarif
+      
+      - name: Run Syft SBOM generation
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ env.IMAGE_NAME }}:scan
+          output-file: container-sbom.spdx
+      
+      - name: Container structure test
+        run: |
+          # Install container-structure-test
+          curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64
+          chmod +x container-structure-test-linux-amd64
+          
+          # Run structure tests
+          ./container-structure-test-linux-amd64 test \
+            --image ${{ env.IMAGE_NAME }}:scan \
+            --config container-structure-test.yaml \
+            --output json \
+            --test-report structure-test-results.json
+      
+      - name: Docker Bench Security
+        run: |
+          # Clone Docker Bench Security
+          git clone https://github.com/docker/docker-bench-security.git
+          cd docker-bench-security
+          
+          # Run security benchmark
+          sudo ./docker-bench-security.sh -j > ../docker-bench-results.json
+      
+      - name: Upload Trivy results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: trivy-results.sarif
+          category: trivy-image
+      
+      - name: Upload Trivy filesystem results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: trivy-fs-results.sarif
+          category: trivy-filesystem
+      
+      - name: Upload Grype results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: grype-results.sarif
+          category: grype
+      
+      - name: Upload container scan artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: container-scan-results
+          path: |
+            trivy-results.sarif
+            trivy-fs-results.sarif
+            grype-results.sarif
+            container-sbom.spdx
+            structure-test-results.json
+            docker-bench-results.json
+
+  # =============================================================================
+  # INFRASTRUCTURE SECURITY SCANNING
+  # =============================================================================
+  infrastructure-scan:
+    name: Infrastructure Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Scan Kubernetes manifests with Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: deployments/
+          framework: kubernetes
+          output_format: sarif
+          output_file_path: checkov-k8s-results.sarif
+      
+      - name: Scan Terraform with Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: deployments/terraform/
+          framework: terraform
+          output_format: sarif
+          output_file_path: checkov-terraform-results.sarif
+      
+      - name: Scan Dockerfiles with Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          file: Dockerfile
+          framework: dockerfile
+          output_format: sarif
+          output_file_path: checkov-dockerfile-results.sarif
+      
+      - name: Kubernetes security scanning with Polaris
+        run: |
+          # Install Polaris
+          curl -L https://github.com/FairwindsOps/polaris/releases/latest/download/polaris_linux_amd64.tar.gz | tar xz
+          chmod +x polaris
+          
+          # Audit Kubernetes manifests
+          ./polaris audit --audit-path deployments/ --format json > polaris-results.json
+      
+      - name: OPA Conftest policy testing
+        run: |
+          # Install Conftest
+          curl -L https://github.com/open-policy-agent/conftest/releases/latest/download/conftest_linux_x86_64.tar.gz | tar xz
+          chmod +x conftest
+          
+          # Run policy tests
+          ./conftest test --policy policies/ --output json deployments/ > conftest-results.json
+      
+      - name: Kube-score analysis
+        run: |
+          # Install kube-score
+          curl -L https://github.com/zegl/kube-score/releases/latest/download/kube-score_linux_amd64.tar.gz | tar xz
+          chmod +x kube-score
+          
+          # Analyze Kubernetes manifests
+          find deployments/ -name "*.yaml" -o -name "*.yml" | xargs ./kube-score score --output-format json > kube-score-results.json
+      
+      - name: Upload infrastructure scan results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: infrastructure-scan-results
+          path: |
+            checkov-k8s-results.sarif
+            checkov-terraform-results.sarif
+            checkov-dockerfile-results.sarif
+            polaris-results.json
+            conftest-results.json
+            kube-score-results.json
+
+  # =============================================================================
+  # SECRET SCANNING
+  # =============================================================================
+  secret-scan:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for comprehensive secret scanning
+      
+      - name: Run TruffleHog secret scanner
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: main
+          head: HEAD
+          extra_args: --json --only-verified
+      
+      - name: Run detect-secrets
+        run: |
+          pip install detect-secrets
+          
+          # Scan for secrets
+          detect-secrets scan --all-files --baseline .secrets.baseline --output secrets-scan-results.json
+          
+          # Audit findings
+          detect-secrets audit .secrets.baseline
+      
+      - name: Run GitLeaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          config-path: .gitleaks.toml
+      
+      - name: Upload secret scan results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: secret-scan-results
+          path: |
+            secrets-scan-results.json
+            .secrets.baseline
+
+  # =============================================================================
+  # COMPLIANCE SCANNING
+  # =============================================================================
+  compliance-scan:
+    name: Compliance Scanning
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: CIS Kubernetes Benchmark
+        run: |
+          # Install kube-bench
+          curl -L https://github.com/aquasecurity/kube-bench/releases/latest/download/kube-bench_linux_amd64.tar.gz | tar xz
+          chmod +x kube-bench
+          
+          # Run CIS benchmark (simulate with available manifests)
+          ./kube-bench run --targets master,node --json > cis-benchmark-results.json
+      
+      - name: PCI DSS compliance check
+        run: |
+          # Custom PCI DSS compliance checks
+          python scripts/pci-dss-compliance-check.py --output pci-dss-results.json
+      
+      - name: SOC 2 compliance check
+        run: |
+          # Custom SOC 2 compliance checks
+          python scripts/soc2-compliance-check.py --output soc2-results.json
+      
+      - name: GDPR compliance check
+        run: |
+          # GDPR data protection compliance
+          python scripts/gdpr-compliance-check.py --output gdpr-results.json
+      
+      - name: Upload compliance scan results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: compliance-scan-results
+          path: |
+            cis-benchmark-results.json
+            pci-dss-results.json
+            soc2-results.json
+            gdpr-results.json
+
+  # =============================================================================
+  # SECURITY REPORT GENERATION
+  # =============================================================================
+  security-report:
+    name: Generate Security Report
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [static-analysis, dependency-scan, container-scan, infrastructure-scan, secret-scan, compliance-scan]
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download all security scan results
+        uses: actions/download-artifact@v3
+        with:
+          path: security-results/
+      
+      - name: Generate comprehensive security report
+        run: |
+          # Install report generation dependencies
+          pip install jinja2 markdown weasyprint
+          
+          # Generate comprehensive security report
+          python scripts/generate-security-report.py \
+            --input-dir security-results/ \
+            --output security-report.html \
+            --format html,pdf,json \
+            --template templates/security-report.html
+      
+      - name: Calculate security score
+        run: |
+          # Calculate overall security score
+          python scripts/calculate-security-score.py \
+            --input-dir security-results/ \
+            --output security-score.json \
+            --thresholds security-thresholds.yaml
+      
+      - name: Check security gates
+        run: |
+          # Check if security gates pass
+          python scripts/check-security-gates.py \
+            --score-file security-score.json \
+            --gates-config security-gates.yaml
+      
+      - name: Upload security report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: comprehensive-security-report
+          path: |
+            security-report.html
+            security-report.pdf
+            security-report.json
+            security-score.json
+      
+      - name: Comment security summary on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const securityScore = JSON.parse(fs.readFileSync('security-score.json', 'utf8'));
+            
+            const comment = `## 🔒 Security Scan Results
+            
+            **Overall Security Score: ${securityScore.overall_score}/100**
+            
+            | Category | Score | Status |
+            |----------|-------|--------|
+            | Static Analysis | ${securityScore.static_analysis}/100 | ${securityScore.static_analysis >= 80 ? '✅' : '❌'} |
+            | Dependencies | ${securityScore.dependencies}/100 | ${securityScore.dependencies >= 80 ? '✅' : '❌'} |
+            | Container Security | ${securityScore.container}/100 | ${securityScore.container >= 80 ? '✅' : '❌'} |
+            | Infrastructure | ${securityScore.infrastructure}/100 | ${securityScore.infrastructure >= 80 ? '✅' : '❌'} |
+            | Secret Scanning | ${securityScore.secrets}/100 | ${securityScore.secrets >= 95 ? '✅' : '❌'} |
+            | Compliance | ${securityScore.compliance}/100 | ${securityScore.compliance >= 90 ? '✅' : '❌'} |
+            
+            ${securityScore.overall_score >= 85 ? '✅ Security gates passed!' : '❌ Security gates failed - please address the issues above.'}
+            
+            [View detailed security report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  # =============================================================================
+  # SECURITY NOTIFICATION
+  # =============================================================================
+  security-notification:
+    name: Security Notification
+    runs-on: ubuntu-latest
+    needs: [security-report]
+    if: always()
+    
+    steps:
+      - name: Send security notification
+        if: contains(needs.*.result, 'failure')
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          webhook_url: ${{ secrets.SECURITY_SLACK_WEBHOOK }}
+          message: |
+            🚨 Security scan failures detected in ${{ github.repository }}
+            
+            Repository: ${{ github.repository }}
+            Branch: ${{ github.ref_name }}
+            Commit: ${{ github.sha }}
+            
+            Please review the security scan results and address any critical findings immediately.
+            
+            View results: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

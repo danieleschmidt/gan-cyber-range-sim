@@ -1,0 +1,504 @@
+# Dependency Update Workflow Template for GAN Cyber Range Simulator
+# Place this file in .github/workflows/dependency-update.yml after proper GitHub App permissions
+
+name: Dependency Updates
+
+on:
+  schedule:
+    # Run weekly on Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+    inputs:
+      update_type:
+        description: 'Type of dependency update'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - security-only
+          - major
+          - minor
+          - patch
+      auto_merge:
+        description: 'Auto-merge if tests pass'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  PYTHON_VERSION: '3.11'
+  NODE_VERSION: '18'
+
+jobs:
+  # =============================================================================
+  # PYTHON DEPENDENCY UPDATES
+  # =============================================================================
+  python-dependencies:
+    name: Update Python Dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    strategy:
+      matrix:
+        update-type: [security, minor, major]
+        exclude:
+          - update-type: major
+            # Conditional exclusion based on input
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependency management tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install pip-tools pip-audit safety pipenv-to-requirements
+      
+      - name: Update requirements files
+        run: |
+          # Update main requirements
+          pip-compile --upgrade requirements.in --output-file requirements.txt
+          
+          # Update development requirements
+          if [ -f requirements-dev.in ]; then
+            pip-compile --upgrade requirements-dev.in --output-file requirements-dev.txt
+          fi
+          
+          # Update testing requirements
+          if [ -f requirements-test.in ]; then
+            pip-compile --upgrade requirements-test.in --output-file requirements-test.txt
+          fi
+      
+      - name: Security vulnerability check
+        run: |
+          # Check for known security vulnerabilities
+          pip-audit --desc --format=json --output=pip-audit-results.json
+          safety check --json --output safety-results.json
+      
+      - name: Filter updates based on type
+        run: |
+          # Create filtered requirements based on update type
+          case "${{ matrix.update-type }}" in
+            security)
+              # Only include security updates
+              python scripts/filter-security-updates.py \
+                --audit-file pip-audit-results.json \
+                --safety-file safety-results.json \
+                --requirements requirements.txt \
+                --output requirements-security.txt
+              ;;
+            minor)
+              # Include minor and patch updates
+              python scripts/filter-minor-updates.py \
+                --requirements requirements.txt \
+                --output requirements-minor.txt
+              ;;
+            major)
+              # Include all updates including major
+              cp requirements.txt requirements-major.txt
+              ;;
+          esac
+      
+      - name: Test dependency updates
+        env:
+          UPDATE_TYPE: ${{ matrix.update-type }}
+        run: |
+          # Install updated dependencies
+          pip install -r requirements-${UPDATE_TYPE}.txt
+          pip install -e ".[dev,testing]"
+          
+          # Run quick tests to ensure compatibility
+          python -m pytest tests/unit/ -x --tb=short
+          
+          # Run security tests
+          python -m pytest tests/security/ -m "not slow"
+      
+      - name: Generate dependency update report
+        run: |
+          # Generate report of changes
+          python scripts/generate-dependency-report.py \
+            --old-requirements requirements.txt.bak \
+            --new-requirements requirements-${{ matrix.update-type }}.txt \
+            --output dependency-update-${{ matrix.update-type }}.md
+      
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            deps: update Python dependencies (${{ matrix.update-type }})
+            
+            - Update ${{ matrix.update-type }} level dependencies
+            - All tests passing
+            - Security vulnerabilities addressed
+            
+            🤖 Generated with [Claude Code](https://claude.ai/code)
+          title: 'deps: Update Python Dependencies (${{ matrix.update-type }})'
+          body-path: dependency-update-${{ matrix.update-type }}.md
+          branch: deps/python-${{ matrix.update-type }}-updates
+          delete-branch: true
+          labels: |
+            dependencies
+            python
+            ${{ matrix.update-type }}
+            automated-pr
+          reviewers: |
+            security-team
+            lead-developers
+          assignees: |
+            ${{ github.actor }}
+
+  # =============================================================================
+  # CONTAINER BASE IMAGE UPDATES
+  # =============================================================================
+  container-updates:
+    name: Update Container Base Images
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Check for base image updates
+        run: |
+          # Extract current base image from Dockerfile
+          CURRENT_IMAGE=$(grep "^FROM" Dockerfile | head -1 | awk '{print $2}')
+          echo "Current base image: $CURRENT_IMAGE"
+          
+          # Check for newer versions
+          python scripts/check-base-image-updates.py \
+            --current-image "$CURRENT_IMAGE" \
+            --output base-image-updates.json
+      
+      - name: Update Dockerfile
+        run: |
+          # Update base image in Dockerfile
+          python scripts/update-dockerfile.py \
+            --updates-file base-image-updates.json \
+            --dockerfile Dockerfile \
+            --output Dockerfile.new
+          
+          # Backup original and replace
+          cp Dockerfile Dockerfile.bak
+          mv Dockerfile.new Dockerfile
+      
+      - name: Build and test updated container
+        run: |
+          # Build container with updated base image
+          docker build -t gan-cyber-range:test .
+          
+          # Run container structure tests
+          if [ -f container-structure-test.yaml ]; then
+            curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64
+            chmod +x container-structure-test-linux-amd64
+            ./container-structure-test-linux-amd64 test \
+              --image gan-cyber-range:test \
+              --config container-structure-test.yaml
+          fi
+          
+          # Run security scan on updated image
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:latest image \
+            --format json \
+            --output trivy-results.json \
+            gan-cyber-range:test
+      
+      - name: Generate container update report
+        run: |
+          python scripts/generate-container-report.py \
+            --dockerfile-diff <(diff -u Dockerfile.bak Dockerfile) \
+            --trivy-results trivy-results.json \
+            --output container-update-report.md
+      
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            build: update container base images
+            
+            - Update base image to latest stable version
+            - Security vulnerabilities addressed
+            - Container tests passing
+            
+            🤖 Generated with [Claude Code](https://claude.ai/code)
+          title: 'build: Update Container Base Images'
+          body-path: container-update-report.md
+          branch: deps/container-base-image-updates
+          delete-branch: true
+          labels: |
+            dependencies
+            docker
+            security
+            automated-pr
+
+  # =============================================================================
+  # KUBERNETES MANIFEST UPDATES
+  # =============================================================================
+  k8s-updates:
+    name: Update Kubernetes Dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up kubectl and Helm
+        run: |
+          # Install kubectl
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+          
+          # Install Helm
+          curl https://get.helm.sh/helm-v3.12.0-linux-amd64.tar.gz | tar xz
+          sudo mv linux-amd64/helm /usr/local/bin/
+      
+      - name: Update Helm chart dependencies
+        run: |
+          if [ -d charts/ ]; then
+            for chart in charts/*/; do
+              if [ -f "$chart/Chart.yaml" ]; then
+                cd "$chart"
+                helm dependency update
+                cd - > /dev/null
+              fi
+            done
+          fi
+      
+      - name: Check for Kubernetes API version updates
+        run: |
+          # Check for deprecated API versions
+          python scripts/check-k8s-api-versions.py \
+            --manifests-dir deployments/ \
+            --target-version v1.28 \
+            --output k8s-api-updates.json
+      
+      - name: Update Kubernetes manifests
+        run: |
+          # Update deprecated API versions
+          python scripts/update-k8s-manifests.py \
+            --updates-file k8s-api-updates.json \
+            --manifests-dir deployments/
+      
+      - name: Validate updated manifests
+        run: |
+          # Validate Kubernetes manifests
+          find deployments/ -name "*.yaml" -o -name "*.yml" | \
+            xargs -I {} kubectl apply --dry-run=client -f {}
+          
+          # Run Helm linting if charts exist
+          if [ -d charts/ ]; then
+            for chart in charts/*/; do
+              helm lint "$chart"
+            done
+          fi
+      
+      - name: Generate Kubernetes update report
+        run: |
+          python scripts/generate-k8s-report.py \
+            --updates-file k8s-api-updates.json \
+            --output k8s-update-report.md
+      
+      - name: Create Pull Request
+        if: success()
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            k8s: update Kubernetes manifests and dependencies
+            
+            - Update deprecated API versions
+            - Update Helm chart dependencies
+            - All manifests validated
+            
+            🤖 Generated with [Claude Code](https://claude.ai/code)
+          title: 'k8s: Update Kubernetes Dependencies'
+          body-path: k8s-update-report.md
+          branch: deps/kubernetes-updates
+          delete-branch: true
+          labels: |
+            dependencies
+            kubernetes
+            helm
+            automated-pr
+
+  # =============================================================================
+  # GITHUB ACTIONS UPDATES
+  # =============================================================================
+  actions-updates:
+    name: Update GitHub Actions
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Update GitHub Actions
+        uses: kentaro-m/auto-assign-action@v1.2.5
+        with:
+          configuration-path: '.github/workflows-updater.yml'
+      
+      - name: Check for action updates
+        run: |
+          # Find all workflow files
+          find .github/workflows/ -name "*.yml" -o -name "*.yaml" > workflow-files.txt
+          
+          # Check for action updates
+          python scripts/check-action-updates.py \
+            --workflow-files workflow-files.txt \
+            --output action-updates.json
+      
+      - name: Update workflow files
+        run: |
+          # Update actions in workflow files
+          python scripts/update-workflow-actions.py \
+            --updates-file action-updates.json \
+            --workflow-dir .github/workflows/
+      
+      - name: Generate actions update report
+        run: |
+          python scripts/generate-actions-report.py \
+            --updates-file action-updates.json \
+            --output actions-update-report.md
+      
+      - name: Create Pull Request
+        if: success()
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            ci: update GitHub Actions to latest versions
+            
+            - Update actions to latest stable versions
+            - Security improvements included
+            - Workflow compatibility verified
+            
+            🤖 Generated with [Claude Code](https://claude.ai/code)
+          title: 'ci: Update GitHub Actions'
+          body-path: actions-update-report.md
+          branch: deps/github-actions-updates
+          delete-branch: true
+          labels: |
+            dependencies
+            github-actions
+            ci
+            automated-pr
+
+  # =============================================================================
+  # DEPENDENCY MERGE AUTOMATION
+  # =============================================================================
+  auto-merge:
+    name: Auto-merge Dependencies
+    runs-on: ubuntu-latest
+    needs: [python-dependencies, container-updates, k8s-updates, actions-updates]
+    if: |
+      always() && 
+      (github.event.inputs.auto_merge == 'true' || github.event_name == 'schedule') &&
+      !contains(needs.*.result, 'failure')
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.DEPENDABOT_TOKEN }}
+      
+      - name: Auto-merge security updates
+        uses: pascalgn/merge-action@v0.15.6
+        with:
+          github_token: ${{ secrets.DEPENDABOT_TOKEN }}
+          merge_method: squash
+          merge_filter_author: dependabot[bot]
+          merge_forks: false
+          merge_labels: "dependencies,security,automated-pr"
+          merge_remove_labels: "automated-pr"
+          merge_commit_message: "pull-request-title-and-description"
+      
+      - name: Auto-merge minor updates
+        uses: pascalgn/merge-action@v0.15.6
+        with:
+          github_token: ${{ secrets.DEPENDABOT_TOKEN }}
+          merge_method: squash
+          merge_filter_author: dependabot[bot]
+          merge_forks: false
+          merge_labels: "dependencies,minor,automated-pr"
+          merge_remove_labels: "automated-pr"
+          merge_commit_message: "pull-request-title-and-description"
+      
+      - name: Notify on auto-merge
+        if: success()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: success
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+          message: |
+            🔄 Dependency updates auto-merged successfully
+            
+            Repository: ${{ github.repository }}
+            Updates processed: 
+            - Python dependencies
+            - Container base images  
+            - Kubernetes manifests
+            - GitHub Actions
+            
+            All tests passed and changes have been merged automatically.
+
+  # =============================================================================
+  # DEPENDENCY MONITORING
+  # =============================================================================
+  dependency-monitoring:
+    name: Dependency Monitoring
+    runs-on: ubuntu-latest
+    needs: [python-dependencies, container-updates, k8s-updates, actions-updates]
+    if: always()
+    
+    steps:
+      - name: Generate dependency dashboard
+        run: |
+          # Create comprehensive dependency status dashboard
+          python scripts/generate-dependency-dashboard.py \
+            --output dependency-dashboard.html \
+            --include-metrics \
+            --include-security-status \
+            --include-update-history
+      
+      - name: Update dependency tracking
+        run: |
+          # Update dependency tracking database
+          python scripts/update-dependency-tracking.py \
+            --results-dir dependency-results/ \
+            --database dependency-tracking.db
+      
+      - name: Schedule vulnerability notifications
+        run: |
+          # Schedule regular vulnerability notifications
+          python scripts/schedule-vuln-notifications.py \
+            --config vuln-notification-config.yaml \
+            --schedule weekly
+      
+      - name: Upload dependency dashboard
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependency-dashboard
+          path: dependency-dashboard.html
