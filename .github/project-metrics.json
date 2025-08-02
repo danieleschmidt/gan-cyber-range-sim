@@ -1,0 +1,354 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "last_updated": "2025-08-02",
+    "framework": "Terragon SDLC Metrics v2.0",
+    "repository": "gan-cyber-range-sim",
+    "collection_frequency": "daily"
+  },
+  "metrics": {
+    "development": {
+      "code_quality": {
+        "test_coverage": {
+          "target": 85,
+          "current": 0,
+          "unit": "percentage",
+          "trend": "improving",
+          "measurement_method": "pytest-cov",
+          "thresholds": {
+            "red": 60,
+            "yellow": 75,
+            "green": 85
+          }
+        },
+        "cyclomatic_complexity": {
+          "target": 10,
+          "current": 8,
+          "unit": "average",
+          "trend": "stable",
+          "measurement_method": "radon",
+          "thresholds": {
+            "red": 15,
+            "yellow": 12,
+            "green": 10
+          }
+        },
+        "code_duplication": {
+          "target": 5,
+          "current": 3,
+          "unit": "percentage",
+          "trend": "improving",
+          "measurement_method": "dupeguru",
+          "thresholds": {
+            "red": 10,
+            "yellow": 7,
+            "green": 5
+          }
+        },
+        "technical_debt_ratio": {
+          "target": 5,
+          "current": 8,
+          "unit": "percentage",
+          "trend": "improving",
+          "measurement_method": "sonarqube",
+          "thresholds": {
+            "red": 15,
+            "yellow": 10,
+            "green": 5
+          }
+        }
+      },
+      "security": {
+        "vulnerability_count": {
+          "target": 0,
+          "current": 2,
+          "unit": "count",
+          "trend": "improving",
+          "measurement_method": "bandit,safety",
+          "severity_breakdown": {
+            "critical": 0,
+            "high": 0,
+            "medium": 2,
+            "low": 0
+          }
+        },
+        "secret_exposure_incidents": {
+          "target": 0,
+          "current": 0,
+          "unit": "count",
+          "trend": "stable",
+          "measurement_method": "truffleHog,gitleaks"
+        },
+        "security_scan_frequency": {
+          "target": "daily",
+          "current": "weekly",
+          "unit": "frequency",
+          "trend": "improving",
+          "measurement_method": "automation"
+        },
+        "slsa_compliance_level": {
+          "target": 3,
+          "current": 1,
+          "unit": "level",
+          "trend": "improving",
+          "measurement_method": "slsa-verifier"
+        }
+      },
+      "performance": {
+        "build_time": {
+          "target": 300,
+          "current": 245,
+          "unit": "seconds",
+          "trend": "stable",
+          "measurement_method": "ci_timing",
+          "thresholds": {
+            "red": 600,
+            "yellow": 450,
+            "green": 300
+          }
+        },
+        "test_execution_time": {
+          "target": 120,
+          "current": 95,
+          "unit": "seconds",
+          "trend": "improving",
+          "measurement_method": "pytest_timing"
+        },
+        "container_image_size": {
+          "target": 500,
+          "current": 750,
+          "unit": "MB",
+          "trend": "improving",
+          "measurement_method": "docker_inspect"
+        }
+      }
+    },
+    "operations": {
+      "deployment": {
+        "deployment_frequency": {
+          "target": "weekly",
+          "current": "monthly",
+          "unit": "frequency",
+          "trend": "improving",
+          "measurement_method": "release_tracking"
+        },
+        "deployment_success_rate": {
+          "target": 98,
+          "current": 95,
+          "unit": "percentage",
+          "trend": "stable",
+          "measurement_method": "ci_cd_metrics"
+        },
+        "mean_time_to_deployment": {
+          "target": 30,
+          "current": 45,
+          "unit": "minutes",
+          "trend": "improving",
+          "measurement_method": "pipeline_timing"
+        },
+        "rollback_frequency": {
+          "target": 2,
+          "current": 1,
+          "unit": "percentage",
+          "trend": "stable",
+          "measurement_method": "deployment_tracking"
+        }
+      },
+      "reliability": {
+        "uptime": {
+          "target": 99.9,
+          "current": 99.5,
+          "unit": "percentage",
+          "trend": "stable",
+          "measurement_method": "monitoring"
+        },
+        "mean_time_to_recovery": {
+          "target": 15,
+          "current": 25,
+          "unit": "minutes",
+          "trend": "improving",
+          "measurement_method": "incident_tracking"
+        },
+        "error_rate": {
+          "target": 0.1,
+          "current": 0.3,
+          "unit": "percentage",
+          "trend": "improving",
+          "measurement_method": "application_logs"
+        }
+      },
+      "monitoring": {
+        "alert_noise_ratio": {
+          "target": 5,
+          "current": 12,
+          "unit": "percentage",
+          "trend": "improving",
+          "measurement_method": "alerting_system"
+        },
+        "observability_coverage": {
+          "target": 90,
+          "current": 70,
+          "unit": "percentage",
+          "trend": "improving",
+          "measurement_method": "instrumentation_audit"
+        }
+      }
+    },
+    "compliance": {
+      "governance": {
+        "policy_compliance_rate": {
+          "target": 100,
+          "current": 95,
+          "unit": "percentage",
+          "trend": "improving",
+          "measurement_method": "policy_engine"
+        },
+        "audit_findings": {
+          "target": 0,
+          "current": 3,
+          "unit": "count",
+          "trend": "improving",
+          "measurement_method": "compliance_audit",
+          "severity_breakdown": {
+            "critical": 0,
+            "high": 1,
+            "medium": 2,
+            "low": 0
+          }
+        },
+        "documentation_coverage": {
+          "target": 95,
+          "current": 85,
+          "unit": "percentage",
+          "trend": "improving",
+          "measurement_method": "documentation_audit"
+        }
+      },
+      "security_compliance": {
+        "nist_csf_maturity": {
+          "target": 4,
+          "current": 3,
+          "unit": "level",
+          "trend": "improving",
+          "measurement_method": "nist_assessment"
+        },
+        "iso27001_compliance": {
+          "target": 90,
+          "current": 75,
+          "unit": "percentage",
+          "trend": "improving",
+          "measurement_method": "iso_audit"
+        },
+        "data_protection_score": {
+          "target": 95,
+          "current": 88,
+          "unit": "percentage",
+          "trend": "improving",
+          "measurement_method": "privacy_audit"
+        }
+      }
+    },
+    "team": {
+      "productivity": {
+        "velocity": {
+          "target": 40,
+          "current": 35,
+          "unit": "story_points",
+          "trend": "improving",
+          "measurement_method": "sprint_tracking"
+        },
+        "cycle_time": {
+          "target": 3,
+          "current": 5,
+          "unit": "days",
+          "trend": "improving",
+          "measurement_method": "issue_tracking"
+        },
+        "pr_review_time": {
+          "target": 8,
+          "current": 12,
+          "unit": "hours",
+          "trend": "stable",
+          "measurement_method": "github_metrics"
+        }
+      },
+      "quality": {
+        "defect_density": {
+          "target": 2,
+          "current": 4,
+          "unit": "defects_per_kloc",
+          "trend": "improving",
+          "measurement_method": "bug_tracking"
+        },
+        "customer_satisfaction": {
+          "target": 85,
+          "current": 78,
+          "unit": "percentage",
+          "trend": "stable",
+          "measurement_method": "surveys"
+        }
+      },
+      "collaboration": {
+        "knowledge_sharing_sessions": {
+          "target": 8,
+          "current": 4,
+          "unit": "per_month",
+          "trend": "improving",
+          "measurement_method": "calendar_tracking"
+        },
+        "cross_team_contributions": {
+          "target": 15,
+          "current": 8,
+          "unit": "percentage",
+          "trend": "stable",
+          "measurement_method": "commit_analysis"
+        }
+      }
+    }
+  },
+  "automation": {
+    "collection_scripts": {
+      "code_metrics": "scripts/collect-code-metrics.py",
+      "security_metrics": "scripts/collect-security-metrics.py",
+      "performance_metrics": "scripts/collect-performance-metrics.py",
+      "compliance_metrics": "scripts/collect-compliance-metrics.py"
+    },
+    "reporting": {
+      "dashboard_url": "https://metrics.terragon.local/gan-cyber-range",
+      "weekly_report": "scripts/generate-weekly-report.py",
+      "monthly_report": "scripts/generate-monthly-report.py",
+      "executive_summary": "scripts/generate-executive-summary.py"
+    },
+    "integration": {
+      "prometheus": "monitoring/prometheus-config.yml",
+      "grafana": "monitoring/grafana-dashboards.json",
+      "elasticsearch": "monitoring/elasticsearch-mappings.json"
+    }
+  },
+  "targets": {
+    "q1_2025": {
+      "test_coverage": 85,
+      "vulnerability_count": 0,
+      "deployment_frequency": "weekly",
+      "nist_csf_maturity": 4
+    },
+    "q2_2025": {
+      "technical_debt_ratio": 5,
+      "deployment_success_rate": 98,
+      "slsa_compliance_level": 3,
+      "iso27001_compliance": 90
+    },
+    "q3_2025": {
+      "uptime": 99.9,
+      "error_rate": 0.1,
+      "policy_compliance_rate": 100,
+      "customer_satisfaction": 85
+    },
+    "q4_2025": {
+      "mean_time_to_recovery": 15,
+      "observability_coverage": 90,
+      "data_protection_score": 95,
+      "velocity": 40
+    }
+  }
+}
