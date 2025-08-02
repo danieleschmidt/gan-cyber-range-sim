@@ -1,0 +1,42 @@
+# CODEOWNERS file for GAN Cyber Range Simulator
+# Global ownership
+* @security-team @maintainers
+
+# Core application code
+/src/ @core-developers @security-team
+/src/gan_cyber_range/agents/ @ai-team @security-team
+/src/gan_cyber_range/environment/ @infrastructure-team @security-team
+
+# Security-critical files
+/SECURITY.md @security-team
+/docs/COMPLIANCE.md @security-team @compliance-team
+/.github/workflows/ @devops-team @security-team
+/deployments/ @infrastructure-team @security-team
+
+# Testing and quality assurance
+/tests/ @qa-team @core-developers
+/.pre-commit-config.yaml @devops-team
+/pyproject.toml @core-developers @devops-team
+
+# Documentation
+/docs/ @documentation-team @core-developers
+/README.md @documentation-team @maintainers
+
+# Configuration and infrastructure
+/docker-compose.yml @infrastructure-team @devops-team
+/Dockerfile @infrastructure-team @security-team
+/Makefile @devops-team @core-developers
+
+# Dependency management
+/requirements.txt @security-team @core-developers
+/.github/dependabot.yml @security-team @devops-team
+
+# Scripts and automation
+/scripts/ @devops-team @security-team
+
+# Monitoring and observability
+/docs/monitoring/ @infrastructure-team @devops-team
+
+# Compliance and governance
+/docs/COMPLIANCE.md @compliance-team @security-team
+/LICENSE @legal-team @maintainers
