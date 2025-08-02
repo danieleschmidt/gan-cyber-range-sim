@@ -2,7 +2,7 @@
 # Security-hardened container with minimal attack surface
 
 # Base stage with common dependencies
-FROM python:3.11-slim as base
+FROM python:3.13-slim as base
 
 # Metadata
 LABEL maintainer="info@gan-cyber-range.org"
@@ -89,7 +89,7 @@ RUN bandit -r src/ -f json -o /tmp/bandit-report.json || true
 RUN safety check --json --output /tmp/safety-report.json || true
 
 # Production stage - minimal and secure
-FROM python:3.11-slim as production
+FROM python:3.13-slim as production
 
 # Install only runtime dependencies
 RUN apt-get update && apt-get upgrade -y && \
