@@ -1,0 +1,48 @@
+# Global owners - default reviewers for all changes
+* @danieleschmidt
+
+# Core architecture and security
+/src/ @danieleschmidt
+/docs/ARCHITECTURE.md @danieleschmidt
+/docs/SECURITY.md @danieleschmidt
+/SECURITY.md @danieleschmidt
+
+# CI/CD and deployment configuration
+/.github/ @danieleschmidt
+/docs/workflows/ @danieleschmidt
+/deployments/ @danieleschmidt
+/docker-compose.yml @danieleschmidt
+/Dockerfile @danieleschmidt
+
+# Testing and quality assurance
+/tests/ @danieleschmidt
+/pyproject.toml @danieleschmidt
+/requirements.txt @danieleschmidt
+/.pre-commit-config.yaml @danieleschmidt
+/ruff.toml @danieleschmidt
+
+# Scripts and automation
+/scripts/ @danieleschmidt
+/Makefile @danieleschmidt
+
+# Documentation
+/docs/ @danieleschmidt
+/README.md @danieleschmidt
+/CONTRIBUTING.md @danieleschmidt
+/CHANGELOG.md @danieleschmidt
+
+# Configuration files
+/*.yml @danieleschmidt
+/*.yaml @danieleschmidt
+/*.toml @danieleschmidt
+/*.json @danieleschmidt
+
+# Legal and compliance
+/LICENSE @danieleschmidt
+/CODE_OF_CONDUCT.md @danieleschmidt
+
+# Metrics and reporting
+/.github/project-metrics.json @danieleschmidt
+/scripts/collect-metrics.py @danieleschmidt
+/scripts/*-automation.py @danieleschmidt
+/scripts/*-monitor.py @danieleschmidt
