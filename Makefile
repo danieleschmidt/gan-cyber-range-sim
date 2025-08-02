@@ -67,17 +67,45 @@ docs-deploy: ## Deploy documentation
 
 # Docker operations
 docker-build: ## Build Docker images
-	docker build -t gan-cyber-range:latest .
-	docker build -f deployments/Dockerfile.agent -t gan-cyber-range-agent:latest .
+	docker build --target production -t gan-cyber-range:$(DOCKER_TAG) .
+	docker build --target development -t gan-cyber-range:dev .
+
+docker-build-all: ## Build all Docker images with security scanning
+	docker build --target production -t gan-cyber-range:$(DOCKER_TAG) .
+	docker build --target development -t gan-cyber-range:dev .
+	docker build --target testing -t gan-cyber-range:test .
+	docker build --target security-scan -t gan-cyber-range:security-scan .
+	docker build --target sbom -t gan-cyber-range:sbom .
+
+docker-security-scan: docker-build ## Run security scanning on Docker images
+	docker run --rm gan-cyber-range:security-scan
+	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+		aquasec/trivy image gan-cyber-range:$(DOCKER_TAG)
+
+docker-sbom: ## Generate Software Bill of Materials
+	docker run --rm gan-cyber-range:sbom cat /tmp/sbom.json > sbom.json
+	@echo "SBOM generated: sbom.json"
 
 docker-run: ## Run application with Docker Compose
+	docker-compose up -d
+
+docker-run-dev: ## Run development environment with Docker Compose
+	docker-compose --profile dev up -d
+
+docker-run-full: ## Run full stack including monitoring
 	docker-compose up -d
 
 docker-stop: ## Stop Docker Compose services
 	docker-compose down
 
+docker-stop-all: ## Stop all services and remove volumes
+	docker-compose down -v --remove-orphans
+
 docker-logs: ## View Docker Compose logs
 	docker-compose logs -f
+
+docker-logs-app: ## View application logs only
+	docker-compose logs -f cyber-range
 
 # Kubernetes operations
 k8s-namespace: ## Create Kubernetes namespace
