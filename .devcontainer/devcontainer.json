@@ -1,0 +1,169 @@
+{
+  "name": "GAN Cyber Range Simulator",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "dev-environment",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true,
+      "username": "vscode",
+      "userUid": "1000",
+      "userGid": "1000"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11",
+      "installTools": true,
+      "optimize": true
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18",
+      "nodeGypDependencies": true,
+      "installYarnUsingApt": true
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "enableNonRootDocker": true,
+      "moby": true
+    },
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+      "version": "latest",
+      "helm": "latest",
+      "minikube": "latest"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest",
+      "ppa": true
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.pylint",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "ms-python.mypy-type-checker",
+        "charliermarsh.ruff",
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "ms-vscode.vscode-yaml",
+        "redhat.vscode-yaml",
+        "ms-vscode.vscode-json",
+        "eamodio.gitlens",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "ms-vscode.test-adapter-converter",
+        "hbenl.vscode-test-explorer",
+        "littlefoxteam.vscode-python-test-adapter",
+        "ms-azuretools.vscode-docker",
+        "hashicorp.terraform",
+        "ms-vscode-remote.remote-containers",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "streetsidesoftware.code-spell-checker",
+        "ban.spellright",
+        "yzhang.markdown-all-in-one",
+        "DavidAnson.vscode-markdownlint",
+        "shd101wyy.markdown-preview-enhanced"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": false,
+        "python.linting.ruffEnabled": true,
+        "python.formatting.provider": "black",
+        "python.formatting.blackArgs": ["--line-length=88"],
+        "python.sortImports.args": ["--profile", "black"],
+        "python.testing.pytestEnabled": true,
+        "python.testing.unittestEnabled": false,
+        "python.testing.pytestArgs": [
+          "tests"
+        ],
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": true,
+          "source.fixAll": true
+        },
+        "files.exclude": {
+          "**/__pycache__": true,
+          "**/*.pyc": true,
+          "**/node_modules": true,
+          "**/.pytest_cache": true,
+          "**/.mypy_cache": true,
+          "**/.ruff_cache": true
+        },
+        "yaml.schemas": {
+          "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml",
+          "https://json.schemastore.org/github-action.json": ".github/actions/*/action.yml",
+          "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json": "docker-compose*.yml"
+        },
+        "kubernetes.kubectlPath": "/usr/local/bin/kubectl",
+        "kubernetes.helmPath": "/usr/local/bin/helm",
+        "security.workspace.trust.enabled": false
+      }
+    }
+  },
+
+  "containerEnv": {
+    "PYTHONPATH": "/workspace/src",
+    "ENVIRONMENT": "development",
+    "LOG_LEVEL": "DEBUG"
+  },
+
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+  ],
+
+  "forwardPorts": [
+    8080,
+    8000,
+    3000,
+    5432,
+    6379,
+    9090,
+    3001
+  ],
+
+  "portsAttributes": {
+    "8080": {
+      "label": "Cyber Range Dashboard",
+      "onAutoForward": "notify"
+    },
+    "8000": {
+      "label": "API Server",
+      "onAutoForward": "silent"
+    },
+    "3000": {
+      "label": "Frontend Dev Server",
+      "onAutoForward": "notify"
+    },
+    "5432": {
+      "label": "PostgreSQL",
+      "onAutoForward": "silent"
+    },
+    "6379": {
+      "label": "Redis",
+      "onAutoForward": "silent"
+    },
+    "9090": {
+      "label": "Prometheus",
+      "onAutoForward": "silent"
+    },
+    "3001": {
+      "label": "Grafana",
+      "onAutoForward": "silent"
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "postStartCommand": "git config --global --add safe.directory /workspace",
+
+  "remoteUser": "vscode",
+
+  "overrideCommand": false
+}

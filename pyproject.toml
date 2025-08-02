@@ -50,16 +50,46 @@ dev = [
     "pytest>=7.4.0",
     "pytest-cov>=4.1.0",
     "pytest-asyncio>=0.21.0",
+    "pytest-xdist>=3.3.1",
+    "pytest-mock>=3.11.1",
+    "pytest-benchmark>=4.0.0",
+    "pytest-timeout>=2.1.0",
+    "pytest-html>=4.0.0",
     "black>=23.9.0",
     "isort>=5.12.0",
-    "flake8>=6.1.0",
+    "ruff>=0.1.0",
     "mypy>=1.6.0",
     "pre-commit>=3.5.0",
+    "factory-boy>=3.3.0",
+    "freezegun>=1.2.0",
+    "responses>=0.23.0",
 ]
 security = [
     "bandit>=1.7.5",
     "safety>=2.3.0",
     "semgrep>=1.45.0",
+    "detect-secrets>=1.4.0",
+    "pip-audit>=2.6.0",
+]
+test = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-xdist>=3.3.1",
+    "pytest-mock>=3.11.1",
+    "pytest-benchmark>=4.0.0",
+    "pytest-timeout>=2.1.0",
+    "pytest-html>=4.0.0",
+    "factory-boy>=3.3.0",
+    "freezegun>=1.2.0",
+    "responses>=0.23.0",
+    "locust>=2.17.0",
+]
+performance = [
+    "locust>=2.17.0",
+    "pytest-benchmark>=4.0.0",
+    "memory-profiler>=0.61.0",
+    "py-spy>=0.3.14",
 ]
 docs = [
     "mkdocs>=1.5.0",
@@ -114,13 +144,31 @@ addopts = [
     "--cov=gan_cyber_range",
     "--cov-report=term-missing",
     "--cov-report=html",
+    "--cov-report=xml",
     "--strict-markers",
+    "--strict-config",
+    "--tb=short",
+    "--timeout=300",
 ]
 markers = [
     "unit: Unit tests",
     "integration: Integration tests",
     "security: Security-related tests",
+    "performance: Performance tests",
     "slow: Slow running tests",
+    "smoke: Smoke tests for quick validation",
+    "regression: Regression tests",
+    "agent: Tests for AI agent functionality",
+    "kubernetes: Tests requiring Kubernetes cluster",
+    "network: Tests involving network operations",
+]
+timeout = 300
+timeout_method = "thread"
+filterwarnings = [
+    "error",
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
 ]
 
 [tool.bandit]
