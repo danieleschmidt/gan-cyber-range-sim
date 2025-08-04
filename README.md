@@ -487,7 +487,7 @@ See [SECURITY.md](SECURITY.md) for details.
 ```bibtex
 @software{gan_cyber_range_sim,
   title={GAN Cyber Range Simulator: Adversarial Security Training with LLMs},
-  author={Your Name},
+  author={Daniel Schmidt},
   year={2025},
   url={https://github.com/yourusername/gan-cyber-range-sim}
 }
