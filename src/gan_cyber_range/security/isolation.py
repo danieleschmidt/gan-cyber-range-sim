@@ -542,3 +542,89 @@ class NetworkIsolation:
         except Exception as e:
             self.logger.error(f"Failed to cleanup network policies: {e}")
             return False
+    
+    async def create_dynamic_quarantine_zone(
+        self,
+        threat_type: str,
+        affected_hosts: List[str],
+        duration_hours: int = 24
+    ) -> str:
+        """Create dynamic quarantine zone for threat containment."""
+        from datetime import datetime, timedelta
+        
+        zone_id = f"quarantine_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        
+        quarantine_zone = {
+            "id": zone_id,
+            "threat_type": threat_type,
+            "affected_hosts": affected_hosts,
+            "created_at": datetime.now().isoformat(),
+            "expires_at": (datetime.now() + timedelta(hours=duration_hours)).isoformat(),
+            "status": "active",
+            "containment_rules": []
+        }
+        
+        # Create strict isolation rules for quarantine zone
+        containment_rules = [
+            NetworkRule(
+                source="quarantine_zone",
+                destination="external",
+                port=0,
+                action="DENY",
+                priority=1,
+                description=f"Block all external traffic from quarantine zone {zone_id}"
+            ),
+            NetworkRule(
+                source="quarantine_zone", 
+                destination="internal",
+                port=0,
+                action="DENY",
+                priority=1,
+                description=f"Block internal lateral movement from quarantine zone {zone_id}"
+            ),
+            NetworkRule(
+                source="quarantine_zone",
+                destination="dns_resolver",
+                port=53,
+                action="ALLOW",
+                priority=10,
+                description="Allow DNS for monitoring and analysis"
+            ),
+            NetworkRule(
+                source="monitoring",
+                destination="quarantine_zone",
+                port=0,
+                action="ALLOW",
+                priority=5,
+                description="Allow monitoring and forensic collection"
+            )
+        ]
+        
+        quarantine_zone["containment_rules"] = [
+            {
+                "source": rule.source,
+                "destination": rule.destination,
+                "port": rule.port,
+                "action": rule.action,
+                "priority": rule.priority,
+                "description": rule.description
+            }
+            for rule in containment_rules
+        ]
+        
+        # Initialize quarantine_zones if not exists
+        if not hasattr(self, 'quarantine_zones'):
+            self.quarantine_zones = []
+        
+        # Add to quarantine zones list
+        self.quarantine_zones.append(quarantine_zone)
+        
+        # Apply containment rules
+        self.active_rules.extend(containment_rules)
+        
+        self.logger.warning(
+            f"Created quarantine zone {zone_id} for {len(affected_hosts)} hosts "
+            f"(threat: {threat_type}, duration: {duration_hours}h)"
+        )
+        
+        return zone_id

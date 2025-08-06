@@ -18,11 +18,17 @@ class BlueTeamAgent(BaseAgent):
         skill_level: str = "advanced",
         defense_strategy: str = "proactive",
         tools: List[str] = None,
+        threat_intelligence_feeds: List[str] = None,
+        auto_response_enabled: bool = True,
         **kwargs
     ):
         super().__init__(name, llm_model, skill_level, **kwargs)
         self.defense_strategy = defense_strategy
-        self.tools = tools or ["ids", "auto_patcher", "honeypots", "firewall"]
+        self.tools = tools or ["ids", "auto_patcher", "honeypots", "firewall", "siem", "edr"]
+        self.threat_intelligence_feeds = threat_intelligence_feeds or [
+            "mitre_attack", "cti_feeds", "osint", "internal_intel"
+        ]
+        self.auto_response_enabled = auto_response_enabled
         self.defensive_actions = [
             "threat_detection",
             "vulnerability_patching",
@@ -30,10 +36,21 @@ class BlueTeamAgent(BaseAgent):
             "network_monitoring",
             "incident_response",
             "system_hardening",
-            "honeypot_deployment"
+            "honeypot_deployment",
+            "threat_hunting",
+            "forensic_analysis",
+            "containment",
+            "eradication",
+            "recovery"
         ]
         self.threat_intelligence = []
         self.active_incidents = []
+        self.incident_history = []
+        self.threat_indicators = set()
+        self.quarantine_zones = []
+        self.security_baselines = {}
+        self.detection_rules = []
+        self.response_playbooks = self._initialize_playbooks()
     
     async def analyze_environment(self, environment_state: Dict[str, Any]) -> Dict[str, Any]:
         """Analyze environment for security threats and vulnerabilities."""
@@ -153,6 +170,14 @@ class BlueTeamAgent(BaseAgent):
                     "first_seen": datetime.now().isoformat()
                 }
                 threats.append(threat)
+        
+        # Correlate with threat intelligence feeds
+        for threat in threats:
+            threat['intelligence_matches'] = self._correlate_with_threat_intel(threat)
+            threat['risk_score'] = self._calculate_risk_score(threat)
+        
+        # Sort by risk score
+        threats.sort(key=lambda x: x.get('risk_score', 0.5), reverse=True)
         
         return threats
     
@@ -363,6 +388,116 @@ class BlueTeamAgent(BaseAgent):
         
         return min(base_confidence, 1.0)
     
+    def _initialize_playbooks(self) -> Dict[str, Dict[str, Any]]:
+        """Initialize automated response playbooks."""
+        return {
+            "malware_detected": {
+                "severity": "high",
+                "steps": [
+                    {"action": "isolate_host", "priority": 1},
+                    {"action": "collect_artifacts", "priority": 2},
+                    {"action": "scan_network", "priority": 3},
+                    {"action": "update_signatures", "priority": 4}
+                ]
+            },
+            "brute_force_attack": {
+                "severity": "medium",
+                "steps": [
+                    {"action": "block_source_ip", "priority": 1},
+                    {"action": "lock_account", "priority": 2},
+                    {"action": "enhance_monitoring", "priority": 3}
+                ]
+            },
+            "data_exfiltration": {
+                "severity": "critical",
+                "steps": [
+                    {"action": "block_egress", "priority": 1},
+                    {"action": "isolate_affected_systems", "priority": 2},
+                    {"action": "activate_incident_response", "priority": 3},
+                    {"action": "notify_stakeholders", "priority": 4}
+                ]
+            },
+            "privilege_escalation": {
+                "severity": "high",
+                "steps": [
+                    {"action": "terminate_suspicious_processes", "priority": 1},
+                    {"action": "review_access_logs", "priority": 2},
+                    {"action": "patch_vulnerabilities", "priority": 3},
+                    {"action": "strengthen_access_controls", "priority": 4}
+                ]
+            }
+        }
+    
+    def _correlate_with_threat_intel(self, threat: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Correlate threat with intelligence feeds."""
+        matches = []
+        
+        threat_indicators = [
+            threat.get("source"),
+            threat.get("indicator"),
+            threat.get("type")
+        ]
+        
+        for indicator in threat_indicators:
+            if indicator and indicator in self.threat_indicators:
+                matches.append({
+                    "indicator": indicator,
+                    "source": "internal_intel",
+                    "confidence": 0.8
+                })
+        
+        # Simulate external threat intelligence correlation
+        if threat.get("type") in ["malware", "c2_communication", "data_exfiltration"]:
+            matches.append({
+                "indicator": threat.get("type"),
+                "source": "mitre_attack",
+                "confidence": 0.9,
+                "technique_id": self._map_to_mitre_technique(threat.get("type"))
+            })
+        
+        return matches
+    
+    def _map_to_mitre_technique(self, threat_type: str) -> str:
+        """Map threat type to MITRE ATT&CK technique."""
+        technique_mapping = {
+            "malware": "T1059",  # Command and Scripting Interpreter
+            "c2_communication": "T1071",  # Application Layer Protocol
+            "data_exfiltration": "T1041",  # Exfiltration Over C2 Channel
+            "privilege_escalation": "T1068",  # Exploitation for Privilege Escalation
+            "lateral_movement": "T1021",  # Remote Services
+            "persistence": "T1053"  # Scheduled Task/Job
+        }
+        return technique_mapping.get(threat_type, "T1000")
+    
+    def _calculate_risk_score(self, threat: Dict[str, Any]) -> float:
+        """Calculate comprehensive risk score for threat."""
+        base_score = 0.5
+        
+        # Severity contribution
+        severity_weights = {
+            "critical": 1.0,
+            "high": 0.8,
+            "medium": 0.5,
+            "low": 0.2
+        }
+        base_score += severity_weights.get(threat.get("severity", "medium"), 0.5) * 0.3
+        
+        # Confidence contribution
+        confidence = threat.get("confidence", 0.5)
+        base_score += confidence * 0.2
+        
+        # Intelligence matches contribution
+        intel_matches = threat.get("intelligence_matches", [])
+        if intel_matches:
+            avg_intel_confidence = sum(m.get("confidence", 0) for m in intel_matches) / len(intel_matches)
+            base_score += avg_intel_confidence * 0.2
+        
+        # Asset value contribution (if targeting critical assets)
+        if threat.get("target") in ["database", "domain_controller", "api_gateway"]:
+            base_score += 0.3
+        
+        return min(base_score, 1.0)
+    
     def _calculate_urgency(self, threat: Dict[str, Any]) -> float:
         """Calculate urgency score for threat."""
         urgency = 0.5
@@ -455,3 +590,214 @@ class BlueTeamAgent(BaseAgent):
             "critical_services_up": True,  # Simplified
             "last_assessment": datetime.now().isoformat()
         }
+    
+    async def execute_automated_response(self, threat: Dict[str, Any]) -> List[AgentAction]:
+        """Execute automated response based on threat type."""
+        if not self.auto_response_enabled:
+            return []
+        
+        threat_type = threat.get("type", "unknown")
+        playbook_key = self._map_threat_to_playbook(threat_type)
+        
+        if playbook_key not in self.response_playbooks:
+            return []
+        
+        playbook = self.response_playbooks[playbook_key]
+        actions = []
+        
+        for step in sorted(playbook["steps"], key=lambda x: x["priority"]):
+            action = AgentAction(
+                type=step["action"],
+                target=threat.get("target", "unknown"),
+                payload={
+                    "threat_id": threat.get("id"),
+                    "automated": True,
+                    "playbook": playbook_key,
+                    "step_priority": step["priority"]
+                },
+                metadata={
+                    "agent_name": self.name,
+                    "response_type": "automated",
+                    "threat_data": threat
+                }
+            )
+            actions.append(action)
+        
+        return actions
+    
+    def _map_threat_to_playbook(self, threat_type: str) -> str:
+        """Map threat type to response playbook."""
+        mapping = {
+            "malware": "malware_detected",
+            "brute_force": "brute_force_attack",
+            "credential_attack": "brute_force_attack",
+            "data_exfiltration": "data_exfiltration",
+            "privilege_escalation": "privilege_escalation",
+            "lateral_movement": "privilege_escalation"
+        }
+        return mapping.get(threat_type, "malware_detected")
+    
+    async def conduct_threat_hunt(self, hunt_hypothesis: str) -> Dict[str, Any]:
+        """Conduct proactive threat hunting."""
+        hunt_results = {
+            "hypothesis": hunt_hypothesis,
+            "start_time": datetime.now().isoformat(),
+            "findings": [],
+            "indicators_discovered": [],
+            "confidence_score": 0.0
+        }
+        
+        # Simulate threat hunting activities
+        hunting_techniques = [
+            "log_analysis",
+            "network_traffic_analysis", 
+            "endpoint_analysis",
+            "behavioral_analysis"
+        ]
+        
+        for technique in hunting_techniques:
+            findings = await self._execute_hunt_technique(technique, hunt_hypothesis)
+            hunt_results["findings"].extend(findings)
+        
+        # Extract new indicators of compromise
+        for finding in hunt_results["findings"]:
+            if finding.get("indicators"):
+                hunt_results["indicators_discovered"].extend(finding["indicators"])
+                self.threat_indicators.update(finding["indicators"])
+        
+        # Calculate overall confidence
+        if hunt_results["findings"]:
+            avg_confidence = sum(f.get("confidence", 0) for f in hunt_results["findings"]) / len(hunt_results["findings"])
+            hunt_results["confidence_score"] = avg_confidence
+        
+        hunt_results["end_time"] = datetime.now().isoformat()
+        return hunt_results
+    
+    async def _execute_hunt_technique(self, technique: str, hypothesis: str) -> List[Dict[str, Any]]:
+        """Execute specific threat hunting technique."""
+        findings = []
+        
+        # Simulate different hunting techniques
+        if technique == "log_analysis":
+            findings.append({
+                "technique": "log_analysis",
+                "description": f"Analyzed logs for patterns related to: {hypothesis}",
+                "confidence": 0.7,
+                "indicators": [f"suspicious_pattern_{hash(hypothesis) % 1000}"],
+                "evidence": "Multiple failed authentication attempts from single IP"
+            })
+        
+        elif technique == "network_traffic_analysis":
+            findings.append({
+                "technique": "network_traffic_analysis",
+                "description": f"Network traffic analysis for: {hypothesis}",
+                "confidence": 0.8,
+                "indicators": [f"network_indicator_{hash(hypothesis) % 1000}"],
+                "evidence": "Unusual outbound connections to suspicious domains"
+            })
+        
+        elif technique == "endpoint_analysis":
+            findings.append({
+                "technique": "endpoint_analysis",
+                "description": f"Endpoint forensics for: {hypothesis}",
+                "confidence": 0.6,
+                "indicators": [f"endpoint_artifact_{hash(hypothesis) % 1000}"],
+                "evidence": "Suspicious process execution patterns detected"
+            })
+        
+        elif technique == "behavioral_analysis":
+            findings.append({
+                "technique": "behavioral_analysis",
+                "description": f"User behavior analysis for: {hypothesis}",
+                "confidence": 0.9,
+                "indicators": [f"behavior_anomaly_{hash(hypothesis) % 1000}"],
+                "evidence": "Anomalous user access patterns identified"
+            })
+        
+        # Simulate async processing time
+        await asyncio.sleep(0.1)
+        return findings
+    
+    async def create_incident(self, threat: Dict[str, Any], severity: str = "medium") -> str:
+        """Create security incident from threat."""
+        incident_id = f"INC-{datetime.now().strftime('%Y%m%d')}-{len(self.active_incidents) + 1:03d}"
+        
+        incident = {
+            "id": incident_id,
+            "title": f"Security Incident: {threat.get('type', 'Unknown threat')}",
+            "severity": severity,
+            "status": "open",
+            "created_at": datetime.now().isoformat(),
+            "threat_data": threat,
+            "assigned_analyst": self.name,
+            "timeline": [{
+                "timestamp": datetime.now().isoformat(),
+                "action": "incident_created",
+                "details": f"Incident created from threat {threat.get('id')}"
+            }],
+            "containment_actions": [],
+            "eradication_actions": [],
+            "recovery_actions": []
+        }
+        
+        self.active_incidents.append(incident)
+        self.logger.info(f"Created security incident: {incident_id}")
+        
+        return incident_id
+    
+    async def update_incident(self, incident_id: str, action: str, details: str) -> bool:
+        """Update incident with new action/information."""
+        for incident in self.active_incidents:
+            if incident["id"] == incident_id:
+                incident["timeline"].append({
+                    "timestamp": datetime.now().isoformat(),
+                    "action": action,
+                    "details": details
+                })
+                
+                # Update appropriate action list
+                if action.startswith("containment"):
+                    incident["containment_actions"].append(details)
+                elif action.startswith("eradication"):
+                    incident["eradication_actions"].append(details)
+                elif action.startswith("recovery"):
+                    incident["recovery_actions"].append(details)
+                
+                return True
+        
+        return False
+    
+    async def deploy_adaptive_honeypot(self, threat_type: str, location: str) -> Dict[str, Any]:
+        """Deploy adaptive honeypot based on observed threats."""
+        honeypot_config = {
+            "id": f"honeypot_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+            "type": "adaptive",
+            "threat_mimicry": threat_type,
+            "location": location,
+            "deployed_at": datetime.now().isoformat(),
+            "interactions": [],
+            "intelligence_gathered": []
+        }
+        
+        # Configure honeypot based on threat type
+        if threat_type == "web_attack":
+            honeypot_config.update({
+                "services": ["http", "https"],
+                "vulnerabilities": ["sql_injection", "xss", "path_traversal"],
+                "port": 8080
+            })
+        elif threat_type == "lateral_movement":
+            honeypot_config.update({
+                "services": ["ssh", "rdp", "smb"],
+                "credentials": ["weak_passwords", "default_accounts"],
+                "port": 22
+            })
+        elif threat_type == "data_exfiltration":
+            honeypot_config.update({
+                "services": ["ftp", "database"],
+                "fake_data": ["customer_records", "financial_data"],
+                "port": 21
+            })
+        
+        self.logger.info(f"Deployed adaptive honeypot: {honeypot_config['id']}")
+        return honeypot_config
