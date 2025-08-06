@@ -2,10 +2,11 @@
 
 import asyncio
 import random
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 from datetime import datetime, timedelta
 
 from .base import BaseAgent, AgentAction
+from .llm_client import AgentLLMIntegration
 
 
 class BlueTeamAgent(BaseAgent):
@@ -20,10 +21,12 @@ class BlueTeamAgent(BaseAgent):
         tools: List[str] = None,
         threat_intelligence_feeds: List[str] = None,
         auto_response_enabled: bool = True,
+        api_key: Optional[str] = None,
         **kwargs
     ):
         super().__init__(name, llm_model, skill_level, **kwargs)
         self.defense_strategy = defense_strategy
+        self.llm_integration = AgentLLMIntegration(llm_model, api_key)
         self.tools = tools or ["ids", "auto_patcher", "honeypots", "firewall", "siem", "edr"]
         self.threat_intelligence_feeds = threat_intelligence_feeds or [
             "mitre_attack", "cti_feeds", "osint", "internal_intel"
@@ -53,59 +56,61 @@ class BlueTeamAgent(BaseAgent):
         self.response_playbooks = self._initialize_playbooks()
     
     async def analyze_environment(self, environment_state: Dict[str, Any]) -> Dict[str, Any]:
-        """Analyze environment for security threats and vulnerabilities."""
-        services = environment_state.get("services", [])
-        network_logs = environment_state.get("network_logs", [])
-        security_events = environment_state.get("security_events", [])
-        attack_indicators = environment_state.get("attack_indicators", [])
-        
-        # Analyze threats
-        active_threats = self._detect_active_threats(security_events, attack_indicators)
-        
-        # Assess vulnerabilities
-        vulnerabilities = self._assess_system_vulnerabilities(services)
-        
-        # Analyze attack patterns
-        attack_patterns = self._analyze_attack_patterns(network_logs, security_events)
-        
-        # Prioritize defensive actions
-        priorities = self._calculate_defense_priorities(active_threats, vulnerabilities)
-        
-        return {
-            "active_threats": active_threats,
-            "vulnerabilities": vulnerabilities,
-            "attack_patterns": attack_patterns,
-            "defense_priorities": priorities,
-            "system_health": self._assess_system_health(services),
-            "analysis_timestamp": datetime.now().isoformat()
-        }
+        """Analyze environment for security threats using LLM intelligence."""
+        try:
+            # Get LLM-powered analysis
+            agent_context = {
+                "skill_level": self.skill_level,
+                "tools": self.tools,
+                "round": self._round_counter,
+                "defense_strategy": self.defense_strategy,
+                "threat_intel_feeds": self.threat_intelligence_feeds,
+                "previous_actions": len(self.memory.actions),
+                "auto_response": self.auto_response_enabled
+            }
+            
+            llm_analysis = await self.llm_integration.analyze_environment(
+                "blue_team", environment_state, agent_context
+            )
+            
+            # Enhance with traditional security analysis
+            enhanced_analysis = self._enhance_analysis_with_traditional_methods(
+                llm_analysis, environment_state
+            )
+            
+            return enhanced_analysis
+            
+        except Exception as e:
+            self.logger.warning(f"LLM analysis failed, falling back to traditional methods: {e}")
+            return self._fallback_analysis(environment_state)
     
     async def plan_actions(self, analysis: Dict[str, Any]) -> List[AgentAction]:
-        """Plan defensive actions based on threat analysis."""
-        active_threats = analysis.get("active_threats", [])
-        vulnerabilities = analysis.get("vulnerabilities", [])
-        priorities = analysis.get("defense_priorities", [])
-        
-        actions = []
-        
-        # Respond to active threats first
-        for threat in active_threats[:3]:  # Handle top 3 threats
-            response_action = self._plan_threat_response(threat)
-            if response_action:
-                actions.append(response_action)
-        
-        # Address vulnerabilities based on strategy
-        if self.defense_strategy == "proactive":
-            vuln_actions = self._plan_vulnerability_mitigation(vulnerabilities)
-            actions.extend(vuln_actions[:2])  # Top 2 vulnerabilities
-        
-        # Deploy preventive measures
-        if len(actions) < self.max_actions_per_round:
-            preventive_action = self._plan_preventive_action(analysis)
-            if preventive_action:
-                actions.append(preventive_action)
-        
-        return actions
+        """Plan defensive actions using LLM intelligence."""
+        try:
+            # Get LLM-powered action plan
+            agent_context = {
+                "skill_level": self.skill_level,
+                "tools": self.tools,
+                "round": self._round_counter,
+                "max_actions": self.max_actions_per_round,
+                "defense_strategy": self.defense_strategy,
+                "recent_successes": len(self.memory.successes),
+                "active_incidents": len(self.active_incidents)
+            }
+            
+            llm_actions = await self.llm_integration.plan_actions(
+                "blue_team", analysis, agent_context
+            )
+            
+            # Convert LLM actions to AgentAction objects
+            actions = self._convert_llm_actions_to_agent_actions(llm_actions, analysis)
+            
+            # Ensure we don't exceed max actions per round
+            return actions[:self.max_actions_per_round]
+            
+        except Exception as e:
+            self.logger.warning(f"LLM action planning failed, falling back to traditional planning: {e}")
+            return self._fallback_action_planning(analysis)
     
     async def execute_action(self, action: AgentAction) -> AgentAction:
         """Execute a defensive action."""
@@ -801,3 +806,136 @@ class BlueTeamAgent(BaseAgent):
         
         self.logger.info(f"Deployed adaptive honeypot: {honeypot_config['id']}")
         return honeypot_config
+    
+    def _enhance_analysis_with_traditional_methods(self, llm_analysis: Dict[str, Any], environment_state: Dict[str, Any]) -> Dict[str, Any]:
+        """Enhance LLM analysis with traditional security methods."""
+        services = environment_state.get("services", [])
+        network_logs = environment_state.get("network_logs", [])
+        security_events = environment_state.get("security_events", [])
+        attack_indicators = environment_state.get("attack_indicators", [])
+        
+        # Add traditional threat detection
+        traditional_threats = self._detect_active_threats(security_events, attack_indicators)
+        traditional_vulns = self._assess_system_vulnerabilities(services)
+        
+        # Merge with LLM analysis
+        llm_threats = llm_analysis.get("detected_threats", [])
+        all_threats = traditional_threats + [
+            {"id": f"llm_{i}", **threat} for i, threat in enumerate(llm_threats)
+        ]
+        
+        # Enhanced analysis
+        enhanced_analysis = {
+            **llm_analysis,
+            "traditional_threats": traditional_threats,
+            "traditional_vulnerabilities": traditional_vulns,
+            "all_threats": all_threats,
+            "system_health": self._assess_system_health(services),
+            "attack_patterns": self._analyze_attack_patterns(network_logs, security_events),
+            "analysis_timestamp": datetime.now().isoformat()
+        }
+        
+        return enhanced_analysis
+    
+    def _fallback_analysis(self, environment_state: Dict[str, Any]) -> Dict[str, Any]:
+        """Fallback analysis using traditional security methods."""
+        services = environment_state.get("services", [])
+        network_logs = environment_state.get("network_logs", [])
+        security_events = environment_state.get("security_events", [])
+        attack_indicators = environment_state.get("attack_indicators", [])
+        
+        # Analyze threats
+        active_threats = self._detect_active_threats(security_events, attack_indicators)
+        
+        # Assess vulnerabilities
+        vulnerabilities = self._assess_system_vulnerabilities(services)
+        
+        # Analyze attack patterns
+        attack_patterns = self._analyze_attack_patterns(network_logs, security_events)
+        
+        # Prioritize defensive actions
+        priorities = self._calculate_defense_priorities(active_threats, vulnerabilities)
+        
+        return {
+            "active_threats": active_threats,
+            "vulnerabilities": vulnerabilities,
+            "attack_patterns": attack_patterns,
+            "defense_priorities": priorities,
+            "system_health": self._assess_system_health(services),
+            "analysis_timestamp": datetime.now().isoformat()
+        }
+    
+    def _convert_llm_actions_to_agent_actions(self, llm_actions: List[Dict[str, Any]], analysis: Dict[str, Any]) -> List[AgentAction]:
+        """Convert LLM action recommendations to AgentAction objects."""
+        actions = []
+        
+        for llm_action in llm_actions:
+            action_type = llm_action.get("action", "monitoring")
+            target = llm_action.get("target", "infrastructure")
+            priority = llm_action.get("priority", 0.5)
+            
+            # Find threat or vulnerability data from analysis
+            action_data = self._find_action_context(action_type, target, analysis)
+            
+            action = AgentAction(
+                type=action_type,
+                target=target,
+                payload={
+                    "llm_reasoning": llm_action.get("reasoning", "LLM recommended action"),
+                    "priority": priority,
+                    "action_data": action_data,
+                    "defense_strategy": self.defense_strategy,
+                    "urgency": llm_action.get("urgency", 0.5)
+                },
+                metadata={
+                    "agent_name": self.name,
+                    "skill_level": self.skill_level,
+                    "llm_generated": True,
+                    "defense_strategy": self.defense_strategy,
+                    "llm_action_data": llm_action
+                }
+            )
+            actions.append(action)
+        
+        return actions
+    
+    def _find_action_context(self, action_type: str, target: str, analysis: Dict[str, Any]) -> Dict[str, Any]:
+        """Find context data for an action from analysis."""
+        # Look for threat data
+        for threat in analysis.get("all_threats", []):
+            if threat.get("target") == target or threat.get("id") == target:
+                return {"type": "threat_response", "threat_data": threat}
+        
+        # Look for vulnerability data
+        for vuln in analysis.get("vulnerabilities", []):
+            if vuln.get("service") == target or vuln.get("id") == target:
+                return {"type": "vulnerability_mitigation", "vuln_data": vuln}
+        
+        return {"type": "general_action", "target": target}
+    
+    def _fallback_action_planning(self, analysis: Dict[str, Any]) -> List[AgentAction]:
+        """Fallback action planning using traditional methods."""
+        active_threats = analysis.get("active_threats", [])
+        vulnerabilities = analysis.get("vulnerabilities", [])
+        priorities = analysis.get("defense_priorities", [])
+        
+        actions = []
+        
+        # Respond to active threats first
+        for threat in active_threats[:3]:  # Handle top 3 threats
+            response_action = self._plan_threat_response(threat)
+            if response_action:
+                actions.append(response_action)
+        
+        # Address vulnerabilities based on strategy
+        if self.defense_strategy == "proactive":
+            vuln_actions = self._plan_vulnerability_mitigation(vulnerabilities)
+            actions.extend(vuln_actions[:2])  # Top 2 vulnerabilities
+        
+        # Deploy preventive measures
+        if len(actions) < self.max_actions_per_round:
+            preventive_action = self._plan_preventive_action(analysis)
+            if preventive_action:
+                actions.append(preventive_action)
+        
+        return actions
