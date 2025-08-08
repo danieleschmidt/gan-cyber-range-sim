@@ -8,7 +8,7 @@ from typing import Dict, List, Optional
 from contextlib import asynccontextmanager
 
 import uvicorn
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Depends, status
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Depends, status, WebSocket, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
@@ -441,6 +441,48 @@ async def list_simulations():
         "completed_simulations": completed,
         "total_active": len(active),
         "total_completed": len(completed)
+    }
+
+
+# =============================================================================
+# WEBSOCKET ENDPOINTS
+# =============================================================================
+
+from .websocket import websocket_endpoint, connection_manager, simulation_broadcaster
+
+@app.websocket("/ws/{user_id}")
+async def websocket_connection(websocket: WebSocket, user_id: str):
+    """WebSocket endpoint for real-time collaboration."""
+    await websocket_endpoint(websocket, user_id)
+
+
+@app.websocket("/api/v1/simulations/{simulation_id}/ws")
+async def simulation_websocket(websocket: WebSocket, simulation_id: str, user_id: str = Query(...)):
+    """WebSocket endpoint for specific simulation monitoring."""
+    await websocket_endpoint(websocket, user_id)
+
+
+@app.get("/api/v1/websocket/stats")
+async def get_websocket_stats():
+    """Get WebSocket connection statistics."""
+    return connection_manager.get_connection_stats()
+
+
+@app.get("/api/v1/simulations/{simulation_id}/chat")
+async def get_chat_history(simulation_id: str):
+    """Get chat history for a simulation."""
+    return {
+        "simulation_id": simulation_id,
+        "chat_history": connection_manager.get_chat_history(simulation_id)
+    }
+
+
+@app.get("/api/v1/simulations/{simulation_id}/annotations")
+async def get_annotations(simulation_id: str):
+    """Get annotations for a simulation."""
+    return {
+        "simulation_id": simulation_id,
+        "annotations": connection_manager.get_annotations(simulation_id)
     }
 
 

@@ -1,0 +1,632 @@
+components:
+  schemas:
+    AgentAction:
+      description: Represents an action taken by an agent.
+      properties:
+        metadata:
+          additionalProperties: true
+          description: Action metadata
+          title: Metadata
+          type: object
+        payload:
+          additionalProperties: true
+          description: Action payload
+          title: Payload
+          type: object
+        success:
+          description: Whether the action succeeded
+          title: Success
+          type: boolean
+        target:
+          description: Action target
+          title: Target
+          type: string
+        timestamp:
+          description: When the action was taken
+          format: date-time
+          title: Timestamp
+          type: string
+        type:
+          description: Action type
+          title: Type
+          type: string
+      required:
+      - type
+      - target
+      - timestamp
+      - success
+      title: AgentAction
+      type: object
+    BlueTeamConfig:
+      description: Configuration for blue team agent.
+      properties:
+        api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key for LLM service
+          title: Api Key
+        auto_response_enabled:
+          default: true
+          description: Enable automated responses
+          title: Auto Response Enabled
+          type: boolean
+        defense_strategy:
+          default: proactive
+          description: Defense strategy
+          title: Defense Strategy
+          type: string
+        llm_model:
+          default: gpt-4
+          description: LLM model to use
+          title: Llm Model
+          type: string
+        name:
+          default: BlueTeam
+          description: Blue team agent name
+          title: Name
+          type: string
+        skill_level:
+          default: intermediate
+          description: Agent skill level
+          title: Skill Level
+          type: string
+        threat_intelligence_feeds:
+          description: Threat intelligence feeds
+          items:
+            type: string
+          title: Threat Intelligence Feeds
+          type: array
+        tools:
+          description: Available tools
+          items:
+            type: string
+          title: Tools
+          type: array
+      title: BlueTeamConfig
+      type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          title: Detail
+          type: array
+      title: HTTPValidationError
+      type: object
+    HealthCheck:
+      description: Health check response.
+      properties:
+        services:
+          additionalProperties:
+            type: string
+          description: Service statuses
+          title: Services
+          type: object
+        status:
+          description: Service status
+          title: Status
+          type: string
+        timestamp:
+          description: Check timestamp
+          format: date-time
+          title: Timestamp
+          type: string
+        version:
+          description: Service version
+          title: Version
+          type: string
+      required:
+      - status
+      - version
+      - timestamp
+      - services
+      title: HealthCheck
+      type: object
+    MetricsResponse:
+      description: Metrics response model.
+      properties:
+        active_simulations:
+          description: Currently active simulations
+          title: Active Simulations
+          type: integer
+        average_duration_minutes:
+          description: Average simulation duration
+          title: Average Duration Minutes
+          type: number
+        success_rate:
+          description: Simulation success rate
+          title: Success Rate
+          type: number
+        total_agents_deployed:
+          description: Total agents deployed
+          title: Total Agents Deployed
+          type: integer
+        total_simulations:
+          description: Total simulations run
+          title: Total Simulations
+          type: integer
+      required:
+      - total_simulations
+      - active_simulations
+      - average_duration_minutes
+      - success_rate
+      - total_agents_deployed
+      title: MetricsResponse
+      type: object
+    RedTeamConfig:
+      description: Configuration for red team agent.
+      properties:
+        api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key for LLM service
+          title: Api Key
+        attack_objectives:
+          description: Attack objectives
+          items:
+            type: string
+          title: Attack Objectives
+          type: array
+        llm_model:
+          default: gpt-4
+          description: LLM model to use
+          title: Llm Model
+          type: string
+        name:
+          default: RedTeam
+          description: Red team agent name
+          title: Name
+          type: string
+        skill_level:
+          default: intermediate
+          description: Agent skill level
+          title: Skill Level
+          type: string
+        tools:
+          description: Available tools
+          items:
+            type: string
+          title: Tools
+          type: array
+      title: RedTeamConfig
+      type: object
+    SimulationConfig:
+      description: Configuration for a simulation.
+      properties:
+        difficulty:
+          default: medium
+          description: Simulation difficulty
+          title: Difficulty
+          type: string
+        duration_hours:
+          default: 1.0
+          description: Simulation duration in hours
+          title: Duration Hours
+          type: number
+        isolation_enabled:
+          default: true
+          description: Enable network isolation
+          title: Isolation Enabled
+          type: boolean
+        network_topology:
+          default: multi-tier
+          description: Network topology
+          title: Network Topology
+          type: string
+        realtime_factor:
+          default: 60
+          description: Time acceleration factor
+          title: Realtime Factor
+          type: integer
+        vulnerable_services:
+          description: Services to deploy in the range
+          items:
+            type: string
+          title: Vulnerable Services
+          type: array
+      title: SimulationConfig
+      type: object
+    SimulationRequest:
+      description: Request to start a new simulation.
+      example:
+        blue_team_config:
+          defense_strategy: proactive
+          llm_model: claude-3
+          name: ProactiveBlueTeam
+          skill_level: advanced
+        red_team_config:
+          llm_model: gpt-4
+          name: AdvancedRedTeam
+          skill_level: advanced
+          tools:
+          - nmap
+          - metasploit
+          - custom_exploits
+        simulation_config:
+          difficulty: medium
+          duration_hours: 2.0
+          network_topology: multi-tier
+          realtime_factor: 60
+          vulnerable_services:
+          - webapp
+          - database
+          - api-gateway
+      properties:
+        blue_team_config:
+          $ref: '#/components/schemas/BlueTeamConfig'
+        red_team_config:
+          $ref: '#/components/schemas/RedTeamConfig'
+        simulation_config:
+          $ref: '#/components/schemas/SimulationConfig'
+      title: SimulationRequest
+      type: object
+    SimulationResponse:
+      description: Response from starting a simulation.
+      example:
+        created_at: '2024-01-01T12:00:00Z'
+        estimated_duration_minutes: 120
+        simulation_id: sim_abc123def456
+        simulation_url: /api/v1/simulations/sim_abc123def456
+        status: started
+      properties:
+        message:
+          description: Response message
+          title: Message
+          type: string
+        simulation_id:
+          description: Unique simulation identifier
+          title: Simulation Id
+          type: string
+        simulation_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: URL to monitor simulation
+          title: Simulation Url
+        status:
+          description: Response status
+          title: Status
+          type: string
+      required:
+      - simulation_id
+      - status
+      - message
+      title: SimulationResponse
+      type: object
+    SimulationResults:
+      description: Results from a completed simulation.
+      properties:
+        attacks_blocked:
+          default: 0
+          title: Attacks Blocked
+          type: integer
+        blue_team_actions:
+          items:
+            $ref: '#/components/schemas/AgentAction'
+          title: Blue Team Actions
+          type: array
+        end_time:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: Simulation end time
+          title: End Time
+        final_status:
+          $ref: '#/components/schemas/SimulationStatus'
+        patches_deployed:
+          default: 0
+          title: Patches Deployed
+          type: integer
+        red_team_actions:
+          items:
+            $ref: '#/components/schemas/AgentAction'
+          title: Red Team Actions
+          type: array
+        services_compromised:
+          default: 0
+          title: Services Compromised
+          type: integer
+        simulation_id:
+          description: Simulation identifier
+          title: Simulation Id
+          type: string
+        start_time:
+          description: Simulation start time
+          format: date-time
+          title: Start Time
+          type: string
+        total_attacks:
+          default: 0
+          title: Total Attacks
+          type: integer
+      required:
+      - simulation_id
+      - start_time
+      - final_status
+      title: SimulationResults
+      type: object
+    SimulationStatus:
+      description: Current status of a simulation.
+      example:
+        elapsed_time_seconds: 1800
+        is_running: true
+        metrics:
+          compromise_rate: 0.4
+          detection_rate: 0.8
+          mean_time_to_detection: 45.0
+          mean_time_to_response: 30.0
+        progress:
+          blue_team_responses: 12
+          current_phase: exploitation
+          red_team_actions: 15
+          services_compromised: 2
+          services_defended: 3
+        simulation_id: sim_abc123def456
+        start_time: '2024-01-01T12:00:00Z'
+        status: running
+      properties:
+        attacks_blocked:
+          description: Number of blocked attacks
+          title: Attacks Blocked
+          type: integer
+        current_round:
+          description: Current round number
+          title: Current Round
+          type: integer
+        duration:
+          description: Simulation duration
+          title: Duration
+          type: string
+        is_running:
+          description: Whether simulation is active
+          title: Is Running
+          type: boolean
+        patches_deployed:
+          description: Number of patches deployed
+          title: Patches Deployed
+          type: integer
+        services_compromised:
+          description: Number of compromised services
+          title: Services Compromised
+          type: integer
+        services_isolated:
+          description: Number of isolated services
+          title: Services Isolated
+          type: integer
+        services_total:
+          description: Total number of services
+          title: Services Total
+          type: integer
+        simulation_id:
+          description: Simulation identifier
+          title: Simulation Id
+          type: string
+        total_attacks:
+          description: Total number of attacks
+          title: Total Attacks
+          type: integer
+      required:
+      - simulation_id
+      - is_running
+      - current_round
+      - services_total
+      - services_compromised
+      - services_isolated
+      - total_attacks
+      - attacks_blocked
+      - patches_deployed
+      - duration
+      title: SimulationStatus
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          title: Location
+          type: array
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      type: object
+  securitySchemes:
+    apiKey:
+      in: header
+      name: X-API-Key
+      type: apiKey
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+info:
+  description: "\n        # GAN Cyber Range API\n\n        A comprehensive API for\
+    \ managing adversarial cybersecurity simulations using AI agents.\n\n        ##\
+    \ Features\n\n        - **Simulation Management**: Create, monitor, and control\
+    \ cyber range simulations\n        - **Agent Configuration**: Configure red team\
+    \ (attacker) and blue team (defender) AI agents\n        - **Real-time Monitoring**:\
+    \ Track simulation progress and metrics\n        - **Security**: Enterprise-grade\
+    \ authentication and authorization\n        - **Performance**: Optimized for high-throughput\
+    \ simulations\n\n        ## Authentication\n\n        This API uses JWT tokens\
+    \ for authentication. Include your token in the Authorization header:\n\n    \
+    \    ```\n        Authorization: Bearer <your-jwt-token>\n        ```\n\n    \
+    \    ## Rate Limiting\n\n        API calls are rate limited to prevent abuse:\n\
+    \        - 1000 requests per hour for authenticated users\n        - 100 requests\
+    \ per hour for unauthenticated users\n\n        ## Response Format\n\n       \
+    \ All responses follow a consistent format:\n\n        ```json\n        {\n  \
+    \          \"status\": \"success|error\",\n            \"data\": {},\n       \
+    \     \"message\": \"Human readable message\",\n            \"timestamp\": \"\
+    2024-01-01T12:00:00Z\"\n        }\n        ```\n\n        ## Error Handling\n\n\
+    \        Standard HTTP status codes are used:\n        - 200: Success\n      \
+    \  - 201: Created\n        - 400: Bad Request\n        - 401: Unauthorized\n \
+    \       - 404: Not Found\n        - 422: Validation Error\n        - 500: Internal\
+    \ Server Error\n        "
+  title: GAN Cyber Range API
+  version: 1.0.0
+  x-logo:
+    url: https://github.com/yourusername/gan-cyber-range-sim/raw/main/docs/logo.png
+openapi: 3.1.0
+paths:
+  /api/v1/simulations:
+    get:
+      description: List all simulations.
+      operationId: list_simulations_api_v1_simulations_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+      summary: List Simulations
+      tags:
+      - Simulations
+    post:
+      description: Create and start a new cyber range simulation.
+      operationId: create_simulation_api_v1_simulations_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulationRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulationResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Create Simulation
+      tags:
+      - Simulations
+  /api/v1/simulations/{simulation_id}/results:
+    get:
+      description: Get the results of a completed simulation.
+      operationId: get_simulation_results_api_v1_simulations__simulation_id__results_get
+      parameters:
+      - in: path
+        name: simulation_id
+        required: true
+        schema:
+          title: Simulation Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulationResults'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Get Simulation Results
+      tags:
+      - Simulations
+  /api/v1/simulations/{simulation_id}/status:
+    get:
+      description: Get the current status of a simulation.
+      operationId: get_simulation_status_api_v1_simulations__simulation_id__status_get
+      parameters:
+      - in: path
+        name: simulation_id
+        required: true
+        schema:
+          title: Simulation Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulationStatus'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Get Simulation Status
+      tags:
+      - Simulations
+  /api/v1/simulations/{simulation_id}/stop:
+    post:
+      description: Stop a running simulation.
+      operationId: stop_simulation_api_v1_simulations__simulation_id__stop_post
+      parameters:
+      - in: path
+        name: simulation_id
+        required: true
+        schema:
+          title: Simulation Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Stop Simulation
+      tags:
+      - Simulations
+  /health:
+    get:
+      description: Check service health.
+      operationId: health_check_health_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheck'
+          description: Successful Response
+      summary: Health Check
+      tags:
+      - Health
+  /metrics:
+    get:
+      description: Get system metrics.
+      operationId: get_metrics_metrics_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsResponse'
+          description: Successful Response
+      summary: Get Metrics
+      tags:
+      - Monitoring
+servers:
+- description: Development server
+  url: http://localhost:8000
+- description: Production server
+  url: https://api.gan-cyber-range.org

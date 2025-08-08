@@ -1,0 +1,90 @@
+# Container Structure Test Configuration for GAN Cyber Range
+
+schemaVersion: '2.0.0'
+
+# File Existence Tests
+fileExistenceTests:
+  - name: 'Python application exists'
+    path: '/app/src/gan_cyber_range'
+    shouldExist: true
+    isDirectory: true
+
+  - name: 'Requirements file exists'
+    path: '/app/requirements.txt'
+    shouldExist: true
+
+  - name: 'Configuration directory exists'
+    path: '/app/config'
+    shouldExist: true
+    isDirectory: true
+
+  - name: 'Entrypoint script exists'
+    path: '/app/entrypoint.sh'
+    shouldExist: true
+    permissions: '-rwxr-xr-x'
+
+# File Content Tests
+fileContentTests:
+  - name: 'Python version check'
+    path: '/usr/local/bin/python'
+    expectedContents: ['.*python3.*']
+
+  - name: 'Security configuration exists'
+    path: '/app/config/security.yaml'
+    expectedContents: ['authentication:', 'encryption:']
+
+  - name: 'Non-root user configuration'
+    path: '/etc/passwd'
+    expectedContents: ['app:x:1000:1000:Application User:/app:/bin/bash']
+
+# Command Tests
+commandTests:
+  - name: 'Python is installed'
+    command: 'python'
+    args: ['--version']
+    expectedOutput: ['Python 3.12.*']
+    exitCode: 0
+
+  - name: 'Application can import main module'
+    command: 'python'
+    args: ['-c', 'import gan_cyber_range; print("Import successful")']
+    expectedOutput: ['Import successful']
+    exitCode: 0
+
+  - name: 'Security scan command available'
+    command: 'which'
+    args: ['bandit']
+    exitCode: 0
+
+  - name: 'Health check endpoint works'
+    command: 'curl'
+    args: ['-f', 'http://localhost:8000/health']
+    exitCode: 0
+    setup: [['python', '/app/src/gan_cyber_range/api/server.py', '&']]
+
+# Metadata Tests
+metadataTest:
+  envVars:
+    - key: 'PYTHONPATH'
+      value: '/app/src'
+    - key: 'APP_ENV'
+      value: 'production'
+  
+  exposedPorts: ['8000']
+  
+  workdir: '/app'
+  
+  user: 'app'
+
+  labels:
+    - key: 'org.opencontainers.image.title'
+      value: 'GAN Cyber Range'
+    - key: 'org.opencontainers.image.description'
+      value: 'Adversarial cybersecurity training platform'
+    - key: 'org.opencontainers.image.vendor'
+      value: 'Terragon Labs'
+
+# License Tests
+licenseTests:
+  - debian: true
+    files: ['/usr/share/doc/*/copyright']
