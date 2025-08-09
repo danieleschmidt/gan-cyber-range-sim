@@ -30,13 +30,15 @@ class TestBaseAgent:
         return agent
 
     def test_base_agent_initialization(self, mock_llm_client):
-        """Test base agent initialization."""
-        agent = BaseAgent(llm_client=mock_llm_client)
+        """Test base agent initialization through concrete implementation."""
+        from gan_cyber_range.agents.red_team import RedTeamAgent
+        agent = RedTeamAgent(name="TestAgent")
         
-        assert agent.llm_client == mock_llm_client
-        assert agent.action_history == []
-        assert agent.success_patterns == []
-        assert isinstance(agent.created_at, datetime)
+        assert agent.name == "TestAgent"
+        assert agent.llm_model == "gpt-4"
+        assert agent.skill_level == "advanced"
+        assert agent.memory is not None
+        assert hasattr(agent, 'llm_integration')
 
     @pytest.mark.asyncio
     async def test_base_agent_execute_action(self, base_agent):

@@ -19,7 +19,7 @@ from enum import Enum
 import json
 
 from .siem import SIEMEngine, SecurityEvent, EventType, AlertSeverity
-from .ml_threat_detection import ThreatDetector
+from .ml_threat_detection import MLThreatDetector
 from ..monitoring.metrics import MetricsCollector
 
 
@@ -158,7 +158,7 @@ class IncidentResponseEngine:
     
     def __init__(self, 
                  siem_engine: SIEMEngine,
-                 threat_detector: ThreatDetector,
+                 threat_detector: MLThreatDetector,
                  metrics_collector: Optional[MetricsCollector] = None):
         self.siem_engine = siem_engine
         self.threat_detector = threat_detector
