@@ -1,13 +1,18 @@
-"""Tests for LLM integration layer."""
+"""Comprehensive tests for LLM integration components."""
 
 import pytest
+import asyncio
 import json
-from unittest.mock import AsyncMock, Mock, patch
+from unittest.mock import MagicMock, AsyncMock, patch
 from datetime import datetime
 
 from gan_cyber_range.agents.llm_client import (
-    LLMRequest, LLMResponse, OpenAIClient, AnthropicClient, 
-    MockLLMClient, LLMClientFactory, AgentLLMIntegration
+    LLMClientFactory, 
+    OpenAIClient, 
+    AnthropicClient, 
+    MockLLMClient,
+    LLMClientError,
+    CircuitBreakerError
 )
 
 

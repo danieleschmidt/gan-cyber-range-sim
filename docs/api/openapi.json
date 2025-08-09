@@ -1,0 +1,854 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "GAN Cyber Range API",
+    "description": "\n        # GAN Cyber Range API\n\n        A comprehensive API for managing adversarial cybersecurity simulations using AI agents.\n\n        ## Features\n\n        - **Simulation Management**: Create, monitor, and control cyber range simulations\n        - **Agent Configuration**: Configure red team (attacker) and blue team (defender) AI agents\n        - **Real-time Monitoring**: Track simulation progress and metrics\n        - **Security**: Enterprise-grade authentication and authorization\n        - **Performance**: Optimized for high-throughput simulations\n\n        ## Authentication\n\n        This API uses JWT tokens for authentication. Include your token in the Authorization header:\n\n        ```\n        Authorization: Bearer <your-jwt-token>\n        ```\n\n        ## Rate Limiting\n\n        API calls are rate limited to prevent abuse:\n        - 1000 requests per hour for authenticated users\n        - 100 requests per hour for unauthenticated users\n\n        ## Response Format\n\n        All responses follow a consistent format:\n\n        ```json\n        {\n            \"status\": \"success|error\",\n            \"data\": {},\n            \"message\": \"Human readable message\",\n            \"timestamp\": \"2024-01-01T12:00:00Z\"\n        }\n        ```\n\n        ## Error Handling\n\n        Standard HTTP status codes are used:\n        - 200: Success\n        - 201: Created\n        - 400: Bad Request\n        - 401: Unauthorized\n        - 404: Not Found\n        - 422: Validation Error\n        - 500: Internal Server Error\n        ",
+    "version": "1.0.0",
+    "x-logo": {
+      "url": "https://github.com/yourusername/gan-cyber-range-sim/raw/main/docs/logo.png"
+    }
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Health Check",
+        "description": "Check service health.",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheck"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/metrics": {
+      "get": {
+        "tags": [
+          "Monitoring"
+        ],
+        "summary": "Get Metrics",
+        "description": "Get system metrics.",
+        "operationId": "get_metrics_metrics_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetricsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/simulations": {
+      "get": {
+        "tags": [
+          "Simulations"
+        ],
+        "summary": "List Simulations",
+        "description": "List all simulations.",
+        "operationId": "list_simulations_api_v1_simulations_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Simulations"
+        ],
+        "summary": "Create Simulation",
+        "description": "Create and start a new cyber range simulation.",
+        "operationId": "create_simulation_api_v1_simulations_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/simulations/{simulation_id}/status": {
+      "get": {
+        "tags": [
+          "Simulations"
+        ],
+        "summary": "Get Simulation Status",
+        "description": "Get the current status of a simulation.",
+        "operationId": "get_simulation_status_api_v1_simulations__simulation_id__status_get",
+        "parameters": [
+          {
+            "name": "simulation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Simulation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/simulations/{simulation_id}/results": {
+      "get": {
+        "tags": [
+          "Simulations"
+        ],
+        "summary": "Get Simulation Results",
+        "description": "Get the results of a completed simulation.",
+        "operationId": "get_simulation_results_api_v1_simulations__simulation_id__results_get",
+        "parameters": [
+          {
+            "name": "simulation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Simulation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationResults"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/simulations/{simulation_id}/stop": {
+      "post": {
+        "tags": [
+          "Simulations"
+        ],
+        "summary": "Stop Simulation",
+        "description": "Stop a running simulation.",
+        "operationId": "stop_simulation_api_v1_simulations__simulation_id__stop_post",
+        "parameters": [
+          {
+            "name": "simulation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Simulation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AgentAction": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type",
+            "description": "Action type"
+          },
+          "target": {
+            "type": "string",
+            "title": "Target",
+            "description": "Action target"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Timestamp",
+            "description": "When the action was taken"
+          },
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Whether the action succeeded"
+          },
+          "payload": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Payload",
+            "description": "Action payload"
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Metadata",
+            "description": "Action metadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "target",
+          "timestamp",
+          "success"
+        ],
+        "title": "AgentAction",
+        "description": "Represents an action taken by an agent."
+      },
+      "BlueTeamConfig": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Blue team agent name",
+            "default": "BlueTeam"
+          },
+          "llm_model": {
+            "type": "string",
+            "title": "Llm Model",
+            "description": "LLM model to use",
+            "default": "gpt-4"
+          },
+          "skill_level": {
+            "type": "string",
+            "title": "Skill Level",
+            "description": "Agent skill level",
+            "default": "intermediate"
+          },
+          "tools": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tools",
+            "description": "Available tools"
+          },
+          "api_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Api Key",
+            "description": "API key for LLM service"
+          },
+          "defense_strategy": {
+            "type": "string",
+            "title": "Defense Strategy",
+            "description": "Defense strategy",
+            "default": "proactive"
+          },
+          "threat_intelligence_feeds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Threat Intelligence Feeds",
+            "description": "Threat intelligence feeds"
+          },
+          "auto_response_enabled": {
+            "type": "boolean",
+            "title": "Auto Response Enabled",
+            "description": "Enable automated responses",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "BlueTeamConfig",
+        "description": "Configuration for blue team agent."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthCheck": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "description": "Service status"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version",
+            "description": "Service version"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Timestamp",
+            "description": "Check timestamp"
+          },
+          "services": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Services",
+            "description": "Service statuses"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "version",
+          "timestamp",
+          "services"
+        ],
+        "title": "HealthCheck",
+        "description": "Health check response."
+      },
+      "MetricsResponse": {
+        "properties": {
+          "total_simulations": {
+            "type": "integer",
+            "title": "Total Simulations",
+            "description": "Total simulations run"
+          },
+          "active_simulations": {
+            "type": "integer",
+            "title": "Active Simulations",
+            "description": "Currently active simulations"
+          },
+          "average_duration_minutes": {
+            "type": "number",
+            "title": "Average Duration Minutes",
+            "description": "Average simulation duration"
+          },
+          "success_rate": {
+            "type": "number",
+            "title": "Success Rate",
+            "description": "Simulation success rate"
+          },
+          "total_agents_deployed": {
+            "type": "integer",
+            "title": "Total Agents Deployed",
+            "description": "Total agents deployed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_simulations",
+          "active_simulations",
+          "average_duration_minutes",
+          "success_rate",
+          "total_agents_deployed"
+        ],
+        "title": "MetricsResponse",
+        "description": "Metrics response model."
+      },
+      "RedTeamConfig": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Red team agent name",
+            "default": "RedTeam"
+          },
+          "llm_model": {
+            "type": "string",
+            "title": "Llm Model",
+            "description": "LLM model to use",
+            "default": "gpt-4"
+          },
+          "skill_level": {
+            "type": "string",
+            "title": "Skill Level",
+            "description": "Agent skill level",
+            "default": "intermediate"
+          },
+          "tools": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tools",
+            "description": "Available tools"
+          },
+          "api_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Api Key",
+            "description": "API key for LLM service"
+          },
+          "attack_objectives": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Attack Objectives",
+            "description": "Attack objectives"
+          }
+        },
+        "type": "object",
+        "title": "RedTeamConfig",
+        "description": "Configuration for red team agent."
+      },
+      "SimulationConfig": {
+        "properties": {
+          "vulnerable_services": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Vulnerable Services",
+            "description": "Services to deploy in the range"
+          },
+          "network_topology": {
+            "type": "string",
+            "title": "Network Topology",
+            "description": "Network topology",
+            "default": "multi-tier"
+          },
+          "difficulty": {
+            "type": "string",
+            "title": "Difficulty",
+            "description": "Simulation difficulty",
+            "default": "medium"
+          },
+          "duration_hours": {
+            "type": "number",
+            "title": "Duration Hours",
+            "description": "Simulation duration in hours",
+            "default": 1.0
+          },
+          "realtime_factor": {
+            "type": "integer",
+            "title": "Realtime Factor",
+            "description": "Time acceleration factor",
+            "default": 60
+          },
+          "isolation_enabled": {
+            "type": "boolean",
+            "title": "Isolation Enabled",
+            "description": "Enable network isolation",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "SimulationConfig",
+        "description": "Configuration for a simulation."
+      },
+      "SimulationRequest": {
+        "properties": {
+          "simulation_config": {
+            "$ref": "#/components/schemas/SimulationConfig"
+          },
+          "red_team_config": {
+            "$ref": "#/components/schemas/RedTeamConfig"
+          },
+          "blue_team_config": {
+            "$ref": "#/components/schemas/BlueTeamConfig"
+          }
+        },
+        "type": "object",
+        "title": "SimulationRequest",
+        "description": "Request to start a new simulation.",
+        "example": {
+          "simulation_config": {
+            "vulnerable_services": [
+              "webapp",
+              "database",
+              "api-gateway"
+            ],
+            "network_topology": "multi-tier",
+            "difficulty": "medium",
+            "duration_hours": 2.0,
+            "realtime_factor": 60
+          },
+          "red_team_config": {
+            "name": "AdvancedRedTeam",
+            "llm_model": "gpt-4",
+            "skill_level": "advanced",
+            "tools": [
+              "nmap",
+              "metasploit",
+              "custom_exploits"
+            ]
+          },
+          "blue_team_config": {
+            "name": "ProactiveBlueTeam",
+            "llm_model": "claude-3",
+            "skill_level": "advanced",
+            "defense_strategy": "proactive"
+          }
+        }
+      },
+      "SimulationResponse": {
+        "properties": {
+          "simulation_id": {
+            "type": "string",
+            "title": "Simulation Id",
+            "description": "Unique simulation identifier"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "description": "Response status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Response message"
+          },
+          "simulation_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Simulation Url",
+            "description": "URL to monitor simulation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "simulation_id",
+          "status",
+          "message"
+        ],
+        "title": "SimulationResponse",
+        "description": "Response from starting a simulation.",
+        "example": {
+          "status": "started",
+          "simulation_id": "sim_abc123def456",
+          "simulation_url": "/api/v1/simulations/sim_abc123def456",
+          "estimated_duration_minutes": 120,
+          "created_at": "2024-01-01T12:00:00Z"
+        }
+      },
+      "SimulationResults": {
+        "properties": {
+          "simulation_id": {
+            "type": "string",
+            "title": "Simulation Id",
+            "description": "Simulation identifier"
+          },
+          "start_time": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start Time",
+            "description": "Simulation start time"
+          },
+          "end_time": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Time",
+            "description": "Simulation end time"
+          },
+          "red_team_actions": {
+            "items": {
+              "$ref": "#/components/schemas/AgentAction"
+            },
+            "type": "array",
+            "title": "Red Team Actions"
+          },
+          "blue_team_actions": {
+            "items": {
+              "$ref": "#/components/schemas/AgentAction"
+            },
+            "type": "array",
+            "title": "Blue Team Actions"
+          },
+          "services_compromised": {
+            "type": "integer",
+            "title": "Services Compromised",
+            "default": 0
+          },
+          "patches_deployed": {
+            "type": "integer",
+            "title": "Patches Deployed",
+            "default": 0
+          },
+          "attacks_blocked": {
+            "type": "integer",
+            "title": "Attacks Blocked",
+            "default": 0
+          },
+          "total_attacks": {
+            "type": "integer",
+            "title": "Total Attacks",
+            "default": 0
+          },
+          "final_status": {
+            "$ref": "#/components/schemas/SimulationStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "simulation_id",
+          "start_time",
+          "final_status"
+        ],
+        "title": "SimulationResults",
+        "description": "Results from a completed simulation."
+      },
+      "SimulationStatus": {
+        "properties": {
+          "simulation_id": {
+            "type": "string",
+            "title": "Simulation Id",
+            "description": "Simulation identifier"
+          },
+          "is_running": {
+            "type": "boolean",
+            "title": "Is Running",
+            "description": "Whether simulation is active"
+          },
+          "current_round": {
+            "type": "integer",
+            "title": "Current Round",
+            "description": "Current round number"
+          },
+          "services_total": {
+            "type": "integer",
+            "title": "Services Total",
+            "description": "Total number of services"
+          },
+          "services_compromised": {
+            "type": "integer",
+            "title": "Services Compromised",
+            "description": "Number of compromised services"
+          },
+          "services_isolated": {
+            "type": "integer",
+            "title": "Services Isolated",
+            "description": "Number of isolated services"
+          },
+          "total_attacks": {
+            "type": "integer",
+            "title": "Total Attacks",
+            "description": "Total number of attacks"
+          },
+          "attacks_blocked": {
+            "type": "integer",
+            "title": "Attacks Blocked",
+            "description": "Number of blocked attacks"
+          },
+          "patches_deployed": {
+            "type": "integer",
+            "title": "Patches Deployed",
+            "description": "Number of patches deployed"
+          },
+          "duration": {
+            "type": "string",
+            "title": "Duration",
+            "description": "Simulation duration"
+          }
+        },
+        "type": "object",
+        "required": [
+          "simulation_id",
+          "is_running",
+          "current_round",
+          "services_total",
+          "services_compromised",
+          "services_isolated",
+          "total_attacks",
+          "attacks_blocked",
+          "patches_deployed",
+          "duration"
+        ],
+        "title": "SimulationStatus",
+        "description": "Current status of a simulation.",
+        "example": {
+          "simulation_id": "sim_abc123def456",
+          "status": "running",
+          "is_running": true,
+          "start_time": "2024-01-01T12:00:00Z",
+          "elapsed_time_seconds": 1800,
+          "progress": {
+            "red_team_actions": 15,
+            "blue_team_responses": 12,
+            "services_compromised": 2,
+            "services_defended": 3,
+            "current_phase": "exploitation"
+          },
+          "metrics": {
+            "compromise_rate": 0.4,
+            "detection_rate": 0.8,
+            "mean_time_to_detection": 45.0,
+            "mean_time_to_response": 30.0
+          }
+        }
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "apiKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Development server"
+    },
+    {
+      "url": "https://api.gan-cyber-range.org",
+      "description": "Production server"
+    }
+  ]
+}

@@ -82,12 +82,10 @@ class SecurityIncident:
     status: IncidentStatus
     created_at: datetime
     updated_at: datetime
-    closed_at: Optional[datetime] = None
-    
-    # Detection information
     detection_source: str
     detection_method: str
     confidence: float
+    closed_at: Optional[datetime] = None
     
     # Affected assets and scope
     affected_assets: List[str] = field(default_factory=list)

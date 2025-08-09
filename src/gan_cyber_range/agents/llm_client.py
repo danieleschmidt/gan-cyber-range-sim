@@ -18,6 +18,16 @@ from ..resilience.circuit_breaker import with_circuit_breaker, CircuitBreakerCon
 from ..resilience.retry import with_retry, RetryPolicy, LLM_RETRY_POLICY
 
 
+class LLMClientError(Exception):
+    """Base exception for LLM client errors."""
+    pass
+
+
+class CircuitBreakerError(Exception):
+    """Circuit breaker is open."""
+    pass
+
+
 @dataclass
 class LLMRequest:
     """Represents a request to an LLM."""
