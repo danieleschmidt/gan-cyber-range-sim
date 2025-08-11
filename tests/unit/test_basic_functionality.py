@@ -41,8 +41,8 @@ class TestBasicFunctionality:
         
         response = await client.generate("Test prompt")
         
-        assert isinstance(response, str)
-        assert len(response) > 0
+        assert hasattr(response, 'content')
+        assert len(response.content) > 0
 
 
 class TestAPIModels:

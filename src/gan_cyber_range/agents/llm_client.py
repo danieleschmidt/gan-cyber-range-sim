@@ -337,9 +337,16 @@ class MockLLMClient(BaseLLMClient):
     def __init__(self, model: str = "mock-model"):
         super().__init__(model)
     
-    async def generate(self, request: LLMRequest) -> LLMResponse:
+    async def chat(self, request: Union[str, LLMRequest]) -> LLMResponse:
+        """Chat method for compatibility."""
+        return await self.generate(request)
+    
+    async def generate(self, request: Union[str, LLMRequest]) -> LLMResponse:
         """Generate mock response for testing."""
         await asyncio.sleep(0.1)  # Simulate latency
+        
+        if isinstance(request, str):
+            request = LLMRequest(prompt=request, context={})
         
         agent_type = request.context.get("agent_type", "security_agent")
         
