@@ -36,6 +36,8 @@ from .adversarial_training import CoevolutionaryGANTrainer, run_coevolutionary_e
 from .multimodal_detection import MultiModalThreatDetector, run_multimodal_research
 from .zero_shot_vuln import ZeroShotVulnerabilityDetector, run_zero_shot_research
 from .self_healing import SelfHealingSecuritySystem, run_self_healing_research
+from .quantum_adversarial import QuantumAdversarialTrainer, run_quantum_adversarial_research
+from .neuromorphic_security import NeuromorphicSecuritySystem, run_neuromorphic_security_research
 
 logger = logging.getLogger(__name__)
 
@@ -853,6 +855,30 @@ class ResearchValidationSuite:
             run_self_healing_research, 'self_healing'
         )
         
+        # 5. Validate Quantum-Enhanced Adversarial Training
+        logger.info("Validating quantum-enhanced adversarial training")
+        config = ExperimentConfig(
+            experiment_name="Quantum_Adversarial_Training",
+            num_trials=15,
+            output_directory=f"{self.output_directory}/quantum_adversarial"
+        )
+        runner = ExperimentRunner(config)
+        validation_results['quantum_adversarial'] = await runner.run_experiment(
+            run_quantum_adversarial_research, 'adversarial_training'
+        )
+        
+        # 6. Validate Neuromorphic Security Systems
+        logger.info("Validating neuromorphic security systems")
+        config = ExperimentConfig(
+            experiment_name="Neuromorphic_Security_System",
+            num_trials=12,
+            output_directory=f"{self.output_directory}/neuromorphic"
+        )
+        runner = ExperimentRunner(config)
+        validation_results['neuromorphic_security'] = await runner.run_experiment(
+            run_neuromorphic_security_research, 'self_healing'
+        )
+        
         # Generate comprehensive report
         await self._generate_comprehensive_report(validation_results)
         
@@ -912,6 +938,16 @@ class ResearchValidationSuite:
                     'Autonomous incident response with AI',
                     'Causal inference for attack attribution',
                     'Real-time system adaptation'
+                ],
+                'quantum_adversarial': [
+                    'Quantum superposition for parallel strategy exploration',
+                    'Entangled coevolution of red/blue team strategies',
+                    'Quantum advantage in adversarial training'
+                ],
+                'neuromorphic_security': [
+                    'Spiking neural networks for real-time threat detection',
+                    'Synaptic plasticity for continuous learning',
+                    'Bio-inspired homeostatic security regulation'
                 ]
             }
         }
@@ -964,6 +1000,16 @@ This report presents the comprehensive validation results for our cybersecurity 
 - Autonomous incident response with AI-driven decision making
 - Causal inference engines for attack attribution and prediction
 - Real-time adaptation mechanisms for defense optimization
+
+### 5. Quantum-Enhanced Adversarial Training
+- Quantum superposition for parallel strategy exploration
+- Entangled coevolution of red/blue team strategies
+- Quantum-classical hybrid optimization for scalability
+
+### 6. Neuromorphic Computing for Adaptive Security
+- Spiking neural networks for real-time threat detection
+- Synaptic plasticity for continuous learning without forgetting
+- Bio-inspired homeostatic regulation for system stability
 
 ## Validation Quality
 All research contributions have been validated using:
