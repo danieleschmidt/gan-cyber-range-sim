@@ -16,6 +16,7 @@ from .zero_shot_vuln import ZeroShotVulnerabilityDetector
 from .self_healing import SelfHealingSecuritySystem
 from .quantum_adversarial import QuantumAdversarialTrainer
 from .neuromorphic_security import NeuromorphicThreatDetector, NeuromorphicSecuritySystem
+from .federated_quantum_neuromorphic import FederatedQuantumNeuromorphicTrainer, run_federated_quantum_neuromorphic_research
 
 __all__ = [
     "CoevolutionaryGANTrainer",
@@ -24,5 +25,7 @@ __all__ = [
     "SelfHealingSecuritySystem",
     "QuantumAdversarialTrainer",
     "NeuromorphicThreatDetector",
-    "NeuromorphicSecuritySystem"
+    "NeuromorphicSecuritySystem",
+    "FederatedQuantumNeuromorphicTrainer",
+    "run_federated_quantum_neuromorphic_research"
 ]

@@ -38,6 +38,7 @@ from .zero_shot_vuln import ZeroShotVulnerabilityDetector, run_zero_shot_researc
 from .self_healing import SelfHealingSecuritySystem, run_self_healing_research
 from .quantum_adversarial import QuantumAdversarialTrainer, run_quantum_adversarial_research
 from .neuromorphic_security import NeuromorphicSecuritySystem, run_neuromorphic_security_research
+from .federated_quantum_neuromorphic import FederatedQuantumNeuromorphicTrainer, run_federated_quantum_neuromorphic_research
 
 logger = logging.getLogger(__name__)
 
@@ -246,6 +247,11 @@ class BaselineComparator:
                 'reactive_systems': {'mttr': 1200, 'availability': 0.85, 'false_positives': 0.20},
                 'rule_based_automation': {'mttr': 600, 'availability': 0.92, 'false_positives': 0.15},
                 'ml_assisted': {'mttr': 300, 'availability': 0.95, 'false_positives': 0.10}
+            },
+            'federated_learning': {
+                'centralized_training': {'accuracy': 0.70, 'privacy_score': 0.2, 'convergence_time': 2400},
+                'simple_federated': {'accuracy': 0.65, 'privacy_score': 0.7, 'convergence_time': 1800},
+                'differential_privacy': {'accuracy': 0.68, 'privacy_score': 0.9, 'convergence_time': 2000}
             }
         }
     
@@ -879,6 +885,18 @@ class ResearchValidationSuite:
             run_neuromorphic_security_research, 'self_healing'
         )
         
+        # 7. Validate Federated Quantum-Neuromorphic Training
+        logger.info("Validating federated quantum-neuromorphic training")
+        config = ExperimentConfig(
+            experiment_name="Federated_Quantum_Neuromorphic_Training",
+            num_trials=8,
+            output_directory=f"{self.output_directory}/federated_quantum_neuromorphic"
+        )
+        runner = ExperimentRunner(config)
+        validation_results['federated_quantum_neuromorphic'] = await runner.run_experiment(
+            run_federated_quantum_neuromorphic_research, 'federated_learning'
+        )
+        
         # Generate comprehensive report
         await self._generate_comprehensive_report(validation_results)
         
@@ -948,6 +966,12 @@ class ResearchValidationSuite:
                     'Spiking neural networks for real-time threat detection',
                     'Synaptic plasticity for continuous learning',
                     'Bio-inspired homeostatic security regulation'
+                ],
+                'federated_quantum_neuromorphic': [
+                    'Privacy-preserving quantum-neuromorphic fusion architecture',
+                    'Distributed quantum advantage with differential privacy',
+                    'Cross-organizational learning without data sharing',
+                    'Autonomous progressive quality gates for federated systems'
                 ]
             }
         }
@@ -1010,6 +1034,12 @@ This report presents the comprehensive validation results for our cybersecurity 
 - Spiking neural networks for real-time threat detection
 - Synaptic plasticity for continuous learning without forgetting
 - Bio-inspired homeostatic regulation for system stability
+
+### 7. Federated Quantum-Neuromorphic Training (Novel Contribution)
+- Privacy-preserving quantum-neuromorphic fusion architecture
+- Distributed quantum advantage with differential privacy guarantees
+- Cross-organizational learning without centralized data sharing
+- Autonomous progressive quality gates for federated systems
 
 ## Validation Quality
 All research contributions have been validated using:
