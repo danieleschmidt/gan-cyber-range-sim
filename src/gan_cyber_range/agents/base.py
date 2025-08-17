@@ -15,18 +15,18 @@ class AgentAction(BaseModel):
     type: str = Field(..., description="Type of action")
     target: str = Field(..., description="Target of the action")
     payload: Dict[str, Any] = Field(default_factory=dict, description="Action payload")
-    timestamp: datetime = Field(default_factory=datetime.now)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(), description="Action timestamp")
     success: bool = Field(default=False, description="Whether action succeeded")
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
 
 
 class AgentMemory(BaseModel):
     """Agent's memory system for learning and adaptation."""
     
-    actions: List[AgentAction] = Field(default_factory=list)
-    successes: List[AgentAction] = Field(default_factory=list)
-    failures: List[AgentAction] = Field(default_factory=list)
-    patterns: Dict[str, Any] = Field(default_factory=dict)
+    actions: List[AgentAction] = Field(default_factory=list, description="All agent actions")
+    successes: List[AgentAction] = Field(default_factory=list, description="Successful actions")
+    failures: List[AgentAction] = Field(default_factory=list, description="Failed actions")
+    patterns: Dict[str, Any] = Field(default_factory=dict, description="Learned patterns")
 
 
 class BaseAgent(ABC):
