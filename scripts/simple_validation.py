@@ -18,7 +18,7 @@ def validate_file_structure():
         "src/gan_cyber_range/quality/intelligent_optimizer.py",
         "src/gan_cyber_range/quality/auto_scaler.py",
         "scripts/run_quality_pipeline.py",
-        ".github/workflows/quality-gates.yml",
+        "docs/workflows/quality-gates-setup.md",
         "quality_config.yaml",
         "tests/quality/test_quality_gates.py",
         "tests/quality/test_progressive_validator.py",
@@ -151,23 +151,23 @@ def validate_configuration():
                     print(f"  ❌ {section}")
                     return False
         
-        # Check GitHub workflow
-        workflow_file = Path(".github/workflows/quality-gates.yml")
-        if workflow_file.exists():
-            content = workflow_file.read_text()
+        # Check GitHub workflow setup documentation
+        workflow_doc = Path("docs/workflows/quality-gates-setup.md")
+        if workflow_doc.exists():
+            content = workflow_doc.read_text()
             
-            required_jobs = [
+            required_sections = [
                 "progressive-validation:",
                 "security-scan:",
                 "deployment-readiness:",
                 "notify-results:"
             ]
             
-            for job in required_jobs:
-                if job in content:
-                    print(f"  ✅ {job}")
+            for section in required_sections:
+                if section in content:
+                    print(f"  ✅ {section}")
                 else:
-                    print(f"  ❌ {job}")
+                    print(f"  ❌ {section}")
                     return False
         
         print("✅ Configuration validation passed")

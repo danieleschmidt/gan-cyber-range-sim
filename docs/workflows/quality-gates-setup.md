@@ -1,3 +1,12 @@
+# Quality Gates GitHub Actions Setup
+
+This document provides the GitHub Actions workflow configuration for the Progressive Quality Gates system. Since workflow files require special permissions, this configuration should be manually added to your repository.
+
+## Workflow File: `.github/workflows/quality-gates.yml`
+
+Create this file in your repository's `.github/workflows/` directory:
+
+```yaml
 name: Progressive Quality Gates
 
 on:
@@ -28,7 +37,6 @@ on:
 
 env:
   PYTHON_VERSION: '3.10'
-  POETRY_VERSION: '1.6.0'
 
 jobs:
   progressive-validation:
@@ -59,21 +67,14 @@ jobs:
       with:
         path: |
           ~/.cache/pip
-          ~/.cache/pypoetry
-        key: ${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-${{ hashFiles('**/pyproject.toml', '**/requirements.txt') }}
+        key: ${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-
     
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y \
-          build-essential \
-          curl \
-          git \
-          jq \
-          docker.io \
-          docker-compose
+        sudo apt-get install -y build-essential curl git jq
     
     - name: Install Python dependencies
       run: |
@@ -286,3 +287,73 @@ jobs:
         else
           echo "⚠️ **Some quality gates failed. Review the reports and address issues before deployment.**" >> $GITHUB_STEP_SUMMARY
         fi
+```
+
+## Setup Instructions
+
+1. **Create the workflow file** in your repository:
+   ```bash
+   mkdir -p .github/workflows
+   # Copy the YAML content above into .github/workflows/quality-gates.yml
+   ```
+
+2. **Ensure required permissions** are set in your repository settings:
+   - Go to Settings → Actions → General
+   - Set "Workflow permissions" to "Read and write permissions"
+   - Enable "Allow GitHub Actions to create and approve pull requests"
+
+3. **Configure secrets** if needed for external services:
+   - Go to Settings → Secrets and variables → Actions
+   - Add any required API keys or tokens
+
+4. **Test the workflow**:
+   - Push changes to trigger the workflow
+   - Check the Actions tab to see execution results
+   - Review quality reports in the artifacts
+
+## Manual Execution
+
+You can also run the quality pipeline manually:
+
+```bash
+# Run all stages
+python scripts/run_quality_pipeline.py --target-stage production
+
+# Run specific stage
+python scripts/run_quality_pipeline.py --target-stage generation_2
+
+# Enable auto-deployment
+python scripts/run_quality_pipeline.py --auto-deploy
+```
+
+## Configuration
+
+The workflow uses the `quality_config.yaml` file for configuration. You can customize:
+
+- Quality thresholds per stage
+- Gate configurations and timeouts
+- Auto-fix strategies
+- Deployment criteria
+- Notification settings
+
+## Troubleshooting
+
+If you encounter issues:
+
+1. **Check logs** in the Actions tab
+2. **Review quality reports** in the artifacts
+3. **Validate configuration** using the validation script:
+   ```bash
+   python scripts/simple_validation.py
+   ```
+4. **Run locally** to debug issues:
+   ```bash
+   python scripts/run_quality_pipeline.py --log-level DEBUG
+   ```
+
+## Security Considerations
+
+- The workflow runs security scans including SAST, dependency scanning, and vulnerability assessment
+- Results are uploaded to GitHub Security tab for review
+- Deployment is blocked if critical security issues are found
+- All artifacts are retained for audit purposes
