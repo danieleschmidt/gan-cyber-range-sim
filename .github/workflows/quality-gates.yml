@@ -1,0 +1,288 @@
+name: Progressive Quality Gates
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run nightly quality validation
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      target_stage:
+        description: 'Target validation stage'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+        - generation_1
+        - generation_2
+        - generation_3
+        - production
+      auto_deploy:
+        description: 'Enable auto-deployment if pipeline passes'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  PYTHON_VERSION: '3.10'
+  POETRY_VERSION: '1.6.0'
+
+jobs:
+  progressive-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    
+    strategy:
+      matrix:
+        stage: 
+          - generation_1
+          - generation_2
+          - generation_3
+          - production
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/pip
+          ~/.cache/pypoetry
+        key: ${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-${{ hashFiles('**/pyproject.toml', '**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-
+    
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          curl \
+          git \
+          jq \
+          docker.io \
+          docker-compose
+    
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -e .
+    
+    - name: Install additional security tools
+      run: |
+        pip install bandit safety semgrep detect-secrets
+    
+    - name: Create quality pipeline config
+      run: |
+        mkdir -p .github/quality
+        cat > .github/quality/pipeline-config.json << EOF
+        {
+          "enable_auto_fix": true,
+          "fail_fast": false,
+          "parallel_execution": true,
+          "target_stage": "${{ matrix.stage }}",
+          "notification_channels": ["github"],
+          "quality_thresholds": {
+            "minimum_overall_score": 85.0,
+            "minimum_success_rate": 90.0,
+            "maximum_critical_failures": 0
+          },
+          "deployment_criteria": {
+            "require_all_stages_passed": true,
+            "minimum_score": 95.0,
+            "security_scan_required": true,
+            "performance_benchmark_required": true
+          }
+        }
+        EOF
+    
+    - name: Run Progressive Quality Pipeline
+      id: quality_pipeline
+      run: |
+        python scripts/run_quality_pipeline.py \
+          --target-stage ${{ matrix.stage }} \
+          --config .github/quality/pipeline-config.json \
+          --project-root . \
+          --log-level INFO \
+          --trigger "github_actions" \
+          > quality_pipeline_output.txt 2>&1
+        
+        # Capture exit code
+        echo "exit_code=$?" >> $GITHUB_OUTPUT
+        
+        # Extract key metrics
+        OVERALL_SCORE=$(grep "Overall Score:" quality_pipeline_output.txt | grep -o "[0-9]*\.[0-9]*" | head -1 || echo "0.0")
+        SUCCESS_RATE=$(grep "Success Rate:" quality_pipeline_output.txt | grep -o "[0-9]*\.[0-9]*" | head -1 || echo "0.0")
+        DEPLOYMENT_READY=$(grep "Deployment Ready:" quality_pipeline_output.txt | grep -o "True\|False" | head -1 || echo "False")
+        
+        echo "overall_score=$OVERALL_SCORE" >> $GITHUB_OUTPUT
+        echo "success_rate=$SUCCESS_RATE" >> $GITHUB_OUTPUT
+        echo "deployment_ready=$DEPLOYMENT_READY" >> $GITHUB_OUTPUT
+        
+        # Always upload output (even on failure)
+        cat quality_pipeline_output.txt
+      continue-on-error: true
+    
+    - name: Upload Quality Reports
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: quality-reports-${{ matrix.stage }}
+        path: |
+          quality_reports/
+          quality_pipeline_output.txt
+          coverage.json
+          htmlcov/
+          bandit_report.json
+          benchmark_results.json
+        retention-days: 30
+    
+    - name: Upload Deployment Artifacts
+      uses: actions/upload-artifact@v3
+      if: steps.quality_pipeline.outputs.deployment_ready == 'True'
+      with:
+        name: deployment-artifacts-${{ matrix.stage }}
+        path: |
+          deployment_artifacts/
+        retention-days: 7
+    
+    - name: Create Quality Gate Summary
+      if: always()
+      run: |
+        echo "## 🎯 Quality Gate Results - ${{ matrix.stage }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+        echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+        echo "| Overall Score | ${{ steps.quality_pipeline.outputs.overall_score }}% |" >> $GITHUB_STEP_SUMMARY
+        echo "| Success Rate | ${{ steps.quality_pipeline.outputs.success_rate }}% |" >> $GITHUB_STEP_SUMMARY
+        echo "| Deployment Ready | ${{ steps.quality_pipeline.outputs.deployment_ready }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Exit Code | ${{ steps.quality_pipeline.outputs.exit_code }} |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ steps.quality_pipeline.outputs.exit_code }}" -eq 0 ]; then
+          echo "✅ **Quality gates passed for ${{ matrix.stage }}**" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ **Quality gates failed for ${{ matrix.stage }}**" >> $GITHUB_STEP_SUMMARY
+        fi
+    
+    - name: Fail job if quality gates failed
+      if: steps.quality_pipeline.outputs.exit_code != '0'
+      run: |
+        echo "Quality gates failed for stage: ${{ matrix.stage }}"
+        exit 1
+
+  security-scan:
+    runs-on: ubuntu-latest
+    needs: progressive-validation
+    if: always()
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+    
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  deployment-readiness:
+    runs-on: ubuntu-latest
+    needs: [progressive-validation, security-scan]
+    if: github.ref == 'refs/heads/main' && success()
+    
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+    
+    - name: Check deployment readiness across all stages
+      id: deployment_check
+      run: |
+        echo "Checking deployment readiness across all validation stages..."
+        
+        READY_COUNT=0
+        TOTAL_STAGES=4
+        
+        for stage in generation_1 generation_2 generation_3 production; do
+          if [ -d "deployment-artifacts-$stage" ]; then
+            echo "✅ Stage $stage is deployment ready"
+            READY_COUNT=$((READY_COUNT + 1))
+          else
+            echo "❌ Stage $stage is not deployment ready"
+          fi
+        done
+        
+        echo "ready_count=$READY_COUNT" >> $GITHUB_OUTPUT
+        echo "total_stages=$TOTAL_STAGES" >> $GITHUB_OUTPUT
+        
+        if [ $READY_COUNT -eq $TOTAL_STAGES ]; then
+          echo "deployment_ready=true" >> $GITHUB_OUTPUT
+          echo "🚀 All stages passed - ready for deployment!"
+        else
+          echo "deployment_ready=false" >> $GITHUB_OUTPUT
+          echo "⚠️ Not all stages passed - deployment blocked"
+        fi
+    
+    - name: Create deployment summary
+      run: |
+        echo "## 🚀 Deployment Readiness Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Stage | Status |" >> $GITHUB_STEP_SUMMARY
+        echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+        
+        for stage in generation_1 generation_2 generation_3 production; do
+          if [ -d "deployment-artifacts-$stage" ]; then
+            echo "| $stage | ✅ Ready |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| $stage | ❌ Not Ready |" >> $GITHUB_STEP_SUMMARY
+          fi
+        done
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Overall Status:** ${{ steps.deployment_check.outputs.deployment_ready == 'true' && '🚀 Ready for Deployment' || '⚠️ Deployment Blocked' }}" >> $GITHUB_STEP_SUMMARY
+    
+    outputs:
+      deployment_ready: ${{ steps.deployment_check.outputs.deployment_ready }}
+
+  notify-results:
+    runs-on: ubuntu-latest
+    needs: [progressive-validation, security-scan, deployment-readiness]
+    if: always()
+    
+    steps:
+    - name: Create notification summary
+      run: |
+        echo "## 📊 Progressive Quality Gates Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Workflow:** ${{ github.workflow }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ needs.deployment-readiness.outputs.deployment_ready }}" == "true" ]; then
+          echo "🎉 **All quality gates passed! System is ready for production deployment.**" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ **Some quality gates failed. Review the reports and address issues before deployment.**" >> $GITHUB_STEP_SUMMARY
+        fi
