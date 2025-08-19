@@ -1,0 +1,243 @@
+# Progressive Quality Gates Configuration
+# Configuration file for autonomous SDLC quality validation
+
+# Global pipeline settings
+pipeline:
+  enable_auto_fix: true
+  fail_fast: false
+  parallel_execution: true
+  timeout_minutes: 30
+
+# Quality thresholds by stage
+quality_thresholds:
+  generation_1:
+    minimum_overall_score: 70.0
+    minimum_success_rate: 80.0
+    maximum_critical_failures: 2
+    required_gates:
+      - test_coverage
+      - code_quality
+  
+  generation_2:
+    minimum_overall_score: 80.0
+    minimum_success_rate: 90.0
+    maximum_critical_failures: 1
+    required_gates:
+      - test_coverage
+      - code_quality
+      - security_scan
+      - compliance_check
+  
+  generation_3:
+    minimum_overall_score: 90.0
+    minimum_success_rate: 95.0
+    maximum_critical_failures: 0
+    required_gates:
+      - test_coverage
+      - code_quality
+      - security_scan
+      - performance_benchmark
+      - compliance_check
+  
+  production:
+    minimum_overall_score: 95.0
+    minimum_success_rate: 98.0
+    maximum_critical_failures: 0
+    required_gates:
+      - test_coverage
+      - code_quality
+      - security_scan
+      - performance_benchmark
+      - compliance_check
+
+# Gate-specific configurations
+gates:
+  test_coverage:
+    generation_1:
+      threshold: 70.0
+      timeout: 300
+      required: true
+    generation_2:
+      threshold: 80.0
+      timeout: 300
+      required: true
+    generation_3:
+      threshold: 90.0
+      timeout: 300
+      required: true
+    production:
+      threshold: 95.0
+      timeout: 300
+      required: true
+  
+  security_scan:
+    generation_1:
+      threshold: 80.0
+      timeout: 600
+      required: false
+    generation_2:
+      threshold: 90.0
+      timeout: 600
+      required: true
+    generation_3:
+      threshold: 95.0
+      timeout: 600
+      required: true
+    production:
+      threshold: 98.0
+      timeout: 600
+      required: true
+  
+  code_quality:
+    generation_1:
+      threshold: 75.0
+      timeout: 300
+      required: true
+    generation_2:
+      threshold: 85.0
+      timeout: 300
+      required: true
+    generation_3:
+      threshold: 90.0
+      timeout: 300
+      required: true
+    production:
+      threshold: 95.0
+      timeout: 300
+      required: true
+  
+  performance_benchmark:
+    generation_1:
+      threshold: 70.0
+      timeout: 900
+      required: false
+    generation_2:
+      threshold: 75.0
+      timeout: 900
+      required: false
+    generation_3:
+      threshold: 85.0
+      timeout: 900
+      required: true
+    production:
+      threshold: 90.0
+      timeout: 900
+      required: true
+  
+  compliance_check:
+    generation_1:
+      threshold: 85.0
+      timeout: 120
+      required: false
+    generation_2:
+      threshold: 90.0
+      timeout: 120
+      required: true
+    generation_3:
+      threshold: 95.0
+      timeout: 120
+      required: true
+    production:
+      threshold: 98.0
+      timeout: 120
+      required: true
+
+# Deployment criteria
+deployment_criteria:
+  require_all_stages_passed: true
+  minimum_score: 95.0
+  security_scan_required: true
+  performance_benchmark_required: true
+  compliance_required: true
+  max_high_severity_vulnerabilities: 0
+  max_medium_severity_vulnerabilities: 2
+
+# Auto-fix configurations
+auto_fix:
+  enabled: true
+  strategies:
+    code_quality:
+      - black_formatting
+      - isort_imports
+      - remove_unused_imports
+    test_coverage:
+      - generate_test_stubs
+      - create_missing_tests
+    security_scan:
+      - fix_common_vulnerabilities
+      - update_dependencies
+    compliance_check:
+      - create_missing_files
+      - update_license_headers
+
+# Notification settings
+notifications:
+  enabled: true
+  channels:
+    - console
+    - file
+    - github_annotations
+  
+  triggers:
+    - pipeline_start
+    - pipeline_complete
+    - stage_failure
+    - deployment_ready
+  
+  templates:
+    success: "✅ Quality pipeline passed with score {overall_score}%"
+    failure: "❌ Quality pipeline failed at stage {failed_stage}"
+    warning: "⚠️ Quality pipeline completed with warnings"
+
+# Reporting configuration
+reporting:
+  generate_html_report: true
+  generate_json_report: true
+  generate_junit_xml: true
+  
+  include_sections:
+    - executive_summary
+    - detailed_metrics
+    - gate_results
+    - recommendations
+    - trend_analysis
+    - compliance_status
+    - security_assessment
+  
+  retention_days: 30
+  archive_location: "quality_reports/"
+
+# Integration settings
+integrations:
+  github:
+    create_check_runs: true
+    update_commit_status: true
+    create_issue_on_failure: false
+  
+  slack:
+    enabled: false
+    webhook_url: ""
+    channel: "#quality-gates"
+  
+  email:
+    enabled: false
+    smtp_server: ""
+    recipients: []
+
+# Advanced settings
+advanced:
+  cache_results: true
+  cache_duration_hours: 24
+  
+  parallel_gate_execution: true
+  max_concurrent_gates: 5
+  
+  retry_failed_gates: true
+  max_retries: 2
+  retry_delay_seconds: 30
+  
+  performance_monitoring: true
+  collect_metrics: true
+  
+  research_mode: true
+  experimental_features: true
