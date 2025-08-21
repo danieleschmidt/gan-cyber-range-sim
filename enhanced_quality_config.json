@@ -1,0 +1,36 @@
+{
+  "real_time_monitoring": {
+    "enabled": true,
+    "update_interval": 30.0,
+    "websocket_port": 8765,
+    "alert_sensitivity": 0.85
+  },
+  "adaptive_thresholds": {
+    "enabled": true,
+    "adaptation_strategy": "balanced",
+    "min_samples": 20,
+    "confidence_threshold": 0.8
+  },
+  "ml_optimization": {
+    "enabled": true,
+    "training_window_days": 30,
+    "retrain_interval_hours": 24,
+    "min_training_samples": 50
+  },
+  "predictive_qa": {
+    "enabled": true,
+    "prediction_horizons": [
+      "immediate",
+      "short_term",
+      "medium_term"
+    ],
+    "anomaly_sensitivity": 0.05,
+    "risk_threshold": 0.7
+  },
+  "anomaly_detection": {
+    "enabled": true,
+    "statistical_detection": true,
+    "pattern_detection": true,
+    "correlation_detection": true
+  }
+}
