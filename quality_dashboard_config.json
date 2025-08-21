@@ -1,0 +1,28 @@
+{
+  "dashboard": {
+    "title": "GAN Cyber Range - Enhanced Quality Monitoring",
+    "refresh_interval": 30,
+    "panels": [
+      {
+        "title": "Quality Metrics Overview",
+        "type": "metrics"
+      },
+      {
+        "title": "Real-time Alerts",
+        "type": "alerts"
+      },
+      {
+        "title": "Quality Trends",
+        "type": "trends"
+      },
+      {
+        "title": "Anomaly Detection",
+        "type": "anomalies"
+      },
+      {
+        "title": "ML Model Performance",
+        "type": "ml_metrics"
+      }
+    ]
+  }
+}
