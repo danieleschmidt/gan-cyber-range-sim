@@ -1,6 +1,6 @@
 {
-  "benchmark_timestamp": 1755210949.2067566,
-  "benchmark_duration": 0.00026988983154296875,
+  "benchmark_timestamp": 1755928381.379259,
+  "benchmark_duration": 0.0005965232849121094,
   "overall_performance_score": 3.3476785073613398,
   "component_results": {
     "quantum_advantage": {
