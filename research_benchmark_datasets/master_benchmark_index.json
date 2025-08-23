@@ -1,0 +1,66 @@
+{
+  "benchmark_suite_info": {
+    "citation": "Please cite this benchmark suite in any publications using these datasets",
+    "creation_timestamp": 1755928825.3038993,
+    "description": "Comprehensive benchmark datasets for evaluating breakthrough cybersecurity AI research",
+    "license": "MIT",
+    "name": "Cybersecurity AI Research Benchmark Suite",
+    "total_datasets": 4,
+    "version": "1.0.0"
+  },
+  "datasets": {
+    "cross_platform_security": {
+      "applications": [
+        "Security posture",
+        "Compliance checking",
+        "Risk assessment"
+      ],
+      "description": "Framework for cross-platform security assessment",
+      "filename": "cross_platform_security_framework.json",
+      "research_area": "Cross-platform Analysis + Security Assessment"
+    },
+    "federated_quantum_neuromorphic": {
+      "applications": [
+        "Privacy-preserving ML",
+        "Quantum advantage",
+        "Neuromorphic computing"
+      ],
+      "description": "Benchmark for federated quantum-neuromorphic adversarial training",
+      "filename": "federated_quantum_neuromorphic_benchmark.json",
+      "research_area": "Quantum Machine Learning + Federated Learning"
+    },
+    "multimodal_threat_detection": {
+      "applications": [
+        "Threat detection",
+        "Behavioral analysis",
+        "Cross-modal fusion"
+      ],
+      "description": "Evaluation suite for multi-modal threat detection systems",
+      "filename": "multimodal_threat_detection_suite.json",
+      "research_area": "Multi-modal Learning + Cybersecurity"
+    },
+    "zero_shot_vulnerability": {
+      "applications": [
+        "Code analysis",
+        "Pattern recognition",
+        "Transfer learning"
+      ],
+      "description": "Test set for zero-shot vulnerability discovery",
+      "filename": "zero_shot_vulnerability_testset.json",
+      "research_area": "Zero-shot Learning + Vulnerability Detection"
+    }
+  },
+  "file_list": [
+    "research_benchmark_datasets/federated_quantum_neuromorphic/federated_quantum_neuromorphic_benchmark.json",
+    "research_benchmark_datasets/multimodal_threat_detection/multimodal_threat_detection_suite.json",
+    "research_benchmark_datasets/zero_shot_vulnerability/zero_shot_vulnerability_testset.json",
+    "research_benchmark_datasets/cross_platform_security/cross_platform_security_framework.json"
+  ],
+  "usage_guidelines": {
+    "baseline_comparisons": "Include at least 3 state-of-the-art baselines",
+    "cross_validation": "Use stratified k-fold with k=5",
+    "reproducibility": "Use provided random seeds for reproducible results",
+    "significance_testing": "Report p-values and effect sizes",
+    "statistical_requirements": "Minimum 30 trials for significance testing"
+  }
+}

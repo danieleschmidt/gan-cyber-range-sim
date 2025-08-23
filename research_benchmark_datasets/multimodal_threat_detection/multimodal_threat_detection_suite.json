@@ -1,0 +1,5057 @@
+{
+  "benign_samples": [
+    {
+      "category": "normal_operation",
+      "complexity": "maintenance",
+      "data_hash": "5f4d63eb5af8fabd",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.136,
+      "modalities_involved": [
+        "network_traffic",
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_normal_operation_b9897c65"
+    },
+    {
+      "category": "normal_operation",
+      "complexity": "routine",
+      "data_hash": "53ec0653db9d51e7",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.089,
+      "modalities_involved": [
+        "code_analysis",
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_normal_operation_25cedc61"
+    },
+    {
+      "category": "normal_operation",
+      "complexity": "routine",
+      "data_hash": "bfc7815a91575bcf",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.133,
+      "modalities_involved": [
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_normal_operation_195e134a"
+    },
+    {
+      "category": "normal_operation",
+      "complexity": "routine",
+      "data_hash": "d1285dfce8ee1175",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.139,
+      "modalities_involved": [
+        "email_content",
+        "code_analysis",
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_normal_operation_576425a1"
+    },
+    {
+      "category": "normal_operation",
+      "complexity": "routine",
+      "data_hash": "36d4f4d45ec5d96b",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.085,
+      "modalities_involved": [
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_normal_operation_6faf2f6e"
+    },
+    {
+      "category": "normal_operation",
+      "complexity": "routine",
+      "data_hash": "5107cc0ca648eaae",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.07,
+      "modalities_involved": [
+        "user_behavior",
+        "code_analysis"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_normal_operation_43c8bece"
+    },
+    {
+      "category": "normal_operation",
+      "complexity": "routine",
+      "data_hash": "204b30903f012cb2",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.062,
+      "modalities_involved": [
+        "network_traffic",
+        "user_behavior",
+        "code_analysis"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_normal_operation_9c27a198"
+    },
+    {
+      "category": "normal_operation",
+      "complexity": "routine",
+      "data_hash": "e9a957b455499029",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.065,
+      "modalities_involved": [
+        "network_traffic"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_normal_operation_3e0a98b2"
+    },
+    {
+      "category": "normal_operation",
+      "complexity": "maintenance",
+      "data_hash": "2603944c3f2b7c91",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.113,
+      "modalities_involved": [
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_normal_operation_8430c8ed"
+    },
+    {
+      "category": "normal_operation",
+      "complexity": "maintenance",
+      "data_hash": "82411fc616630ba3",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.146,
+      "modalities_involved": [
+        "network_traffic",
+        "user_behavior",
+        "system_logs"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_normal_operation_c01944be"
+    },
+    {
+      "category": "normal_operation",
+      "complexity": "maintenance",
+      "data_hash": "e0476e0dca2afcb4",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.06,
+      "modalities_involved": [
+        "code_analysis"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_normal_operation_b2a8c993"
+    },
+    {
+      "category": "normal_operation",
+      "complexity": "maintenance",
+      "data_hash": "462cdd3bc0cfd318",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.082,
+      "modalities_involved": [
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_normal_operation_1c68127d"
+    },
+    {
+      "category": "normal_operation",
+      "complexity": "maintenance",
+      "data_hash": "a65e433fb78e5445",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.08,
+      "modalities_involved": [
+        "email_content",
+        "code_analysis",
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_normal_operation_83a26f31"
+    },
+    {
+      "category": "normal_operation",
+      "complexity": "administrative",
+      "data_hash": "5a26d7fbb734e768",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.09,
+      "modalities_involved": [
+        "user_behavior",
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_normal_operation_12aa1661"
+    },
+    {
+      "category": "normal_operation",
+      "complexity": "maintenance",
+      "data_hash": "b6f44a0332e5dd1a",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.049,
+      "modalities_involved": [
+        "user_behavior",
+        "network_traffic",
+        "code_analysis"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_normal_operation_5562eb1b"
+    },
+    {
+      "category": "system_update",
+      "complexity": "administrative",
+      "data_hash": "3edbd7f4ba85de3b",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.146,
+      "modalities_involved": [
+        "code_analysis",
+        "system_logs",
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_system_update_9faafc7b"
+    },
+    {
+      "category": "system_update",
+      "complexity": "maintenance",
+      "data_hash": "69b1d69582e09dd8",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.129,
+      "modalities_involved": [
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_system_update_81052506"
+    },
+    {
+      "category": "system_update",
+      "complexity": "routine",
+      "data_hash": "08e6b23085061ad5",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.037,
+      "modalities_involved": [
+        "email_content",
+        "network_traffic"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_system_update_ca449218"
+    },
+    {
+      "category": "system_update",
+      "complexity": "maintenance",
+      "data_hash": "faf845836288752b",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.147,
+      "modalities_involved": [
+        "user_behavior",
+        "network_traffic"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_system_update_48ee168e"
+    },
+    {
+      "category": "system_update",
+      "complexity": "routine",
+      "data_hash": "9775a817ddcfea36",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.111,
+      "modalities_involved": [
+        "code_analysis",
+        "system_logs",
+        "network_traffic"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_system_update_1f7d6538"
+    },
+    {
+      "category": "system_update",
+      "complexity": "maintenance",
+      "data_hash": "18f8d6cb160ca8ff",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.099,
+      "modalities_involved": [
+        "code_analysis",
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_system_update_aa5d2cfb"
+    },
+    {
+      "category": "system_update",
+      "complexity": "routine",
+      "data_hash": "6176b7de72e6791f",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.057,
+      "modalities_involved": [
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_system_update_c8baf67a"
+    },
+    {
+      "category": "system_update",
+      "complexity": "maintenance",
+      "data_hash": "f24e88e81bed21d9",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.124,
+      "modalities_involved": [
+        "code_analysis"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_system_update_c4dd4c48"
+    },
+    {
+      "category": "system_update",
+      "complexity": "routine",
+      "data_hash": "00210c0637a31ea5",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.106,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_system_update_b2592950"
+    },
+    {
+      "category": "system_update",
+      "complexity": "routine",
+      "data_hash": "509be452b6a73bd4",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.094,
+      "modalities_involved": [
+        "user_behavior",
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_system_update_286a15ad"
+    },
+    {
+      "category": "system_update",
+      "complexity": "routine",
+      "data_hash": "b2ae7d5dd8b17590",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.035,
+      "modalities_involved": [
+        "email_content",
+        "system_logs",
+        "network_traffic"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_system_update_3e7bdb1f"
+    },
+    {
+      "category": "system_update",
+      "complexity": "administrative",
+      "data_hash": "295b8b333017d9ba",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.087,
+      "modalities_involved": [
+        "code_analysis",
+        "user_behavior",
+        "network_traffic"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_system_update_246f8a17"
+    },
+    {
+      "category": "system_update",
+      "complexity": "routine",
+      "data_hash": "581d23bc6b8bbf43",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.059,
+      "modalities_involved": [
+        "system_logs"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_system_update_b2171217"
+    },
+    {
+      "category": "system_update",
+      "complexity": "administrative",
+      "data_hash": "23e55d31b9ebb3e9",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.04,
+      "modalities_involved": [
+        "network_traffic",
+        "code_analysis"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_system_update_aea6447c"
+    },
+    {
+      "category": "system_update",
+      "complexity": "administrative",
+      "data_hash": "92656abd9e9167f6",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.111,
+      "modalities_involved": [
+        "user_behavior",
+        "system_logs",
+        "code_analysis"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_system_update_6f3babe9"
+    },
+    {
+      "category": "user_authentication",
+      "complexity": "routine",
+      "data_hash": "aa4d6dc9d34380d6",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.074,
+      "modalities_involved": [
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_user_authentication_1746b57d"
+    },
+    {
+      "category": "user_authentication",
+      "complexity": "administrative",
+      "data_hash": "bebfafde956409e1",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.149,
+      "modalities_involved": [
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_user_authentication_feb0990e"
+    },
+    {
+      "category": "user_authentication",
+      "complexity": "routine",
+      "data_hash": "7df8d9b3964f481d",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.099,
+      "modalities_involved": [
+        "code_analysis"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_user_authentication_41cccf05"
+    },
+    {
+      "category": "user_authentication",
+      "complexity": "administrative",
+      "data_hash": "b68a86b08f86ad12",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.088,
+      "modalities_involved": [
+        "network_traffic"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_user_authentication_e3251793"
+    },
+    {
+      "category": "user_authentication",
+      "complexity": "routine",
+      "data_hash": "75bf930bfdde31d5",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.023,
+      "modalities_involved": [
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_user_authentication_6a4e551c"
+    },
+    {
+      "category": "user_authentication",
+      "complexity": "maintenance",
+      "data_hash": "7f35ee8cd36fa9b0",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.094,
+      "modalities_involved": [
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_user_authentication_00c88fe6"
+    },
+    {
+      "category": "user_authentication",
+      "complexity": "administrative",
+      "data_hash": "19a8a4c9229e69a9",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.062,
+      "modalities_involved": [
+        "user_behavior",
+        "system_logs",
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_user_authentication_6b515687"
+    },
+    {
+      "category": "user_authentication",
+      "complexity": "administrative",
+      "data_hash": "c5c6687a7c53ac89",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.13,
+      "modalities_involved": [
+        "network_traffic",
+        "system_logs"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_user_authentication_83aa71ad"
+    },
+    {
+      "category": "user_authentication",
+      "complexity": "maintenance",
+      "data_hash": "33b6d3c03fc8c22b",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.136,
+      "modalities_involved": [
+        "network_traffic",
+        "system_logs",
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_user_authentication_5cc2c551"
+    },
+    {
+      "category": "user_authentication",
+      "complexity": "administrative",
+      "data_hash": "cdfe3be405bb7c1b",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.134,
+      "modalities_involved": [
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_user_authentication_38bd4b77"
+    },
+    {
+      "category": "user_authentication",
+      "complexity": "routine",
+      "data_hash": "25b0b9b9a79cd8e7",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.107,
+      "modalities_involved": [
+        "system_logs"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_user_authentication_2574f105"
+    },
+    {
+      "category": "user_authentication",
+      "complexity": "maintenance",
+      "data_hash": "2965d59ef6e8a3c8",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.019,
+      "modalities_involved": [
+        "code_analysis",
+        "user_behavior",
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_user_authentication_e942445f"
+    },
+    {
+      "category": "user_authentication",
+      "complexity": "routine",
+      "data_hash": "ba06ed1998ff5cd7",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.141,
+      "modalities_involved": [
+        "network_traffic"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_user_authentication_4ce7af3d"
+    },
+    {
+      "category": "user_authentication",
+      "complexity": "maintenance",
+      "data_hash": "2c6e8f2697231b56",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.125,
+      "modalities_involved": [
+        "system_logs",
+        "network_traffic"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_user_authentication_114f7de6"
+    },
+    {
+      "category": "user_authentication",
+      "complexity": "administrative",
+      "data_hash": "8c6821ca22cdc5a4",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.114,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis",
+        "network_traffic"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_user_authentication_0f112ed8"
+    },
+    {
+      "category": "scheduled_backup",
+      "complexity": "maintenance",
+      "data_hash": "7d31a8268de98cce",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.091,
+      "modalities_involved": [
+        "code_analysis"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_scheduled_backup_c54cb017"
+    },
+    {
+      "category": "scheduled_backup",
+      "complexity": "administrative",
+      "data_hash": "d770087abb225787",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.064,
+      "modalities_involved": [
+        "email_content",
+        "user_behavior",
+        "code_analysis"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_scheduled_backup_b7562bc7"
+    },
+    {
+      "category": "scheduled_backup",
+      "complexity": "routine",
+      "data_hash": "cf4b5d6d09d2508f",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.028,
+      "modalities_involved": [
+        "system_logs"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_scheduled_backup_daa27c70"
+    },
+    {
+      "category": "scheduled_backup",
+      "complexity": "maintenance",
+      "data_hash": "da1eded2fe5ec0cb",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.06,
+      "modalities_involved": [
+        "email_content",
+        "code_analysis"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_scheduled_backup_49f15f65"
+    },
+    {
+      "category": "scheduled_backup",
+      "complexity": "maintenance",
+      "data_hash": "57ab36abeb72cf49",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.068,
+      "modalities_involved": [
+        "code_analysis",
+        "network_traffic",
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_scheduled_backup_0b8cc5bd"
+    },
+    {
+      "category": "scheduled_backup",
+      "complexity": "maintenance",
+      "data_hash": "6cc1100046651b85",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.048,
+      "modalities_involved": [
+        "email_content",
+        "network_traffic",
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_scheduled_backup_f28057a5"
+    },
+    {
+      "category": "scheduled_backup",
+      "complexity": "routine",
+      "data_hash": "3b879be4acbeb74b",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.108,
+      "modalities_involved": [
+        "user_behavior",
+        "network_traffic",
+        "code_analysis"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_scheduled_backup_1c265933"
+    },
+    {
+      "category": "scheduled_backup",
+      "complexity": "routine",
+      "data_hash": "3382b52b571653af",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.109,
+      "modalities_involved": [
+        "user_behavior",
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_scheduled_backup_3be7b44f"
+    },
+    {
+      "category": "scheduled_backup",
+      "complexity": "administrative",
+      "data_hash": "648d62bb2bfd49bc",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.032,
+      "modalities_involved": [
+        "user_behavior",
+        "network_traffic",
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_scheduled_backup_613cc67d"
+    },
+    {
+      "category": "scheduled_backup",
+      "complexity": "routine",
+      "data_hash": "98329b3f97fa53a4",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.045,
+      "modalities_involved": [
+        "network_traffic",
+        "code_analysis",
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_scheduled_backup_fdc6b66e"
+    },
+    {
+      "category": "scheduled_backup",
+      "complexity": "routine",
+      "data_hash": "9389f178eac90c4c",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.046,
+      "modalities_involved": [
+        "email_content",
+        "user_behavior",
+        "system_logs"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_scheduled_backup_21217d21"
+    },
+    {
+      "category": "scheduled_backup",
+      "complexity": "maintenance",
+      "data_hash": "e39202f9fdb0b99f",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.118,
+      "modalities_involved": [
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_scheduled_backup_ce2ea6fa"
+    },
+    {
+      "category": "scheduled_backup",
+      "complexity": "routine",
+      "data_hash": "c21a43e6b1a78b0f",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.119,
+      "modalities_involved": [
+        "system_logs"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_scheduled_backup_143cdebe"
+    },
+    {
+      "category": "scheduled_backup",
+      "complexity": "routine",
+      "data_hash": "efa1149bed00816e",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.116,
+      "modalities_involved": [
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_scheduled_backup_77156003"
+    },
+    {
+      "category": "scheduled_backup",
+      "complexity": "maintenance",
+      "data_hash": "5a620eb4de62926d",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.036,
+      "modalities_involved": [
+        "email_content",
+        "system_logs"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_scheduled_backup_775b98a1"
+    },
+    {
+      "category": "software_installation",
+      "complexity": "maintenance",
+      "data_hash": "a9a4574add989f36",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.117,
+      "modalities_involved": [
+        "user_behavior",
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_software_installation_beafd2d7"
+    },
+    {
+      "category": "software_installation",
+      "complexity": "maintenance",
+      "data_hash": "da1ff7ef897c8b69",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.098,
+      "modalities_involved": [
+        "system_logs"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_software_installation_df90a1e2"
+    },
+    {
+      "category": "software_installation",
+      "complexity": "administrative",
+      "data_hash": "37539220c7b52c06",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.038,
+      "modalities_involved": [
+        "email_content",
+        "network_traffic"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_software_installation_86dc449c"
+    },
+    {
+      "category": "software_installation",
+      "complexity": "routine",
+      "data_hash": "53deb107b3131611",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.016,
+      "modalities_involved": [
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_software_installation_2010b236"
+    },
+    {
+      "category": "software_installation",
+      "complexity": "administrative",
+      "data_hash": "181de3e78ee12fdd",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.049,
+      "modalities_involved": [
+        "network_traffic",
+        "code_analysis",
+        "system_logs"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_software_installation_9677ad77"
+    },
+    {
+      "category": "software_installation",
+      "complexity": "maintenance",
+      "data_hash": "f015f9a02d01d34a",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.084,
+      "modalities_involved": [
+        "code_analysis",
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_software_installation_a2d01354"
+    },
+    {
+      "category": "software_installation",
+      "complexity": "maintenance",
+      "data_hash": "7e555555e385ed6e",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.131,
+      "modalities_involved": [
+        "user_behavior",
+        "code_analysis",
+        "network_traffic"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_software_installation_b7cabc0c"
+    },
+    {
+      "category": "software_installation",
+      "complexity": "administrative",
+      "data_hash": "0aad27e485288b33",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.066,
+      "modalities_involved": [
+        "system_logs",
+        "email_content",
+        "code_analysis"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_software_installation_7dcd5df1"
+    },
+    {
+      "category": "software_installation",
+      "complexity": "routine",
+      "data_hash": "02e9007dc22175dc",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.081,
+      "modalities_involved": [
+        "user_behavior",
+        "system_logs"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_software_installation_46ac8a61"
+    },
+    {
+      "category": "software_installation",
+      "complexity": "maintenance",
+      "data_hash": "53c249b63ed826ef",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.014,
+      "modalities_involved": [
+        "system_logs",
+        "user_behavior",
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_software_installation_30579b0e"
+    },
+    {
+      "category": "software_installation",
+      "complexity": "maintenance",
+      "data_hash": "6f55b5c32f3e7553",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.105,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis",
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_software_installation_7424010f"
+    },
+    {
+      "category": "software_installation",
+      "complexity": "maintenance",
+      "data_hash": "154277c493a94707",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.082,
+      "modalities_involved": [
+        "email_content",
+        "system_logs",
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_software_installation_7cbbb728"
+    },
+    {
+      "category": "software_installation",
+      "complexity": "maintenance",
+      "data_hash": "11828f92af80488c",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.134,
+      "modalities_involved": [
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_software_installation_4cfd88a2"
+    },
+    {
+      "category": "software_installation",
+      "complexity": "administrative",
+      "data_hash": "68741a5a0181ddc5",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.078,
+      "modalities_involved": [
+        "network_traffic",
+        "system_logs",
+        "user_behavior"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_software_installation_a313743e"
+    },
+    {
+      "category": "software_installation",
+      "complexity": "maintenance",
+      "data_hash": "3e75390264dec802",
+      "expected_classification": "benign",
+      "false_positive_risk": 0.113,
+      "modalities_involved": [
+        "email_content"
+      ],
+      "normal_patterns": true,
+      "sample_id": "benign_software_installation_ca53c5d9"
+    }
+  ],
+  "dataset_info": {
+    "creation_timestamp": 1755928825.3038993,
+    "description": "Comprehensive evaluation suite for multi-modal threat detection systems",
+    "modalities": [
+      "network_traffic",
+      "system_logs",
+      "user_behavior",
+      "code_analysis",
+      "email_content"
+    ],
+    "name": "Multi-Modal Cybersecurity Threat Detection Benchmark",
+    "threat_categories": [
+      "advanced_persistent_threat",
+      "ransomware",
+      "insider_threat",
+      "zero_day_exploit",
+      "supply_chain_attack",
+      "credential_stuffing",
+      "ddos_attack",
+      "man_in_the_middle",
+      "social_engineering",
+      "malware_injection"
+    ],
+    "total_benign_samples": 75,
+    "total_threat_samples": 200,
+    "version": "1.0.0"
+  },
+  "evaluation_scenarios": [
+    {
+      "description": "Evaluation using only one data modality",
+      "expected_performance_drop": 0.3,
+      "modalities_used": 1,
+      "scenario_name": "single_modal_baseline"
+    },
+    {
+      "description": "Evaluation using two complementary modalities",
+      "expected_performance_improvement": 0.15,
+      "modalities_used": 2,
+      "scenario_name": "dual_modal_fusion"
+    },
+    {
+      "description": "Evaluation using all available modalities",
+      "expected_performance_peak": true,
+      "modalities_used": 5,
+      "scenario_name": "full_multimodal"
+    },
+    {
+      "description": "Evaluation against evasion techniques",
+      "evasion_strength": "high",
+      "expected_robustness_test": true,
+      "scenario_name": "adversarial_evasion"
+    }
+  ],
+  "generation_metadata": {
+    "data_integrity_verified": true,
+    "generated_by": "ResearchBenchmarkDatasetGenerator",
+    "generation_timestamp": 1755928825.3208134,
+    "reproducible_seed": 789
+  },
+  "performance_metrics": {
+    "detection_metrics": [
+      "precision",
+      "recall",
+      "f1_score",
+      "false_positive_rate"
+    ],
+    "multi_modal_metrics": [
+      "cross_modal_correlation",
+      "fusion_effectiveness"
+    ],
+    "robustness_metrics": [
+      "adversarial_robustness",
+      "evasion_resistance"
+    ],
+    "temporal_metrics": [
+      "detection_latency",
+      "processing_time"
+    ]
+  },
+  "threat_samples": [
+    {
+      "cross_modal_correlation": 0.739,
+      "data_hash": "824fd87975e66c3d",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "obfuscation",
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 213.8,
+      "modalities_involved": [
+        "email_content",
+        "network_traffic",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_advanced_persistent_threat_b6dbff34",
+      "severity": "high",
+      "stealth_level": 0.7,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.732,
+      "data_hash": "f92652849f20aef3",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 217.0,
+      "modalities_involved": [
+        "system_logs",
+        "network_traffic",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_advanced_persistent_threat_368cac71",
+      "severity": "low",
+      "stealth_level": 0.48,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.633,
+      "data_hash": "1d41dfbd80d1229e",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 82.2,
+      "modalities_involved": [
+        "user_behavior",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_advanced_persistent_threat_69416c49",
+      "severity": "critical",
+      "stealth_level": 0.49,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.783,
+      "data_hash": "5f90bcc7a60453fd",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "encryption",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 107.9,
+      "modalities_involved": [
+        "email_content",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_advanced_persistent_threat_7f13e5e2",
+      "severity": "high",
+      "stealth_level": 0.81,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.759,
+      "data_hash": "040cfd35eb4e75c3",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 227.5,
+      "modalities_involved": [
+        "code_analysis",
+        "system_logs",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_advanced_persistent_threat_b1f1414c",
+      "severity": "medium",
+      "stealth_level": 0.48,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.304,
+      "data_hash": "fa66ee43fe40f92c",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "obfuscation",
+        "timing_variation"
+      ],
+      "expected_detection_time": 212.7,
+      "modalities_involved": [
+        "network_traffic",
+        "email_content",
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_advanced_persistent_threat_413c78b2",
+      "severity": "low",
+      "stealth_level": 0.26,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.473,
+      "data_hash": "e08bc925ff7842bb",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 114.4,
+      "modalities_involved": [
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_advanced_persistent_threat_7a3ee235",
+      "severity": "medium",
+      "stealth_level": 0.3,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.632,
+      "data_hash": "6834266aa13c9830",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation",
+        "obfuscation"
+      ],
+      "expected_detection_time": 96.0,
+      "modalities_involved": [
+        "user_behavior",
+        "network_traffic",
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_advanced_persistent_threat_ea0828c7",
+      "severity": "low",
+      "stealth_level": 0.88,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.455,
+      "data_hash": "fcb32cbe4d7d8e17",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation",
+        "encryption",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 39.7,
+      "modalities_involved": [
+        "system_logs",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_advanced_persistent_threat_b34c1869",
+      "severity": "medium",
+      "stealth_level": 0.85,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.486,
+      "data_hash": "f1c5665e7c6415f3",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 208.1,
+      "modalities_involved": [
+        "email_content",
+        "system_logs",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_advanced_persistent_threat_28587228",
+      "severity": "low",
+      "stealth_level": 0.48,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.797,
+      "data_hash": "06e556d56eafa162",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 280.4,
+      "modalities_involved": [
+        "email_content",
+        "system_logs",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_advanced_persistent_threat_70549bc9",
+      "severity": "medium",
+      "stealth_level": 0.17,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.726,
+      "data_hash": "630722faf59e0961",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation"
+      ],
+      "expected_detection_time": 19.4,
+      "modalities_involved": [
+        "system_logs",
+        "email_content",
+        "user_behavior",
+        "network_traffic"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_advanced_persistent_threat_c11df780",
+      "severity": "medium",
+      "stealth_level": 0.2,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.6,
+      "data_hash": "b6fce90ee1ad1793",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "encryption",
+        "obfuscation",
+        "timing_variation"
+      ],
+      "expected_detection_time": 6.9,
+      "modalities_involved": [
+        "email_content",
+        "network_traffic",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_advanced_persistent_threat_25bb0675",
+      "severity": "high",
+      "stealth_level": 0.29,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.501,
+      "data_hash": "24648e97b3afcd9a",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption",
+        "obfuscation",
+        "timing_variation"
+      ],
+      "expected_detection_time": 159.1,
+      "modalities_involved": [
+        "user_behavior",
+        "network_traffic",
+        "email_content",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_advanced_persistent_threat_4106c510",
+      "severity": "high",
+      "stealth_level": 0.37,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.922,
+      "data_hash": "da6cb7a9b851ad4d",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "encryption",
+        "traffic_mimicking",
+        "obfuscation"
+      ],
+      "expected_detection_time": 63.7,
+      "modalities_involved": [
+        "email_content",
+        "system_logs",
+        "code_analysis",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_advanced_persistent_threat_077a0e9f",
+      "severity": "low",
+      "stealth_level": 0.44,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.745,
+      "data_hash": "ca729df67f6bfa9a",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "timing_variation",
+        "obfuscation"
+      ],
+      "expected_detection_time": 43.3,
+      "modalities_involved": [
+        "code_analysis",
+        "system_logs",
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_advanced_persistent_threat_0c9c9bf5",
+      "severity": "medium",
+      "stealth_level": 0.12,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.577,
+      "data_hash": "d766ff7e96732e11",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation",
+        "traffic_mimicking",
+        "obfuscation"
+      ],
+      "expected_detection_time": 11.2,
+      "modalities_involved": [
+        "user_behavior",
+        "email_content",
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_advanced_persistent_threat_73489f40",
+      "severity": "critical",
+      "stealth_level": 0.72,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.554,
+      "data_hash": "099d901f10e3b35d",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 18.2,
+      "modalities_involved": [
+        "code_analysis",
+        "system_logs",
+        "network_traffic",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_advanced_persistent_threat_75f6dfea",
+      "severity": "medium",
+      "stealth_level": 0.28,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.425,
+      "data_hash": "c5e0417316f65ec7",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "obfuscation"
+      ],
+      "expected_detection_time": 241.2,
+      "modalities_involved": [
+        "system_logs",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_advanced_persistent_threat_37a136c7",
+      "severity": "medium",
+      "stealth_level": 0.67,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.829,
+      "data_hash": "8036cbae8f6da2dc",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "obfuscation",
+        "timing_variation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 275.4,
+      "modalities_involved": [
+        "code_analysis",
+        "network_traffic",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_advanced_persistent_threat_eb6c8ead",
+      "severity": "low",
+      "stealth_level": 0.86,
+      "threat_category": "advanced_persistent_threat"
+    },
+    {
+      "cross_modal_correlation": 0.663,
+      "data_hash": "e92e2b3f08a68beb",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation",
+        "obfuscation"
+      ],
+      "expected_detection_time": 155.9,
+      "modalities_involved": [
+        "user_behavior",
+        "code_analysis",
+        "network_traffic",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ransomware_f953b0c3",
+      "severity": "medium",
+      "stealth_level": 0.28,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.656,
+      "data_hash": "d0d6bbb36925b6b6",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 144.0,
+      "modalities_involved": [
+        "network_traffic",
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ransomware_7ffb6c9f",
+      "severity": "medium",
+      "stealth_level": 0.16,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.354,
+      "data_hash": "5f2a309a13e0d80f",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 136.8,
+      "modalities_involved": [
+        "email_content",
+        "code_analysis",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ransomware_2d899a1c",
+      "severity": "low",
+      "stealth_level": 0.74,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.312,
+      "data_hash": "c34a5d4a5afdcbc7",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "timing_variation",
+        "obfuscation"
+      ],
+      "expected_detection_time": 31.2,
+      "modalities_involved": [
+        "system_logs",
+        "email_content",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ransomware_91de9a21",
+      "severity": "critical",
+      "stealth_level": 0.24,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.605,
+      "data_hash": "32fcd25576c88d63",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 127.5,
+      "modalities_involved": [
+        "code_analysis",
+        "email_content",
+        "user_behavior",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ransomware_0e7ec4c4",
+      "severity": "medium",
+      "stealth_level": 0.69,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.703,
+      "data_hash": "9c50c31f3f2051ce",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation",
+        "traffic_mimicking",
+        "obfuscation"
+      ],
+      "expected_detection_time": 221.1,
+      "modalities_involved": [
+        "user_behavior",
+        "network_traffic",
+        "email_content"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ransomware_ad4339ff",
+      "severity": "medium",
+      "stealth_level": 0.25,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.821,
+      "data_hash": "5d79e31e360cef28",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "encryption"
+      ],
+      "expected_detection_time": 36.0,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis",
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ransomware_8c3fa9db",
+      "severity": "critical",
+      "stealth_level": 0.42,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.778,
+      "data_hash": "216cd96cfb379d18",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 286.2,
+      "modalities_involved": [
+        "network_traffic",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ransomware_cff33ea8",
+      "severity": "medium",
+      "stealth_level": 0.5,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.321,
+      "data_hash": "15ecc01de17e7267",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "obfuscation"
+      ],
+      "expected_detection_time": 261.4,
+      "modalities_involved": [
+        "email_content",
+        "user_behavior",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ransomware_6a818cd6",
+      "severity": "medium",
+      "stealth_level": 0.37,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.381,
+      "data_hash": "8a1c2cc920ca0de7",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 166.1,
+      "modalities_involved": [
+        "user_behavior",
+        "network_traffic",
+        "email_content",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ransomware_a67633e8",
+      "severity": "high",
+      "stealth_level": 0.85,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.385,
+      "data_hash": "28ee407f8d432964",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation",
+        "obfuscation"
+      ],
+      "expected_detection_time": 269.9,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ransomware_9e0ed54d",
+      "severity": "low",
+      "stealth_level": 0.32,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.61,
+      "data_hash": "5c4ffef1158e0796",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "obfuscation",
+        "timing_variation"
+      ],
+      "expected_detection_time": 288.2,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ransomware_33bd10d5",
+      "severity": "low",
+      "stealth_level": 0.31,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.597,
+      "data_hash": "16aeb122ecfd79b0",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation",
+        "obfuscation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 266.2,
+      "modalities_involved": [
+        "system_logs",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ransomware_08e40d15",
+      "severity": "medium",
+      "stealth_level": 0.33,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.316,
+      "data_hash": "0e26b87a59ce91fd",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "encryption",
+        "timing_variation"
+      ],
+      "expected_detection_time": 199.7,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ransomware_234dbb55",
+      "severity": "critical",
+      "stealth_level": 0.7,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.485,
+      "data_hash": "5b8b432d0caa9473",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 183.6,
+      "modalities_involved": [
+        "user_behavior",
+        "code_analysis",
+        "system_logs",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ransomware_5970fccb",
+      "severity": "critical",
+      "stealth_level": 0.22,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.313,
+      "data_hash": "b041d7ffa90c83f1",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 228.8,
+      "modalities_involved": [
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ransomware_14c97317",
+      "severity": "low",
+      "stealth_level": 0.71,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.38,
+      "data_hash": "098bc8df2295b0ca",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "obfuscation",
+        "timing_variation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 18.8,
+      "modalities_involved": [
+        "code_analysis",
+        "email_content"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ransomware_deefa104",
+      "severity": "high",
+      "stealth_level": 0.75,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.498,
+      "data_hash": "dea93aafc5c3ca7e",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "encryption",
+        "obfuscation"
+      ],
+      "expected_detection_time": 136.0,
+      "modalities_involved": [
+        "code_analysis",
+        "email_content",
+        "system_logs",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ransomware_cf6668d3",
+      "severity": "low",
+      "stealth_level": 0.15,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.588,
+      "data_hash": "96574fa47866edbd",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 28.7,
+      "modalities_involved": [
+        "system_logs",
+        "email_content",
+        "user_behavior",
+        "network_traffic"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ransomware_77b92ab1",
+      "severity": "critical",
+      "stealth_level": 0.45,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.753,
+      "data_hash": "c52ff422b72b55ad",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 17.7,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ransomware_c40e0eaa",
+      "severity": "critical",
+      "stealth_level": 0.71,
+      "threat_category": "ransomware"
+    },
+    {
+      "cross_modal_correlation": 0.836,
+      "data_hash": "0a51dc3d93eda483",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 4.6,
+      "modalities_involved": [
+        "network_traffic",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_insider_threat_894d9745",
+      "severity": "low",
+      "stealth_level": 0.59,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.798,
+      "data_hash": "57d5df50d9d5c029",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation",
+        "obfuscation"
+      ],
+      "expected_detection_time": 229.5,
+      "modalities_involved": [
+        "code_analysis",
+        "email_content",
+        "system_logs",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_insider_threat_521d7eae",
+      "severity": "high",
+      "stealth_level": 0.35,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.629,
+      "data_hash": "ce977381f8955d76",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation",
+        "obfuscation"
+      ],
+      "expected_detection_time": 91.6,
+      "modalities_involved": [
+        "user_behavior",
+        "network_traffic",
+        "email_content"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_insider_threat_850b3be6",
+      "severity": "high",
+      "stealth_level": 0.13,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.596,
+      "data_hash": "035a8c42190e7cb9",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "obfuscation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 88.5,
+      "modalities_involved": [
+        "network_traffic",
+        "email_content",
+        "user_behavior",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_insider_threat_d4c6238b",
+      "severity": "high",
+      "stealth_level": 0.8,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.471,
+      "data_hash": "18a93b23fffdcb83",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 68.6,
+      "modalities_involved": [
+        "user_behavior",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_insider_threat_671b5a02",
+      "severity": "critical",
+      "stealth_level": 0.87,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.304,
+      "data_hash": "4cd17c3cb73b8404",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption",
+        "timing_variation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 43.6,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_insider_threat_893e79ac",
+      "severity": "low",
+      "stealth_level": 0.19,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.524,
+      "data_hash": "4d0f05ebed09eb1b",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 62.7,
+      "modalities_involved": [
+        "network_traffic",
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_insider_threat_823dad7c",
+      "severity": "medium",
+      "stealth_level": 0.63,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.891,
+      "data_hash": "99c8d079b17a7ee2",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 171.3,
+      "modalities_involved": [
+        "network_traffic",
+        "code_analysis",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_insider_threat_238b8615",
+      "severity": "medium",
+      "stealth_level": 0.4,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.859,
+      "data_hash": "70ea47e9f89eb7f2",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "timing_variation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 260.6,
+      "modalities_involved": [
+        "system_logs",
+        "user_behavior",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_insider_threat_9c25a7b9",
+      "severity": "critical",
+      "stealth_level": 0.77,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.586,
+      "data_hash": "131e81833ce200a3",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "encryption",
+        "obfuscation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 72.7,
+      "modalities_involved": [
+        "user_behavior",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_insider_threat_9bab416d",
+      "severity": "high",
+      "stealth_level": 0.55,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.366,
+      "data_hash": "992b2a27c061addf",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "encryption",
+        "timing_variation"
+      ],
+      "expected_detection_time": 112.1,
+      "modalities_involved": [
+        "user_behavior",
+        "network_traffic"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_insider_threat_021c2bde",
+      "severity": "critical",
+      "stealth_level": 0.13,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.546,
+      "data_hash": "e85451dc9712a120",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 295.7,
+      "modalities_involved": [
+        "user_behavior",
+        "email_content",
+        "system_logs",
+        "network_traffic"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_insider_threat_bc1d79fc",
+      "severity": "medium",
+      "stealth_level": 0.79,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.429,
+      "data_hash": "52cca680c076e34f",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "timing_variation",
+        "encryption",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 61.0,
+      "modalities_involved": [
+        "network_traffic",
+        "user_behavior",
+        "email_content"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_insider_threat_fac40c56",
+      "severity": "low",
+      "stealth_level": 0.52,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.698,
+      "data_hash": "821fb355bd076be9",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation"
+      ],
+      "expected_detection_time": 285.7,
+      "modalities_involved": [
+        "code_analysis",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_insider_threat_f897c1d7",
+      "severity": "high",
+      "stealth_level": 0.73,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.68,
+      "data_hash": "dd8e159f3dadfc03",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "obfuscation",
+        "encryption"
+      ],
+      "expected_detection_time": 93.9,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis",
+        "network_traffic",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_insider_threat_48b22844",
+      "severity": "medium",
+      "stealth_level": 0.13,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.859,
+      "data_hash": "0b0b85362c303cf3",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "obfuscation",
+        "timing_variation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 209.2,
+      "modalities_involved": [
+        "code_analysis",
+        "user_behavior"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_insider_threat_8a315a37",
+      "severity": "low",
+      "stealth_level": 0.71,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.742,
+      "data_hash": "ae457f94795b6a07",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation"
+      ],
+      "expected_detection_time": 169.6,
+      "modalities_involved": [
+        "network_traffic",
+        "user_behavior",
+        "email_content"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_insider_threat_ea30dcd1",
+      "severity": "low",
+      "stealth_level": 0.86,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.346,
+      "data_hash": "40040ed3e789f90e",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 145.9,
+      "modalities_involved": [
+        "code_analysis",
+        "email_content",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_insider_threat_d061b7be",
+      "severity": "critical",
+      "stealth_level": 0.4,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.722,
+      "data_hash": "ae2bd5e551757675",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 211.2,
+      "modalities_involved": [
+        "user_behavior",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_insider_threat_e6f68ce3",
+      "severity": "critical",
+      "stealth_level": 0.47,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.66,
+      "data_hash": "673d8b98731b4e79",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "obfuscation",
+        "encryption"
+      ],
+      "expected_detection_time": 299.9,
+      "modalities_involved": [
+        "user_behavior",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_insider_threat_f9cde2ae",
+      "severity": "low",
+      "stealth_level": 0.48,
+      "threat_category": "insider_threat"
+    },
+    {
+      "cross_modal_correlation": 0.631,
+      "data_hash": "1551f8787ceac510",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "timing_variation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 34.9,
+      "modalities_involved": [
+        "network_traffic",
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_zero_day_exploit_1d41adbc",
+      "severity": "critical",
+      "stealth_level": 0.67,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.573,
+      "data_hash": "99631698dfad3b1d",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "obfuscation"
+      ],
+      "expected_detection_time": 167.4,
+      "modalities_involved": [
+        "network_traffic",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_zero_day_exploit_d54e2667",
+      "severity": "high",
+      "stealth_level": 0.25,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.44,
+      "data_hash": "36b446c33ef27241",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 52.8,
+      "modalities_involved": [
+        "code_analysis",
+        "email_content",
+        "user_behavior",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_zero_day_exploit_4c740a6a",
+      "severity": "critical",
+      "stealth_level": 0.78,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.705,
+      "data_hash": "525121805e76a68d",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "timing_variation",
+        "obfuscation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 83.6,
+      "modalities_involved": [
+        "user_behavior",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_zero_day_exploit_1b77c61b",
+      "severity": "medium",
+      "stealth_level": 0.81,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.682,
+      "data_hash": "837ba49854b38739",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 129.7,
+      "modalities_involved": [
+        "network_traffic",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_zero_day_exploit_45ed6898",
+      "severity": "critical",
+      "stealth_level": 0.11,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.592,
+      "data_hash": "3de316efebf717bf",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 56.2,
+      "modalities_involved": [
+        "email_content",
+        "network_traffic"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_zero_day_exploit_494d25be",
+      "severity": "critical",
+      "stealth_level": 0.48,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.678,
+      "data_hash": "4875918704f84492",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "encryption"
+      ],
+      "expected_detection_time": 176.4,
+      "modalities_involved": [
+        "code_analysis",
+        "email_content",
+        "user_behavior",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_zero_day_exploit_374f21a9",
+      "severity": "medium",
+      "stealth_level": 0.48,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.452,
+      "data_hash": "d76f027e56f4edc3",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "obfuscation"
+      ],
+      "expected_detection_time": 121.5,
+      "modalities_involved": [
+        "user_behavior",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_zero_day_exploit_a64450a2",
+      "severity": "high",
+      "stealth_level": 0.7,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.537,
+      "data_hash": "57b4fa32f6396e15",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 209.2,
+      "modalities_involved": [
+        "email_content",
+        "network_traffic",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_zero_day_exploit_ea45d492",
+      "severity": "critical",
+      "stealth_level": 0.36,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.778,
+      "data_hash": "6b0a57199a448929",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 290.1,
+      "modalities_involved": [
+        "system_logs",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_zero_day_exploit_ab2dc061",
+      "severity": "high",
+      "stealth_level": 0.63,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.924,
+      "data_hash": "b58760fe220502f1",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "obfuscation",
+        "traffic_mimicking",
+        "timing_variation"
+      ],
+      "expected_detection_time": 175.6,
+      "modalities_involved": [
+        "network_traffic",
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_zero_day_exploit_bd6caee7",
+      "severity": "low",
+      "stealth_level": 0.83,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.319,
+      "data_hash": "910593f93dd8e482",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 22.5,
+      "modalities_involved": [
+        "email_content",
+        "network_traffic",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_zero_day_exploit_6db73315",
+      "severity": "low",
+      "stealth_level": 0.66,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.387,
+      "data_hash": "acc4e162a6d10a77",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 166.2,
+      "modalities_involved": [
+        "system_logs",
+        "user_behavior"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_zero_day_exploit_6f136882",
+      "severity": "high",
+      "stealth_level": 0.41,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.565,
+      "data_hash": "6252782aa765e7a1",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "obfuscation",
+        "timing_variation"
+      ],
+      "expected_detection_time": 63.6,
+      "modalities_involved": [
+        "code_analysis",
+        "user_behavior"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_zero_day_exploit_2d11e48e",
+      "severity": "critical",
+      "stealth_level": 0.31,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.405,
+      "data_hash": "b8417cdba78b4278",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "timing_variation",
+        "obfuscation",
+        "encryption"
+      ],
+      "expected_detection_time": 98.4,
+      "modalities_involved": [
+        "system_logs",
+        "network_traffic",
+        "user_behavior",
+        "email_content"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_zero_day_exploit_561f3130",
+      "severity": "medium",
+      "stealth_level": 0.87,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.39,
+      "data_hash": "092695396fc4f5af",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 131.5,
+      "modalities_involved": [
+        "user_behavior",
+        "system_logs",
+        "code_analysis",
+        "network_traffic"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_zero_day_exploit_42681e83",
+      "severity": "high",
+      "stealth_level": 0.57,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.358,
+      "data_hash": "e09dedd208661475",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 260.3,
+      "modalities_involved": [
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_zero_day_exploit_7502afee",
+      "severity": "medium",
+      "stealth_level": 0.5,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.64,
+      "data_hash": "808de4fce3560e94",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 177.9,
+      "modalities_involved": [
+        "system_logs",
+        "user_behavior",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_zero_day_exploit_a82919a3",
+      "severity": "high",
+      "stealth_level": 0.35,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.892,
+      "data_hash": "3fa5e32bb9a69c43",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "obfuscation",
+        "traffic_mimicking",
+        "timing_variation"
+      ],
+      "expected_detection_time": 258.1,
+      "modalities_involved": [
+        "network_traffic",
+        "system_logs",
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_zero_day_exploit_3ad2d622",
+      "severity": "critical",
+      "stealth_level": 0.21,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.861,
+      "data_hash": "1293688336cf26c3",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption",
+        "obfuscation"
+      ],
+      "expected_detection_time": 284.5,
+      "modalities_involved": [
+        "user_behavior",
+        "system_logs",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_zero_day_exploit_447b1f9a",
+      "severity": "medium",
+      "stealth_level": 0.55,
+      "threat_category": "zero_day_exploit"
+    },
+    {
+      "cross_modal_correlation": 0.544,
+      "data_hash": "5321bb9e2ab0f8fa",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 2.4,
+      "modalities_involved": [
+        "network_traffic",
+        "system_logs",
+        "code_analysis",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_supply_chain_attack_e2b8f785",
+      "severity": "critical",
+      "stealth_level": 0.53,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.32,
+      "data_hash": "8409e642cf5f6ad0",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 71.7,
+      "modalities_involved": [
+        "system_logs",
+        "email_content",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_supply_chain_attack_55c5d867",
+      "severity": "critical",
+      "stealth_level": 0.1,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.346,
+      "data_hash": "18a046ec2e6f05dd",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 200.8,
+      "modalities_involved": [
+        "code_analysis",
+        "network_traffic",
+        "system_logs",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_supply_chain_attack_1006c3ea",
+      "severity": "critical",
+      "stealth_level": 0.37,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.807,
+      "data_hash": "aff469245a869fca",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 121.8,
+      "modalities_involved": [
+        "email_content",
+        "user_behavior",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_supply_chain_attack_17991a57",
+      "severity": "medium",
+      "stealth_level": 0.41,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.824,
+      "data_hash": "7d1cd467ad1b525a",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 185.8,
+      "modalities_involved": [
+        "system_logs",
+        "user_behavior",
+        "email_content"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_supply_chain_attack_7535678a",
+      "severity": "high",
+      "stealth_level": 0.15,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.857,
+      "data_hash": "ad0a3e3013b9464f",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 220.5,
+      "modalities_involved": [
+        "user_behavior",
+        "network_traffic",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_supply_chain_attack_6b6104e6",
+      "severity": "critical",
+      "stealth_level": 0.46,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.303,
+      "data_hash": "eae021495e73a1b4",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation",
+        "obfuscation",
+        "encryption"
+      ],
+      "expected_detection_time": 295.6,
+      "modalities_involved": [
+        "network_traffic",
+        "email_content",
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_supply_chain_attack_c7b874eb",
+      "severity": "high",
+      "stealth_level": 0.26,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.338,
+      "data_hash": "91f0ca2e97182741",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 95.0,
+      "modalities_involved": [
+        "network_traffic",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_supply_chain_attack_734a89ad",
+      "severity": "critical",
+      "stealth_level": 0.19,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.681,
+      "data_hash": "37e0e33fdce1500a",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "encryption",
+        "obfuscation"
+      ],
+      "expected_detection_time": 216.4,
+      "modalities_involved": [
+        "email_content",
+        "network_traffic"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_supply_chain_attack_cfef608b",
+      "severity": "low",
+      "stealth_level": 0.78,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.309,
+      "data_hash": "687b19e5498a83d4",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 241.3,
+      "modalities_involved": [
+        "network_traffic",
+        "email_content",
+        "user_behavior",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_supply_chain_attack_a4ff3646",
+      "severity": "high",
+      "stealth_level": 0.82,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.55,
+      "data_hash": "2d360e17ac77edc8",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "encryption",
+        "timing_variation"
+      ],
+      "expected_detection_time": 141.3,
+      "modalities_involved": [
+        "code_analysis",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_supply_chain_attack_1c60fe8c",
+      "severity": "critical",
+      "stealth_level": 0.47,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.533,
+      "data_hash": "3d02434115c17c1d",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 232.8,
+      "modalities_involved": [
+        "user_behavior",
+        "email_content"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_supply_chain_attack_f22af5e4",
+      "severity": "critical",
+      "stealth_level": 0.69,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.351,
+      "data_hash": "6fbc4d3c1bf0b854",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption",
+        "obfuscation"
+      ],
+      "expected_detection_time": 203.2,
+      "modalities_involved": [
+        "email_content",
+        "system_logs",
+        "code_analysis",
+        "network_traffic"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_supply_chain_attack_86e827bf",
+      "severity": "medium",
+      "stealth_level": 0.23,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.501,
+      "data_hash": "944a683fc1540f41",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "encryption"
+      ],
+      "expected_detection_time": 167.4,
+      "modalities_involved": [
+        "network_traffic",
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_supply_chain_attack_6d86ada3",
+      "severity": "high",
+      "stealth_level": 0.61,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.733,
+      "data_hash": "ccecc596fdb567ba",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption",
+        "obfuscation"
+      ],
+      "expected_detection_time": 22.8,
+      "modalities_involved": [
+        "system_logs",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_supply_chain_attack_835cda34",
+      "severity": "low",
+      "stealth_level": 0.24,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.873,
+      "data_hash": "f9b9721319fc9fc5",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation"
+      ],
+      "expected_detection_time": 72.9,
+      "modalities_involved": [
+        "network_traffic",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_supply_chain_attack_87d3b51c",
+      "severity": "critical",
+      "stealth_level": 0.51,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.695,
+      "data_hash": "867441e077db00a1",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 105.6,
+      "modalities_involved": [
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_supply_chain_attack_05da5e69",
+      "severity": "critical",
+      "stealth_level": 0.14,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.855,
+      "data_hash": "45a3f33167f50221",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 64.4,
+      "modalities_involved": [
+        "network_traffic",
+        "email_content",
+        "user_behavior",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_supply_chain_attack_e25d1486",
+      "severity": "low",
+      "stealth_level": 0.57,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.437,
+      "data_hash": "d0f8c13ac4e4fd87",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "encryption",
+        "obfuscation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 190.9,
+      "modalities_involved": [
+        "user_behavior",
+        "code_analysis",
+        "system_logs",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_supply_chain_attack_8da950b9",
+      "severity": "medium",
+      "stealth_level": 0.3,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.42,
+      "data_hash": "1982f282769007a6",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "encryption"
+      ],
+      "expected_detection_time": 203.5,
+      "modalities_involved": [
+        "network_traffic",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_supply_chain_attack_ed02c9e8",
+      "severity": "critical",
+      "stealth_level": 0.78,
+      "threat_category": "supply_chain_attack"
+    },
+    {
+      "cross_modal_correlation": 0.575,
+      "data_hash": "187a184810243966",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 116.5,
+      "modalities_involved": [
+        "system_logs",
+        "email_content",
+        "network_traffic",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_credential_stuffing_70470992",
+      "severity": "low",
+      "stealth_level": 0.53,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.937,
+      "data_hash": "e1448dcc3c32b343",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 96.4,
+      "modalities_involved": [
+        "code_analysis",
+        "email_content",
+        "user_behavior",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_credential_stuffing_e6a8ebbc",
+      "severity": "critical",
+      "stealth_level": 0.24,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.368,
+      "data_hash": "0e3599133c0528e1",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "encryption",
+        "timing_variation",
+        "obfuscation"
+      ],
+      "expected_detection_time": 229.9,
+      "modalities_involved": [
+        "email_content",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_credential_stuffing_971dc4e7",
+      "severity": "high",
+      "stealth_level": 0.27,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.802,
+      "data_hash": "fc384107ad79cdec",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation",
+        "traffic_mimicking",
+        "obfuscation"
+      ],
+      "expected_detection_time": 138.0,
+      "modalities_involved": [
+        "system_logs",
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_credential_stuffing_3ec0bdf1",
+      "severity": "medium",
+      "stealth_level": 0.37,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.571,
+      "data_hash": "25e33d3242a6edd9",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "timing_variation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 235.7,
+      "modalities_involved": [
+        "email_content",
+        "network_traffic",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_credential_stuffing_a83beb71",
+      "severity": "critical",
+      "stealth_level": 0.55,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.334,
+      "data_hash": "24188f25f4d97009",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 85.2,
+      "modalities_involved": [
+        "network_traffic",
+        "user_behavior",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_credential_stuffing_d8646117",
+      "severity": "critical",
+      "stealth_level": 0.34,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.935,
+      "data_hash": "a15f4e79d097d731",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation",
+        "traffic_mimicking",
+        "obfuscation"
+      ],
+      "expected_detection_time": 206.1,
+      "modalities_involved": [
+        "code_analysis",
+        "user_behavior"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_credential_stuffing_7f48e774",
+      "severity": "high",
+      "stealth_level": 0.57,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.92,
+      "data_hash": "0927619affd1543b",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "timing_variation",
+        "encryption",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 224.8,
+      "modalities_involved": [
+        "email_content",
+        "network_traffic",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_credential_stuffing_02cc6c43",
+      "severity": "low",
+      "stealth_level": 0.48,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.537,
+      "data_hash": "db203e512ac9826e",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 277.8,
+      "modalities_involved": [
+        "email_content",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_credential_stuffing_6d6d5c60",
+      "severity": "low",
+      "stealth_level": 0.27,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.823,
+      "data_hash": "33a3f22441d21c76",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "obfuscation"
+      ],
+      "expected_detection_time": 261.0,
+      "modalities_involved": [
+        "network_traffic",
+        "email_content",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_credential_stuffing_d6d319b1",
+      "severity": "low",
+      "stealth_level": 0.46,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.564,
+      "data_hash": "92aed6303dca5dc8",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 273.4,
+      "modalities_involved": [
+        "code_analysis",
+        "network_traffic",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_credential_stuffing_75d797ed",
+      "severity": "medium",
+      "stealth_level": 0.11,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.657,
+      "data_hash": "e34a2986958fe41a",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 120.3,
+      "modalities_involved": [
+        "user_behavior",
+        "email_content",
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_credential_stuffing_4d983785",
+      "severity": "low",
+      "stealth_level": 0.29,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.828,
+      "data_hash": "badc2a664e5dbad0",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "obfuscation",
+        "encryption",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 54.9,
+      "modalities_involved": [
+        "email_content",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_credential_stuffing_b9823f4b",
+      "severity": "medium",
+      "stealth_level": 0.3,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.374,
+      "data_hash": "eb7608dd028c9094",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption",
+        "obfuscation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 235.9,
+      "modalities_involved": [
+        "user_behavior",
+        "network_traffic",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_credential_stuffing_eaca96bd",
+      "severity": "high",
+      "stealth_level": 0.48,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.39,
+      "data_hash": "f1ef888d2ebe1250",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation",
+        "encryption",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 155.4,
+      "modalities_involved": [
+        "code_analysis",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_credential_stuffing_f0c79e46",
+      "severity": "medium",
+      "stealth_level": 0.64,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.493,
+      "data_hash": "71c3571616ad9988",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption",
+        "obfuscation"
+      ],
+      "expected_detection_time": 182.2,
+      "modalities_involved": [
+        "system_logs",
+        "network_traffic",
+        "user_behavior",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_credential_stuffing_65421387",
+      "severity": "low",
+      "stealth_level": 0.44,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.533,
+      "data_hash": "e6eca1fd11f658fc",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "timing_variation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 39.1,
+      "modalities_involved": [
+        "code_analysis",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_credential_stuffing_870f65a5",
+      "severity": "medium",
+      "stealth_level": 0.57,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.383,
+      "data_hash": "0c45643183dde65e",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "obfuscation",
+        "traffic_mimicking",
+        "timing_variation"
+      ],
+      "expected_detection_time": 216.9,
+      "modalities_involved": [
+        "system_logs",
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_credential_stuffing_34009c9b",
+      "severity": "low",
+      "stealth_level": 0.44,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.676,
+      "data_hash": "e8fc0bfd8fd95772",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "obfuscation",
+        "encryption"
+      ],
+      "expected_detection_time": 18.0,
+      "modalities_involved": [
+        "system_logs",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_credential_stuffing_4d87eb57",
+      "severity": "critical",
+      "stealth_level": 0.79,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.816,
+      "data_hash": "ff2591c3fd5bda99",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 280.4,
+      "modalities_involved": [
+        "system_logs",
+        "user_behavior",
+        "email_content",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_credential_stuffing_8b274063",
+      "severity": "high",
+      "stealth_level": 0.23,
+      "threat_category": "credential_stuffing"
+    },
+    {
+      "cross_modal_correlation": 0.717,
+      "data_hash": "f6a0a3d3f43ed7ab",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "obfuscation",
+        "timing_variation"
+      ],
+      "expected_detection_time": 24.7,
+      "modalities_involved": [
+        "user_behavior",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ddos_attack_7ef68820",
+      "severity": "medium",
+      "stealth_level": 0.87,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.449,
+      "data_hash": "971be09bb77f989e",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "encryption",
+        "obfuscation",
+        "timing_variation"
+      ],
+      "expected_detection_time": 232.5,
+      "modalities_involved": [
+        "system_logs",
+        "user_behavior",
+        "email_content",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ddos_attack_165820fb",
+      "severity": "low",
+      "stealth_level": 0.47,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.382,
+      "data_hash": "274185b1013396af",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "obfuscation",
+        "encryption"
+      ],
+      "expected_detection_time": 236.8,
+      "modalities_involved": [
+        "email_content",
+        "user_behavior",
+        "system_logs",
+        "network_traffic"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ddos_attack_118d68d3",
+      "severity": "medium",
+      "stealth_level": 0.35,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.823,
+      "data_hash": "1ce9839e64d0ce97",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "obfuscation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 185.6,
+      "modalities_involved": [
+        "code_analysis",
+        "user_behavior"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ddos_attack_298eb0e9",
+      "severity": "high",
+      "stealth_level": 0.13,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.881,
+      "data_hash": "a7fe62779f186e66",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 210.3,
+      "modalities_involved": [
+        "email_content",
+        "code_analysis",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ddos_attack_f5003fc6",
+      "severity": "high",
+      "stealth_level": 0.39,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.832,
+      "data_hash": "eb6e98804703ddd0",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 70.3,
+      "modalities_involved": [
+        "network_traffic",
+        "email_content",
+        "system_logs",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ddos_attack_86da5f29",
+      "severity": "high",
+      "stealth_level": 0.5,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.425,
+      "data_hash": "9456c4376676077c",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation"
+      ],
+      "expected_detection_time": 170.1,
+      "modalities_involved": [
+        "network_traffic",
+        "email_content",
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ddos_attack_7b5c01ae",
+      "severity": "medium",
+      "stealth_level": 0.22,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.404,
+      "data_hash": "6a1861bb88342acd",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 146.3,
+      "modalities_involved": [
+        "code_analysis",
+        "network_traffic",
+        "email_content"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ddos_attack_5d6de4ce",
+      "severity": "high",
+      "stealth_level": 0.62,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.597,
+      "data_hash": "5522f40831c854ee",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 80.8,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis",
+        "user_behavior",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ddos_attack_052ad69c",
+      "severity": "critical",
+      "stealth_level": 0.5,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.865,
+      "data_hash": "69b69a7c66c23014",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 241.1,
+      "modalities_involved": [
+        "email_content",
+        "network_traffic",
+        "user_behavior",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ddos_attack_393f7a2b",
+      "severity": "high",
+      "stealth_level": 0.21,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.722,
+      "data_hash": "b848adf587bffb69",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 257.8,
+      "modalities_involved": [
+        "email_content",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ddos_attack_2715d1df",
+      "severity": "low",
+      "stealth_level": 0.44,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.516,
+      "data_hash": "6c14fb09272125f9",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 148.7,
+      "modalities_involved": [
+        "code_analysis",
+        "email_content"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ddos_attack_60156f32",
+      "severity": "critical",
+      "stealth_level": 0.63,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.462,
+      "data_hash": "cc17af86466629ed",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 148.4,
+      "modalities_involved": [
+        "code_analysis",
+        "user_behavior",
+        "network_traffic",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ddos_attack_a06e6faf",
+      "severity": "low",
+      "stealth_level": 0.58,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.734,
+      "data_hash": "14cbd2799f3ec03f",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "timing_variation",
+        "encryption",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 7.1,
+      "modalities_involved": [
+        "user_behavior",
+        "email_content",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ddos_attack_ad86f726",
+      "severity": "medium",
+      "stealth_level": 0.36,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.577,
+      "data_hash": "c865513119a3e063",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 17.5,
+      "modalities_involved": [
+        "code_analysis",
+        "system_logs",
+        "email_content",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ddos_attack_c26c08ed",
+      "severity": "low",
+      "stealth_level": 0.3,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.329,
+      "data_hash": "1e58d4a153e63de1",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 16.7,
+      "modalities_involved": [
+        "network_traffic",
+        "code_analysis",
+        "user_behavior",
+        "email_content"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ddos_attack_af33f2b5",
+      "severity": "high",
+      "stealth_level": 0.76,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.94,
+      "data_hash": "9a8b4bec2358caa1",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption",
+        "obfuscation"
+      ],
+      "expected_detection_time": 251.1,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ddos_attack_159e6a5d",
+      "severity": "low",
+      "stealth_level": 0.64,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.765,
+      "data_hash": "4943ae6ce9be39d8",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation",
+        "obfuscation"
+      ],
+      "expected_detection_time": 224.6,
+      "modalities_involved": [
+        "network_traffic",
+        "email_content",
+        "code_analysis",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_ddos_attack_a7c0fd0d",
+      "severity": "critical",
+      "stealth_level": 0.18,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.368,
+      "data_hash": "85dcc3d54009626e",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "encryption",
+        "traffic_mimicking",
+        "obfuscation"
+      ],
+      "expected_detection_time": 26.7,
+      "modalities_involved": [
+        "code_analysis",
+        "system_logs",
+        "email_content"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ddos_attack_3cca060e",
+      "severity": "low",
+      "stealth_level": 0.76,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.677,
+      "data_hash": "14ff73ae17f08868",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "encryption",
+        "obfuscation"
+      ],
+      "expected_detection_time": 91.9,
+      "modalities_involved": [
+        "network_traffic",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_ddos_attack_8cf254b3",
+      "severity": "critical",
+      "stealth_level": 0.14,
+      "threat_category": "ddos_attack"
+    },
+    {
+      "cross_modal_correlation": 0.893,
+      "data_hash": "cfc16d1100ac5316",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "obfuscation",
+        "traffic_mimicking",
+        "encryption"
+      ],
+      "expected_detection_time": 148.8,
+      "modalities_involved": [
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_man_in_the_middle_092a1eb7",
+      "severity": "high",
+      "stealth_level": 0.48,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.834,
+      "data_hash": "42dc8d942f9d9536",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 199.1,
+      "modalities_involved": [
+        "network_traffic",
+        "user_behavior",
+        "code_analysis",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_man_in_the_middle_ce65523d",
+      "severity": "low",
+      "stealth_level": 0.42,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.449,
+      "data_hash": "009ce62a3114266a",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 39.0,
+      "modalities_involved": [
+        "network_traffic",
+        "system_logs",
+        "user_behavior",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_man_in_the_middle_cf4c5fc0",
+      "severity": "medium",
+      "stealth_level": 0.63,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.441,
+      "data_hash": "fec960b770faaa76",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 76.9,
+      "modalities_involved": [
+        "code_analysis",
+        "user_behavior"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_man_in_the_middle_b3492031",
+      "severity": "critical",
+      "stealth_level": 0.65,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.474,
+      "data_hash": "aea2dad271317d7c",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption",
+        "timing_variation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 193.7,
+      "modalities_involved": [
+        "code_analysis",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_man_in_the_middle_a6604ded",
+      "severity": "low",
+      "stealth_level": 0.89,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.4,
+      "data_hash": "1a0188e6bd32287d",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 98.8,
+      "modalities_involved": [
+        "email_content",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_man_in_the_middle_80ec0420",
+      "severity": "high",
+      "stealth_level": 0.79,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.441,
+      "data_hash": "6ae28d78a2f4b348",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 49.1,
+      "modalities_involved": [
+        "network_traffic",
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_man_in_the_middle_9d668727",
+      "severity": "critical",
+      "stealth_level": 0.43,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.393,
+      "data_hash": "f209d5cf87ac980f",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "obfuscation",
+        "encryption",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 243.3,
+      "modalities_involved": [
+        "user_behavior",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_man_in_the_middle_d41cc268",
+      "severity": "low",
+      "stealth_level": 0.67,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.839,
+      "data_hash": "5e7b33c8c0ba088d",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption",
+        "timing_variation",
+        "obfuscation"
+      ],
+      "expected_detection_time": 235.1,
+      "modalities_involved": [
+        "system_logs",
+        "email_content",
+        "code_analysis",
+        "network_traffic"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_man_in_the_middle_0d1ed7a2",
+      "severity": "low",
+      "stealth_level": 0.86,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.403,
+      "data_hash": "16ba612292f600e6",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "obfuscation",
+        "encryption",
+        "timing_variation"
+      ],
+      "expected_detection_time": 103.4,
+      "modalities_involved": [
+        "system_logs",
+        "email_content",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_man_in_the_middle_da78dfe2",
+      "severity": "high",
+      "stealth_level": 0.88,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.597,
+      "data_hash": "47e6837498f43a00",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 102.0,
+      "modalities_involved": [
+        "network_traffic",
+        "user_behavior",
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_man_in_the_middle_58d19c1a",
+      "severity": "high",
+      "stealth_level": 0.69,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.66,
+      "data_hash": "5517708315cfcf02",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "timing_variation",
+        "obfuscation"
+      ],
+      "expected_detection_time": 273.2,
+      "modalities_involved": [
+        "user_behavior",
+        "system_logs",
+        "network_traffic",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_man_in_the_middle_00dd6ad0",
+      "severity": "high",
+      "stealth_level": 0.21,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.756,
+      "data_hash": "c953837ee15cc2c2",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "timing_variation",
+        "encryption",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 52.4,
+      "modalities_involved": [
+        "code_analysis",
+        "network_traffic",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_man_in_the_middle_694ce646",
+      "severity": "medium",
+      "stealth_level": 0.54,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.77,
+      "data_hash": "96bf8e3c16bce9c3",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "encryption",
+        "obfuscation"
+      ],
+      "expected_detection_time": 286.5,
+      "modalities_involved": [
+        "email_content",
+        "user_behavior",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_man_in_the_middle_2869c857",
+      "severity": "medium",
+      "stealth_level": 0.75,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.582,
+      "data_hash": "30ac9890871f0f91",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "encryption",
+        "timing_variation",
+        "obfuscation"
+      ],
+      "expected_detection_time": 23.7,
+      "modalities_involved": [
+        "user_behavior",
+        "code_analysis",
+        "system_logs",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_man_in_the_middle_077c50f7",
+      "severity": "medium",
+      "stealth_level": 0.17,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.378,
+      "data_hash": "015db2635028e9c4",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "encryption",
+        "traffic_mimicking",
+        "timing_variation"
+      ],
+      "expected_detection_time": 8.6,
+      "modalities_involved": [
+        "code_analysis",
+        "user_behavior",
+        "network_traffic"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_man_in_the_middle_aba4bf6e",
+      "severity": "critical",
+      "stealth_level": 0.52,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.727,
+      "data_hash": "730686d428ae9ac6",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation",
+        "obfuscation"
+      ],
+      "expected_detection_time": 5.2,
+      "modalities_involved": [
+        "email_content",
+        "user_behavior",
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_man_in_the_middle_a5485a82",
+      "severity": "high",
+      "stealth_level": 0.61,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.363,
+      "data_hash": "bc647a6a3c266985",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 107.1,
+      "modalities_involved": [
+        "network_traffic",
+        "code_analysis",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_man_in_the_middle_1bd905bb",
+      "severity": "low",
+      "stealth_level": 0.16,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.5,
+      "data_hash": "f8039c7ef236adea",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 123.4,
+      "modalities_involved": [
+        "code_analysis",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_man_in_the_middle_c64cf727",
+      "severity": "high",
+      "stealth_level": 0.84,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.902,
+      "data_hash": "6eda16c0ba1a330a",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 157.3,
+      "modalities_involved": [
+        "email_content",
+        "code_analysis",
+        "system_logs",
+        "network_traffic"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_man_in_the_middle_82c54e6d",
+      "severity": "critical",
+      "stealth_level": 0.74,
+      "threat_category": "man_in_the_middle"
+    },
+    {
+      "cross_modal_correlation": 0.9,
+      "data_hash": "6019ffab25a2d4fb",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "obfuscation",
+        "traffic_mimicking",
+        "encryption"
+      ],
+      "expected_detection_time": 66.9,
+      "modalities_involved": [
+        "network_traffic",
+        "code_analysis",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_social_engineering_2b1f482a",
+      "severity": "medium",
+      "stealth_level": 0.26,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.31,
+      "data_hash": "9cbacd35567f277a",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "obfuscation",
+        "traffic_mimicking",
+        "timing_variation"
+      ],
+      "expected_detection_time": 148.2,
+      "modalities_involved": [
+        "user_behavior",
+        "email_content",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_social_engineering_ee7824a3",
+      "severity": "critical",
+      "stealth_level": 0.16,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.377,
+      "data_hash": "467df0c40610c4e7",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "encryption",
+        "timing_variation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 197.1,
+      "modalities_involved": [
+        "email_content",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_social_engineering_aded2303",
+      "severity": "critical",
+      "stealth_level": 0.11,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.325,
+      "data_hash": "ce696335ccdbc5b3",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 34.6,
+      "modalities_involved": [
+        "code_analysis",
+        "user_behavior",
+        "system_logs",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_social_engineering_33a03f90",
+      "severity": "low",
+      "stealth_level": 0.18,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.843,
+      "data_hash": "ed41c44b57ec127d",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation",
+        "encryption",
+        "obfuscation"
+      ],
+      "expected_detection_time": 90.7,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis",
+        "email_content"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_social_engineering_5453a64f",
+      "severity": "low",
+      "stealth_level": 0.37,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.746,
+      "data_hash": "9cb587ae908fa607",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 86.3,
+      "modalities_involved": [
+        "email_content",
+        "network_traffic"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_social_engineering_1a1b1a0a",
+      "severity": "medium",
+      "stealth_level": 0.13,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.704,
+      "data_hash": "e1f9167de2ab6470",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 175.0,
+      "modalities_involved": [
+        "network_traffic",
+        "system_logs",
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_social_engineering_f66962fa",
+      "severity": "medium",
+      "stealth_level": 0.47,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.333,
+      "data_hash": "88f2f92b76d18821",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 238.7,
+      "modalities_involved": [
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_social_engineering_453636c3",
+      "severity": "critical",
+      "stealth_level": 0.25,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.859,
+      "data_hash": "cf91d8b891cd8706",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 140.5,
+      "modalities_involved": [
+        "network_traffic",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_social_engineering_d2d96308",
+      "severity": "high",
+      "stealth_level": 0.13,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.847,
+      "data_hash": "fb4d310091bc3f97",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 130.9,
+      "modalities_involved": [
+        "network_traffic",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_social_engineering_ca9dc30d",
+      "severity": "high",
+      "stealth_level": 0.13,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.48,
+      "data_hash": "d4b8c3a6c5b7d673",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "obfuscation",
+        "timing_variation"
+      ],
+      "expected_detection_time": 87.6,
+      "modalities_involved": [
+        "system_logs",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_social_engineering_6128c546",
+      "severity": "medium",
+      "stealth_level": 0.63,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.819,
+      "data_hash": "3381da500b5364e6",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation",
+        "encryption",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 133.8,
+      "modalities_involved": [
+        "system_logs",
+        "user_behavior",
+        "code_analysis",
+        "email_content"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_social_engineering_62840252",
+      "severity": "critical",
+      "stealth_level": 0.37,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.841,
+      "data_hash": "7030a457cb48cd05",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "obfuscation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 57.7,
+      "modalities_involved": [
+        "user_behavior",
+        "email_content",
+        "code_analysis",
+        "network_traffic"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_social_engineering_44dadb8f",
+      "severity": "high",
+      "stealth_level": 0.42,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.35,
+      "data_hash": "54fea7c28ebaa190",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 1.9,
+      "modalities_involved": [
+        "network_traffic",
+        "code_analysis",
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_social_engineering_1ec52fe8",
+      "severity": "medium",
+      "stealth_level": 0.78,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.76,
+      "data_hash": "526ed26025e4a498",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "encryption",
+        "obfuscation",
+        "timing_variation"
+      ],
+      "expected_detection_time": 228.9,
+      "modalities_involved": [
+        "code_analysis",
+        "email_content",
+        "user_behavior",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_social_engineering_7d5d3c06",
+      "severity": "low",
+      "stealth_level": 0.89,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.913,
+      "data_hash": "c95ab3f4e1410c81",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "encryption",
+        "obfuscation"
+      ],
+      "expected_detection_time": 80.6,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_social_engineering_e57f5c6d",
+      "severity": "critical",
+      "stealth_level": 0.69,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.319,
+      "data_hash": "b873a4c4f7b3ec71",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 79.5,
+      "modalities_involved": [
+        "email_content",
+        "code_analysis",
+        "network_traffic",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_social_engineering_d3f1653b",
+      "severity": "medium",
+      "stealth_level": 0.69,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.95,
+      "data_hash": "6efd96bed0ca2476",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 79.0,
+      "modalities_involved": [
+        "user_behavior",
+        "system_logs",
+        "network_traffic",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_social_engineering_a2c3d693",
+      "severity": "low",
+      "stealth_level": 0.35,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.699,
+      "data_hash": "7045f8f2224f7371",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "encryption",
+        "traffic_mimicking",
+        "timing_variation"
+      ],
+      "expected_detection_time": 129.3,
+      "modalities_involved": [
+        "code_analysis",
+        "email_content",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_social_engineering_ce75d5db",
+      "severity": "low",
+      "stealth_level": 0.35,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.689,
+      "data_hash": "f73ccc935f2b4228",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "encryption"
+      ],
+      "expected_detection_time": 27.5,
+      "modalities_involved": [
+        "user_behavior",
+        "email_content",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_social_engineering_286e7ff2",
+      "severity": "critical",
+      "stealth_level": 0.44,
+      "threat_category": "social_engineering"
+    },
+    {
+      "cross_modal_correlation": 0.868,
+      "data_hash": "24109932693b5c08",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "obfuscation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 17.4,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_malware_injection_21782dbc",
+      "severity": "critical",
+      "stealth_level": 0.81,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.544,
+      "data_hash": "8313059eed8d07c4",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 180.9,
+      "modalities_involved": [
+        "code_analysis",
+        "system_logs",
+        "user_behavior"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_malware_injection_d813ce55",
+      "severity": "critical",
+      "stealth_level": 0.17,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.84,
+      "data_hash": "3b0e09343b191093",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 128.2,
+      "modalities_involved": [
+        "system_logs",
+        "network_traffic"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_malware_injection_83c97d47",
+      "severity": "medium",
+      "stealth_level": 0.73,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.314,
+      "data_hash": "6a396ae44ec751ed",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 253.5,
+      "modalities_involved": [
+        "email_content",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_malware_injection_613ae0c8",
+      "severity": "low",
+      "stealth_level": 0.87,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.372,
+      "data_hash": "1e979956e0a776cc",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "obfuscation",
+        "encryption"
+      ],
+      "expected_detection_time": 169.6,
+      "modalities_involved": [
+        "network_traffic",
+        "user_behavior",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_malware_injection_0cd72c99",
+      "severity": "low",
+      "stealth_level": 0.69,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.757,
+      "data_hash": "1e94cafc7e019d31",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "obfuscation",
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 13.5,
+      "modalities_involved": [
+        "system_logs",
+        "user_behavior"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_malware_injection_bcd0d4ab",
+      "severity": "medium",
+      "stealth_level": 0.52,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.562,
+      "data_hash": "be864ca80ac24dd4",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "obfuscation",
+        "timing_variation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 57.8,
+      "modalities_involved": [
+        "system_logs",
+        "network_traffic",
+        "email_content",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_malware_injection_811eebac",
+      "severity": "critical",
+      "stealth_level": 0.66,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.613,
+      "data_hash": "285451eaae29cd19",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "timing_variation",
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 149.3,
+      "modalities_involved": [
+        "code_analysis",
+        "system_logs",
+        "email_content"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_malware_injection_2d1ee6d6",
+      "severity": "low",
+      "stealth_level": 0.26,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.811,
+      "data_hash": "41e2425196c26776",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation",
+        "obfuscation"
+      ],
+      "expected_detection_time": 245.4,
+      "modalities_involved": [
+        "network_traffic",
+        "email_content",
+        "user_behavior",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_malware_injection_9f647b2b",
+      "severity": "high",
+      "stealth_level": 0.69,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.891,
+      "data_hash": "3cd63cd1e172a460",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 289.1,
+      "modalities_involved": [
+        "email_content",
+        "system_logs"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_malware_injection_7447cdce",
+      "severity": "low",
+      "stealth_level": 0.58,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.779,
+      "data_hash": "6b641ecc78e542eb",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 136.6,
+      "modalities_involved": [
+        "email_content",
+        "system_logs",
+        "code_analysis",
+        "network_traffic"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_malware_injection_89f11030",
+      "severity": "medium",
+      "stealth_level": 0.48,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.331,
+      "data_hash": "b3bb2845910920fd",
+      "detection_complexity": "simple",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 30.7,
+      "modalities_involved": [
+        "user_behavior",
+        "email_content",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_malware_injection_14233f67",
+      "severity": "high",
+      "stealth_level": 0.45,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.89,
+      "data_hash": "587b3f371d2713ef",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "traffic_mimicking"
+      ],
+      "expected_detection_time": 190.5,
+      "modalities_involved": [
+        "network_traffic",
+        "user_behavior",
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_malware_injection_1adc2e34",
+      "severity": "medium",
+      "stealth_level": 0.15,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.469,
+      "data_hash": "b8e16862a4b5f4ce",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "timing_variation"
+      ],
+      "expected_detection_time": 48.2,
+      "modalities_involved": [
+        "email_content",
+        "user_behavior",
+        "code_analysis"
+      ],
+      "multi_stage_attack": true,
+      "sample_id": "threat_malware_injection_c38f14f0",
+      "severity": "high",
+      "stealth_level": 0.43,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.493,
+      "data_hash": "35fe72b91a4b2f81",
+      "detection_complexity": "moderate",
+      "evasion_techniques": [
+        "encryption",
+        "traffic_mimicking",
+        "obfuscation"
+      ],
+      "expected_detection_time": 121.5,
+      "modalities_involved": [
+        "network_traffic",
+        "user_behavior",
+        "system_logs",
+        "email_content"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_malware_injection_23588dcf",
+      "severity": "medium",
+      "stealth_level": 0.39,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.396,
+      "data_hash": "48bc6831bcf6f41d",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "obfuscation"
+      ],
+      "expected_detection_time": 285.9,
+      "modalities_involved": [
+        "email_content",
+        "network_traffic",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_malware_injection_675dd66d",
+      "severity": "high",
+      "stealth_level": 0.87,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.849,
+      "data_hash": "f118ffd770fd454d",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "obfuscation",
+        "timing_variation"
+      ],
+      "expected_detection_time": 56.9,
+      "modalities_involved": [
+        "email_content",
+        "code_analysis",
+        "network_traffic",
+        "system_logs"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_malware_injection_16fcc258",
+      "severity": "critical",
+      "stealth_level": 0.21,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.863,
+      "data_hash": "722629abed1677ed",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "obfuscation",
+        "timing_variation"
+      ],
+      "expected_detection_time": 272.2,
+      "modalities_involved": [
+        "email_content",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_malware_injection_6daa6c80",
+      "severity": "low",
+      "stealth_level": 0.2,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.81,
+      "data_hash": "b1186b19c2d6d974",
+      "detection_complexity": "complex",
+      "evasion_techniques": [
+        "traffic_mimicking",
+        "timing_variation",
+        "encryption"
+      ],
+      "expected_detection_time": 230.2,
+      "modalities_involved": [
+        "system_logs",
+        "code_analysis"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_malware_injection_f589335c",
+      "severity": "medium",
+      "stealth_level": 0.83,
+      "threat_category": "malware_injection"
+    },
+    {
+      "cross_modal_correlation": 0.841,
+      "data_hash": "c2a497325b4af715",
+      "detection_complexity": "expert",
+      "evasion_techniques": [
+        "encryption"
+      ],
+      "expected_detection_time": 189.1,
+      "modalities_involved": [
+        "system_logs",
+        "network_traffic",
+        "user_behavior"
+      ],
+      "multi_stage_attack": false,
+      "sample_id": "threat_malware_injection_181daec7",
+      "severity": "low",
+      "stealth_level": 0.72,
+      "threat_category": "malware_injection"
+    }
+  ]
+}
