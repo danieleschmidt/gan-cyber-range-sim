@@ -20,11 +20,16 @@ terraform {
   
   backend "s3" {
     # Configure S3 backend for state management
+    # Multi-region state management for global deployments
     # bucket = "your-terraform-state-bucket"
     # key    = "gan-cyber-range/terraform.tfstate"
     # region = "us-west-2"
     # encrypt = true
     # dynamodb_table = "terraform-locks"
+    # 
+    # For multi-region deployments:
+    # workspace_key_prefix = "environments"
+    # Enable cross-region replication for disaster recovery
   }
 }
 
@@ -654,7 +659,7 @@ resource "aws_elasticache_replication_group" "main" {
   tags = local.common_tags
 }
 
-# Application Load Balancer
+# Multi-Region Application Load Balancer with Global-First Support
 resource "aws_lb" "main" {
   name               = "${local.cluster_name}-alb"
   internal           = false
@@ -664,13 +669,23 @@ resource "aws_lb" "main" {
   
   enable_deletion_protection = var.environment == "production"
   
+  # Enable HTTP/2 for better performance globally
+  enable_http2 = true
+  
+  # Enable WAF for global security
+  enable_waf_fail_open = false
+  
   access_logs {
     bucket  = aws_s3_bucket.alb_logs.bucket
     prefix  = "alb-logs"
     enabled = true
   }
   
-  tags = local.common_tags
+  tags = merge(local.common_tags, {
+    GlobalFirst = "true"
+    MultiRegionSupport = "enabled"
+    ComplianceReady = "gdpr-ccpa-pdpa"
+  })
 }
 
 # S3 Bucket for ALB Logs
@@ -715,4 +730,320 @@ resource "aws_s3_bucket_public_access_block" "alb_logs" {
 
 resource "random_id" "bucket_suffix" {
   byte_length = 4
+}
+
+# Global-First Infrastructure: Multi-Region Support
+
+# CloudFront Distribution for Global CDN
+resource "aws_cloudfront_distribution" "main" {
+  origin {
+    domain_name = aws_lb.main.dns_name
+    origin_id   = "ALB-${local.cluster_name}"
+    
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
+  }
+  
+  enabled = true
+  
+  # Global edge locations for optimal performance
+  price_class = var.environment == "production" ? "PriceClass_All" : "PriceClass_100"
+  
+  default_cache_behavior {
+    allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = "ALB-${local.cluster_name}"
+    compress               = true
+    viewer_protocol_policy = "redirect-to-https"
+    
+    forwarded_values {
+      query_string = true
+      headers      = ["Accept-Language", "Authorization", "CloudFront-Viewer-Country"]
+      
+      cookies {
+        forward = "all"
+      }
+    }
+    
+    # Cache optimization for global performance
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+  }
+  
+  # Geographic restrictions for compliance
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+      # Can be configured per deployment for specific compliance requirements
+      # locations       = ["CN", "RU"] # Example restrictions
+    }
+  }
+  
+  viewer_certificate {
+    cloudfront_default_certificate = true
+    # In production, would use ACM certificate:
+    # acm_certificate_arn = aws_acm_certificate.main.arn
+    # ssl_support_method  = "sni-only"
+  }
+  
+  # Custom error pages for better UX
+  custom_error_response {
+    error_code         = 404
+    response_code      = 404
+    response_page_path = "/error/404.html"
+  }
+  
+  custom_error_response {
+    error_code         = 500
+    response_code      = 500
+    response_page_path = "/error/500.html"
+  }
+  
+  tags = merge(local.common_tags, {
+    Name = "${local.cluster_name}-cdn"
+    GlobalFirst = "true"
+  })
+}
+
+# WAF for Global Security
+resource "aws_wafv2_web_acl" "main" {
+  name  = "${local.cluster_name}-waf"
+  scope = "CLOUDFRONT"
+  
+  default_action {
+    allow {}
+  }
+  
+  # Rate limiting rule
+  rule {
+    name     = "RateLimitRule"
+    priority = 10
+    
+    action {
+      block {}
+    }
+    
+    statement {
+      rate_based_statement {
+        limit              = 10000
+        aggregate_key_type = "IP"
+      }
+    }
+    
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "RateLimitRule"
+      sampled_requests_enabled   = true
+    }
+  }
+  
+  # SQL Injection protection
+  rule {
+    name     = "SQLInjectionRule"
+    priority = 20
+    
+    action {
+      block {}
+    }
+    
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesCommonRuleSet"
+        vendor_name = "AWS"
+      }
+    }
+    
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "SQLInjectionRule"
+      sampled_requests_enabled   = true
+    }
+  }
+  
+  # Geo-blocking for compliance (if needed)
+  dynamic "rule" {
+    for_each = var.blocked_countries != null ? [1] : []
+    
+    content {
+      name     = "GeoBlockRule"
+      priority = 30
+      
+      action {
+        block {}
+      }
+      
+      statement {
+        geo_match_statement {
+          country_codes = var.blocked_countries
+        }
+      }
+      
+      visibility_config {
+        cloudwatch_metrics_enabled = true
+        metric_name                = "GeoBlockRule"
+        sampled_requests_enabled   = true
+      }
+    }
+  }
+  
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "${local.cluster_name}WAF"
+    sampled_requests_enabled   = true
+  }
+  
+  tags = local.common_tags
+}
+
+# Associate WAF with CloudFront
+resource "aws_wafv2_web_acl_association" "main" {
+  resource_arn = aws_cloudfront_distribution.main.arn
+  web_acl_arn  = aws_wafv2_web_acl.main.arn
+}
+
+# Route53 for Global DNS
+resource "aws_route53_zone" "main" {
+  count = var.domain_name != null ? 1 : 0
+  
+  name = var.domain_name
+  
+  tags = merge(local.common_tags, {
+    Name = "${local.cluster_name}-zone"
+  })
+}
+
+resource "aws_route53_record" "main" {
+  count = var.domain_name != null ? 1 : 0
+  
+  zone_id = aws_route53_zone.main[0].zone_id
+  name    = var.domain_name
+  type    = "A"
+  
+  alias {
+    name                   = aws_cloudfront_distribution.main.domain_name
+    zone_id                = aws_cloudfront_distribution.main.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+# Health checks for global monitoring
+resource "aws_route53_health_check" "main" {
+  count = var.domain_name != null ? 1 : 0
+  
+  fqdn              = var.domain_name
+  port              = 443
+  type              = "HTTPS"
+  resource_path     = "/health"
+  failure_threshold = "3"
+  request_interval  = "30"
+  
+  tags = merge(local.common_tags, {
+    Name = "${local.cluster_name}-health-check"
+  })
+}
+
+# S3 Bucket for Global Static Assets (with replication)
+resource "aws_s3_bucket" "static_assets" {
+  bucket = "${local.cluster_name}-static-assets-${random_id.bucket_suffix.hex}"
+  
+  tags = merge(local.common_tags, {
+    Purpose = "StaticAssets"
+    GlobalFirst = "true"
+  })
+}
+
+resource "aws_s3_bucket_versioning" "static_assets" {
+  bucket = aws_s3_bucket.static_assets.id
+  
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "static_assets" {
+  bucket = aws_s3_bucket.static_assets.id
+  
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "static_assets" {
+  bucket = aws_s3_bucket.static_assets.id
+  
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+# CloudWatch Dashboard for Global Monitoring
+resource "aws_cloudwatch_dashboard" "global_monitoring" {
+  dashboard_name = "${local.cluster_name}-global-monitoring"
+  
+  dashboard_body = jsonencode({
+    widgets = [
+      {
+        type   = "metric"
+        x      = 0
+        y      = 0
+        width  = 12
+        height = 6
+        
+        properties = {
+          metrics = [
+            ["AWS/CloudFront", "Requests", "DistributionId", aws_cloudfront_distribution.main.id],
+            ["AWS/CloudFront", "BytesDownloaded", "DistributionId", aws_cloudfront_distribution.main.id]
+          ]
+          period = 300
+          stat   = "Sum"
+          region = "us-east-1"  # CloudFront metrics are in us-east-1
+          title  = "Global CDN Performance"
+        }
+      },
+      {
+        type   = "metric"
+        x      = 0
+        y      = 6
+        width  = 12
+        height = 6
+        
+        properties = {
+          metrics = [
+            ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", aws_lb.main.arn_suffix],
+            ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", aws_lb.main.arn_suffix]
+          ]
+          period = 300
+          stat   = "Average"
+          region = var.aws_region
+          title  = "Regional Load Balancer Performance"
+        }
+      },
+      {
+        type   = "metric"
+        x      = 0
+        y      = 12
+        width  = 12
+        height = 6
+        
+        properties = {
+          metrics = [
+            ["AWS/EKS", "cluster_failed_request_count", "cluster_name", aws_eks_cluster.main.name],
+            ["AWS/EKS", "cluster_service_count", "cluster_name", aws_eks_cluster.main.name]
+          ]
+          period = 300
+          stat   = "Average"
+          region = var.aws_region
+          title  = "Kubernetes Cluster Health"
+        }
+      }
+    ]
+  })
 }

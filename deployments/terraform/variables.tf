@@ -8,11 +8,12 @@ variable "project_name" {
 }
 
 variable "environment" {
-  description = "Environment name (dev, staging, prod)"
+  description = "Environment name (development, staging, production)"
   type        = string
+  default     = "development"
   validation {
-    condition     = contains(["dev", "staging", "prod"], var.environment)
-    error_message = "Environment must be one of: dev, staging, prod."
+    condition     = contains(["development", "staging", "production"], var.environment)
+    error_message = "Environment must be one of: development, staging, production."
   }
 }
 
@@ -377,6 +378,62 @@ variable "feature_flags" {
     api_rate_limiting  = true
     audit_logging      = true
   }
+}
+
+# Global-First Configuration
+variable "blocked_countries" {
+  description = "List of country codes to block (for compliance)"
+  type        = list(string)
+  default     = null
+  # Example: ["CN", "RU"] for blocking China and Russia
+}
+
+variable "compliance_region" {
+  description = "Primary compliance region (EU, US, SG, JP, etc.)"
+  type        = string
+  default     = "US"
+  
+  validation {
+    condition     = contains(["EU", "US", "CA", "SG", "JP", "CN", "UK", "AU"], var.compliance_region)
+    error_message = "Compliance region must be one of: EU, US, CA, SG, JP, CN, UK, AU."
+  }
+}
+
+variable "enable_i18n" {
+  description = "Enable internationalization support"
+  type        = bool
+  default     = true
+}
+
+variable "supported_languages" {
+  description = "List of supported language codes"
+  type        = list(string)
+  default     = ["en", "es", "fr", "de", "ja", "zh-CN"]
+}
+
+variable "gdpr_compliance" {
+  description = "Enable GDPR compliance features"
+  type        = bool
+  default     = false
+}
+
+variable "ccpa_compliance" {
+  description = "Enable CCPA compliance features"
+  type        = bool
+  default     = false
+}
+
+variable "data_retention_days" {
+  description = "Data retention period for compliance (days)"
+  type        = number
+  default     = 1095  # 3 years
+}
+
+# WAF Configuration
+variable "waf_rate_limit" {
+  description = "WAF rate limit per 5 minutes per IP"
+  type        = number
+  default     = 10000
 }
 
 # Resource Tagging
