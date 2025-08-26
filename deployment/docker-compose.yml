@@ -1,0 +1,73 @@
+version: 3.8
+services:
+  cyber-range:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "gan-cyber-range:latest"
+    container_name: gan-cyber-range-app
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    environment:
+      ENVIRONMENT: production
+      LOG_LEVEL: INFO
+      METRICS_ENABLED: true
+    volumes:
+      - "./data:/app/data:rw"
+      - "./logs:/app/logs:rw"
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - python3
+        - simple_cli.py
+        - status
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: 2.0
+          memory: 4G
+        reservations:
+          cpus: 0.5
+          memory: 1G
+    networks:
+      - cyber-range-network
+  prometheus:
+    image: "prom/prometheus:latest"
+    container_name: gan-cyber-range-prometheus
+    ports:
+      - "9091:9090"
+    volumes:
+      - "./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro"
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.console.libraries=/etc/prometheus/console_libraries
+      - --web.console.templates=/etc/prometheus/consoles
+      - --web.enable-lifecycle
+    networks:
+      - cyber-range-network
+  grafana:
+    image: "grafana/grafana:latest"
+    container_name: gan-cyber-range-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin123
+      GF_INSTALL_PLUGINS: grafana-clock-panel,grafana-simple-json-datasource
+    volumes:
+      - "grafana-storage:/var/lib/grafana"
+      - "./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro"
+      - "./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro"
+    networks:
+      - cyber-range-network
+networks:
+  cyber-range-network:
+    driver: bridge
+volumes:
+  grafana-storage:

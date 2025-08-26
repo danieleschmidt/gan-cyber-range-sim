@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gan-cyber-range
+  namespace: cyber-range
+  labels:
+    app: gan-cyber-range
+    version: 1.0.0
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: gan-cyber-range
+  template:
+    metadata:
+      labels:
+        app: gan-cyber-range
+        version: 1.0.0
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 1001
+      containers:
+        - 
+name: gan-cyber-range
+          image: "gan-cyber-range:latest"
+          ports:
+            - 
+containerPort: 8080
+              name: http
+            - 
+containerPort: 9090
+              name: metrics
+          env:
+            - 
+name: ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  name: gan-cyber-range-config
+                  key: ENVIRONMENT
+            - 
+name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: gan-cyber-range-config
+                  key: LOG_LEVEL
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: 2000m
+              memory: 4Gi
+          livenessProbe:
+            exec:
+              command:
+                - python3
+                - simple_cli.py
+                - status
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - python3
+                - simple_cli.py
+                - status
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL

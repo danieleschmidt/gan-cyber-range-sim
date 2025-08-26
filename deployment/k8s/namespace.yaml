@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cyber-range
+  labels:
+    app: gan-cyber-range
+    version: 1.0.0
