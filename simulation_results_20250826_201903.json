@@ -1,0 +1,64 @@
+{
+  "simulation_id": "sim_1756239542",
+  "timestamp": "20250826_201903",
+  "duration": "0:00:00.602736",
+  "metrics": {
+    "total_attacks": 2,
+    "services_compromised": 1,
+    "attacks_blocked": 1,
+    "patches_deployed": 0,
+    "compromise_rate": 0.5,
+    "defense_effectiveness": 0.5,
+    "avg_detection_time": "1.8 minutes"
+  },
+  "agents": {
+    "red_team": {
+      "name": "AdvancedRedTeam",
+      "total_actions": 2,
+      "success_rate": 0.6,
+      "skill_level": "advanced",
+      "active": false
+    },
+    "blue_team": {
+      "name": "ProactiveBlueTeam",
+      "total_actions": 2,
+      "success_rate": 0.75,
+      "skill_level": "advanced",
+      "active": false
+    }
+  },
+  "actions": {
+    "red_team_actions": [
+      {
+        "round": 1,
+        "type": "vulnerability_scan",
+        "target": "webapp",
+        "success": true,
+        "timestamp": "2025-08-26T20:19:03.275644"
+      },
+      {
+        "round": 1,
+        "type": "exploit_attempt",
+        "target": "database",
+        "success": false,
+        "timestamp": "2025-08-26T20:19:03.275671"
+      }
+    ],
+    "blue_team_actions": [
+      {
+        "round": 1,
+        "type": "incident_isolation",
+        "target": "webapp",
+        "success": true,
+        "timestamp": "2025-08-26T20:19:03.074686"
+      },
+      {
+        "round": 1,
+        "type": "security_monitoring",
+        "target": "infrastructure",
+        "success": true,
+        "timestamp": "2025-08-26T20:19:03.074708"
+      }
+    ]
+  }
+}

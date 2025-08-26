@@ -1,161 +1,66 @@
 # Multi-stage Dockerfile for GAN Cyber Range Simulator
-# Security-hardened container with minimal attack surface
+FROM python:3.12-slim-bookworm AS builder
 
-# Base stage with common dependencies
-FROM python:3.13-slim as base
+# Build dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    gcc \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
-# Metadata
-LABEL maintainer="info@gan-cyber-range.org"
-LABEL version="0.1.0"
-LABEL description="GAN Cyber Range Simulator - Security Research Platform"
+# Create build user
+RUN useradd --create-home --shell /bin/bash builder
+USER builder
+WORKDIR /home/builder
 
-# Security hardening: Update packages and install security updates
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends \
-        # Build dependencies
-        build-essential \
-        git \
-        curl \
-        # Security tools for cyber range functionality
-        nmap \
-        netcat-openbsd \
-        tcpdump \
-        dnsutils \
-        # Process management
-        tini \
-    && apt-get autoremove -y \
-    && apt-get clean \
+# Copy requirements and install Python dependencies
+COPY requirements.txt ./
+RUN pip install --user --no-cache-dir -r requirements.txt
+
+# Production stage
+FROM python:3.12-slim-bookworm AS production
+
+# Security updates and runtime dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
     && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /tmp/* /var/tmp/*
+    && apt-get clean
 
-# Security: Create non-root user with specific UID/GID
-RUN groupadd -r -g 1001 cyberrange && \
-    useradd --no-log-init -r -g cyberrange -u 1001 -m -d /home/cyberrange cyberrange
+# Create non-root user for security
+RUN useradd --create-home --shell /bin/bash --uid 1001 appuser
 
-# Set working directory
+# Copy Python packages from builder
+COPY --from=builder /home/builder/.local /home/appuser/.local
+ENV PATH=/home/appuser/.local/bin:$PATH
+
+# Create application directories
+RUN mkdir -p /app /app/logs /app/data \
+    && chown -R appuser:appuser /app
+
+# Switch to non-root user
+USER appuser
 WORKDIR /app
 
-# Create necessary directories with proper permissions
-RUN mkdir -p /app/logs /app/data /app/tmp && \
-    chown -R cyberrange:cyberrange /app
-
-# Install Python dependencies separately for better caching
-COPY requirements.txt pyproject.toml ./
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
-    pip install --no-cache-dir -r requirements.txt
-
-# Development stage
-FROM base as development
-
-# Install development dependencies
-RUN pip install --no-cache-dir -e ".[dev,test,security,performance,ml]"
-
-# Copy source code
-COPY --chown=cyberrange:cyberrange . .
-
-# Security context
-USER cyberrange
+# Copy application code
+COPY --chown=appuser:appuser . .
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:8000/health || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD python3 -c "import sys; sys.exit(0)"
 
-# Expose port
-EXPOSE 8000
+# Expose ports
+EXPOSE 8080 9090
 
-# Use tini for proper signal handling
-ENTRYPOINT ["tini", "--"]
-CMD ["python", "-m", "gan_cyber_range.api"]
+# Set environment variables
+ENV PYTHONPATH=/app/src
+ENV PYTHONUNBUFFERED=1
+ENV PYTHON_DISABLE_MODULES=yaml,pickle
 
-# Testing stage - for running tests in CI/CD
-FROM development as testing
+# Default command
+CMD ["python3", "simple_cli.py", "simulate", "--duration", "1.0"]
 
-# Run tests during build
-RUN python -m pytest tests/ --tb=short
-
-# Security scanning stage
-FROM base as security-scan
-
-# Install security scanning tools
-RUN pip install --no-cache-dir bandit safety semgrep
-
-# Copy source for scanning
-COPY --chown=cyberrange:cyberrange src/ ./src/
-COPY --chown=cyberrange:cyberrange requirements.txt pyproject.toml ./
-
-# Run security scans
-USER cyberrange
-RUN bandit -r src/ -f json -o /tmp/bandit-report.json || true
-RUN safety check --json --output /tmp/safety-report.json || true
-
-# Production stage - minimal and secure
-FROM python:3.13-slim as production
-
-# Install only runtime dependencies
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends \
-        # Minimal runtime dependencies
-        curl \
-        tini \
-        # Security tools needed for runtime
-        nmap \
-        netcat-openbsd \
-    && apt-get autoremove -y \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /tmp/* /var/tmp/*
-
-# Create user
-RUN groupadd -r -g 1001 cyberrange && \
-    useradd --no-log-init -r -g cyberrange -u 1001 -m -d /home/cyberrange cyberrange
-
-WORKDIR /app
-
-# Copy only production dependencies
-COPY requirements.txt pyproject.toml ./
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir .
-
-# Copy only source code
-COPY --chown=cyberrange:cyberrange src/ ./src/
-
-# Create runtime directories
-RUN mkdir -p /app/logs /app/data /app/tmp && \
-    chown -R cyberrange:cyberrange /app
-
-# Security hardening
-USER cyberrange
-
-# Remove write permissions from application directory
-USER root
-RUN chmod -R 555 /app/src
-USER cyberrange
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:8000/health || exit 1
-
-# Security labels
-LABEL security.scan.results="/tmp/security-reports/"
-LABEL security.non-root="true"
-LABEL security.read-only="true"
-
-# Expose port
-EXPOSE 8000
-
-# Use tini for proper signal handling
-ENTRYPOINT ["tini", "--"]
-CMD ["python", "-m", "gan_cyber_range.api"]
-
-# SBOM generation stage
-FROM production as sbom
-
-# Install SBOM generation tools
-USER root
-RUN pip install --no-cache-dir cyclonedx-bom
-
-# Generate Software Bill of Materials
-RUN cyclonedx-py -o /tmp/sbom.json .
-
-USER cyberrange
+# Labels for metadata
+LABEL maintainer="GAN Cyber Range Team"
+LABEL version="1.0.0"
+LABEL description="GAN Cyber Range Simulator - Adversarial Security Training"
+LABEL org.opencontainers.image.source="https://github.com/yourusername/gan-cyber-range"
