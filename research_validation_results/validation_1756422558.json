@@ -1,0 +1,51 @@
+{
+  "validation_start": 1756422558.749388,
+  "modules_validated": [
+    {
+      "module": "src/gan_cyber_range/research/next_gen_breakthrough_algorithms.py",
+      "classes_found": [
+        "AdaptiveMetaLearner",
+        "QuantumEnhancedDifferentialPrivacy",
+        "NeuromorphicSTDPAdaptation",
+        "NextGenBreakthroughIntegrator"
+      ],
+      "coverage": 1.0
+    },
+    {
+      "module": "src/gan_cyber_range/research/temporal_dynamic_research.py",
+      "classes_found": [
+        "TemporalCausalInferenceEngine",
+        "TemporalDynamicResearchFramework",
+        "TemporalPattern"
+      ],
+      "coverage": 1.0
+    },
+    {
+      "module": "src/gan_cyber_range/research/advanced_federated_framework.py",
+      "classes_found": [
+        "QuantumSecureFederatedProtocol",
+        "FederatedNode",
+        "FederatedModelUpdate"
+      ],
+      "coverage": 1.0
+    }
+  ],
+  "validation_errors": [],
+  "overall_status": "EXCELLENT",
+  "modules_found": 8,
+  "modules_expected": 8,
+  "module_coverage": 1.0,
+  "implementation_score": 1.0,
+  "algorithm_coverage": 1.0,
+  "algorithms_found": [
+    "quantum_secure_aggregation",
+    "real_time_adapt",
+    "quantum_privatize_gradients",
+    "execute_breakthrough_research_cycle",
+    "discover_temporal_causality"
+  ],
+  "documentation_ratio": 0.13666578037755917,
+  "total_code_lines": 7522,
+  "validation_duration": 0.010397672653198242,
+  "overall_score": 0.9683328901887795
+}

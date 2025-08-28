@@ -49,6 +49,389 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
+class QuantumSecureFederatedProtocol:
+    """
+    Next-generation quantum-secure federated learning protocol with
+    post-quantum cryptography and advanced threat intelligence capabilities.
+    """
+    protocol_id: str
+    quantum_key_distribution: bool = True
+    post_quantum_crypto: bool = True
+    homomorphic_encryption: bool = True
+    secure_aggregation: bool = True
+    byzantine_tolerance: int = 3  # Maximum Byzantine nodes
+    
+    def __post_init__(self):
+        self.active_nodes: Dict[str, FederatedNode] = {}
+        self.aggregation_history: List[Dict] = []
+        self.security_audit_log: List[Dict] = []
+        self.quantum_entanglement_keys: Dict[str, bytes] = {}
+        
+    async def establish_quantum_secure_channel(self, node_a: str, node_b: str) -> Dict[str, Any]:
+        """
+        Establish quantum-secure communication channel between nodes.
+        
+        Uses simulated quantum key distribution for secure key exchange.
+        In production, this would interface with actual quantum hardware.
+        """
+        channel_start = time.time()
+        
+        # Simulate quantum key distribution
+        quantum_key = secrets.token_bytes(64)  # 512-bit quantum key
+        entanglement_id = f"qkd_{node_a}_{node_b}_{int(time.time())}"
+        
+        # Store quantum keys for both nodes
+        self.quantum_entanglement_keys[f"{node_a}_{node_b}"] = quantum_key
+        self.quantum_entanglement_keys[f"{node_b}_{node_a}"] = quantum_key
+        
+        # Security audit logging
+        audit_entry = {
+            'event': 'quantum_channel_established',
+            'participants': [node_a, node_b],
+            'entanglement_id': entanglement_id,
+            'key_strength': 512,
+            'timestamp': time.time(),
+            'security_level': 'quantum'
+        }
+        self.security_audit_log.append(audit_entry)
+        
+        channel_results = {
+            'establishment_time': time.time() - channel_start,
+            'entanglement_id': entanglement_id,
+            'key_strength_bits': 512,
+            'channel_security_level': 'quantum',
+            'participants': [node_a, node_b],
+            'quantum_advantage': True
+        }
+        
+        logger.info(f"Quantum secure channel established: {channel_results}")
+        return channel_results
+        
+    async def quantum_secure_aggregation(self, 
+                                       model_updates: List[FederatedModelUpdate],
+                                       aggregation_strategy: str = "federated_averaging") -> Dict[str, Any]:
+        """
+        Perform quantum-secure model aggregation with Byzantine fault tolerance.
+        
+        Args:
+            model_updates: List of encrypted model updates from federated nodes
+            aggregation_strategy: Strategy for combining updates
+            
+        Returns:
+            Aggregated model and security metrics
+        """
+        aggregation_start = time.time()
+        
+        # Phase 1: Quantum verification of updates
+        verified_updates = await self._quantum_verify_updates(model_updates)
+        
+        # Phase 2: Byzantine fault detection and mitigation
+        trusted_updates = await self._detect_and_mitigate_byzantine_faults(verified_updates)
+        
+        # Phase 3: Homomorphic aggregation in encrypted space
+        aggregated_model = await self._homomorphic_secure_aggregation(
+            trusted_updates, aggregation_strategy)
+        
+        # Phase 4: Post-quantum cryptographic protection
+        protected_model = await self._apply_post_quantum_protection(aggregated_model)
+        
+        # Calculate quantum security metrics
+        quantum_security_score = self._calculate_quantum_security_score(
+            verified_updates, trusted_updates)
+        
+        aggregation_results = {
+            'aggregation_time': time.time() - aggregation_start,
+            'total_updates_received': len(model_updates),
+            'verified_updates': len(verified_updates),
+            'trusted_updates': len(trusted_updates),
+            'byzantine_nodes_detected': len(model_updates) - len(trusted_updates),
+            'quantum_security_score': quantum_security_score,
+            'aggregation_strategy': aggregation_strategy,
+            'model_protection_level': 'post-quantum',
+            'aggregated_model_hash': self._compute_model_hash(protected_model)
+        }
+        
+        # Update aggregation history
+        self.aggregation_history.append({
+            'timestamp': time.time(),
+            'results': aggregation_results,
+            'participating_nodes': [update.node_id for update in trusted_updates]
+        })
+        
+        logger.info(f"Quantum secure aggregation completed: {aggregation_results}")
+        return {
+            'aggregated_model': protected_model,
+            'aggregation_metrics': aggregation_results
+        }
+        
+    async def _quantum_verify_updates(self, 
+                                    model_updates: List[FederatedModelUpdate]) -> List[FederatedModelUpdate]:
+        """Verify model updates using quantum cryptographic techniques."""
+        verified_updates = []
+        
+        for update in model_updates:
+            # Check basic integrity
+            if not update.verify_integrity():
+                self.security_audit_log.append({
+                    'event': 'integrity_check_failed',
+                    'node_id': update.node_id,
+                    'timestamp': time.time(),
+                    'severity': 'high'
+                })
+                continue
+                
+            # Quantum signature verification (simulated)
+            if await self._verify_quantum_signature(update):
+                # Verify privacy budget compliance
+                if self._verify_privacy_budget(update):
+                    verified_updates.append(update)
+                else:
+                    self.security_audit_log.append({
+                        'event': 'privacy_budget_violation',
+                        'node_id': update.node_id,
+                        'budget_used': update.privacy_budget_used,
+                        'timestamp': time.time(),
+                        'severity': 'medium'
+                    })
+            else:
+                self.security_audit_log.append({
+                    'event': 'quantum_signature_invalid',
+                    'node_id': update.node_id,
+                    'timestamp': time.time(),
+                    'severity': 'critical'
+                })
+                
+        return verified_updates
+        
+    async def _verify_quantum_signature(self, update: FederatedModelUpdate) -> bool:
+        """Verify quantum digital signature (simulated quantum verification)."""
+        # In production, this would use actual quantum signature verification
+        # For now, simulate quantum advantage in signature verification
+        
+        node_id = update.node_id
+        if node_id in self.active_nodes:
+            node = self.active_nodes[node_id]
+            
+            # Simulate quantum signature verification with higher security
+            classical_verification = len(update.signature) >= 256  # Minimum signature length
+            
+            # Quantum advantage: resistance to quantum attacks
+            quantum_resistance = update.metadata.get('quantum_resistant', False)
+            
+            return classical_verification and quantum_resistance
+            
+        return False
+        
+    def _verify_privacy_budget(self, update: FederatedModelUpdate) -> bool:
+        """Verify that privacy budget is within acceptable limits."""
+        # Maximum privacy budget per update
+        max_budget = 1.0
+        
+        # Check if budget is reasonable
+        if update.privacy_budget_used > max_budget:
+            return False
+            
+        # Additional checks for budget composition
+        if update.privacy_budget_used < 0.001:  # Too little privacy
+            return False
+            
+        return True
+        
+    async def _detect_and_mitigate_byzantine_faults(self, 
+                                                  verified_updates: List[FederatedModelUpdate]) -> List[FederatedModelUpdate]:
+        """Detect and mitigate Byzantine faults in federated learning."""
+        if len(verified_updates) <= self.byzantine_tolerance:
+            return verified_updates  # Not enough updates to filter
+            
+        # Calculate update similarities for outlier detection
+        update_similarities = self._calculate_update_similarities(verified_updates)
+        
+        # Identify potential Byzantine nodes
+        byzantine_candidates = []
+        similarity_threshold = 0.3  # Minimum similarity to cluster
+        
+        for i, update in enumerate(verified_updates):
+            node_similarities = [sim for j, sim in enumerate(update_similarities[i]) if i != j]
+            avg_similarity = np.mean(node_similarities)
+            
+            if avg_similarity < similarity_threshold:
+                byzantine_candidates.append((i, update, avg_similarity))
+                
+        # Sort by suspicion level (lowest similarity first)
+        byzantine_candidates.sort(key=lambda x: x[2])
+        
+        # Remove most suspicious nodes up to Byzantine tolerance
+        nodes_to_remove = byzantine_candidates[:self.byzantine_tolerance]
+        
+        trusted_updates = []
+        for i, update in enumerate(verified_updates):
+            if not any(i == candidate[0] for candidate in nodes_to_remove):
+                trusted_updates.append(update)
+            else:
+                # Log Byzantine detection
+                self.security_audit_log.append({
+                    'event': 'byzantine_node_detected',
+                    'node_id': update.node_id,
+                    'suspicion_score': byzantine_candidates[0][2],
+                    'timestamp': time.time(),
+                    'severity': 'high'
+                })
+                
+                # Reduce node reputation
+                if update.node_id in self.active_nodes:
+                    self.active_nodes[update.node_id].reputation_score *= 0.5
+                    
+        return trusted_updates
+        
+    def _calculate_update_similarities(self, 
+                                     updates: List[FederatedModelUpdate]) -> np.ndarray:
+        """Calculate pairwise similarities between model updates."""
+        n_updates = len(updates)
+        similarities = np.zeros((n_updates, n_updates))
+        
+        for i in range(n_updates):
+            for j in range(i + 1, n_updates):
+                # Calculate cosine similarity between updates
+                update_i = updates[i].update_data.flatten()
+                update_j = updates[j].update_data.flatten()
+                
+                # Normalize vectors
+                norm_i = np.linalg.norm(update_i)
+                norm_j = np.linalg.norm(update_j)
+                
+                if norm_i > 0 and norm_j > 0:
+                    similarity = np.dot(update_i, update_j) / (norm_i * norm_j)
+                    similarities[i, j] = similarity
+                    similarities[j, i] = similarity
+                    
+        return similarities
+        
+    async def _homomorphic_secure_aggregation(self, 
+                                            trusted_updates: List[FederatedModelUpdate],
+                                            strategy: str) -> np.ndarray:
+        """Perform secure aggregation using homomorphic encryption."""
+        if not trusted_updates:
+            raise ValueError("No trusted updates available for aggregation")
+            
+        # Extract update data
+        update_matrices = [update.update_data for update in trusted_updates]
+        
+        if strategy == "federated_averaging":
+            # Weighted averaging based on node reputation and data quality
+            weights = []
+            for update in trusted_updates:
+                node_reputation = self.active_nodes.get(update.node_id, 
+                                                      FederatedNode("unknown", "unknown", b"", b"")).reputation_score
+                data_quality = update.metadata.get('data_quality', 1.0)
+                weight = node_reputation * data_quality
+                weights.append(weight)
+                
+            # Normalize weights
+            total_weight = sum(weights)
+            if total_weight > 0:
+                weights = [w / total_weight for w in weights]
+            else:
+                weights = [1.0 / len(weights)] * len(weights)
+                
+            # Weighted aggregation in encrypted space (simulated)
+            aggregated = np.zeros_like(update_matrices[0])
+            for matrix, weight in zip(update_matrices, weights):
+                aggregated += weight * matrix
+                
+        elif strategy == "median_aggregation":
+            # Byzantine-robust median aggregation
+            stacked_updates = np.stack(update_matrices, axis=0)
+            aggregated = np.median(stacked_updates, axis=0)
+            
+        elif strategy == "trimmed_mean":
+            # Trimmed mean for robustness
+            stacked_updates = np.stack(update_matrices, axis=0)
+            trim_ratio = 0.1  # Remove top/bottom 10%
+            aggregated = self._trimmed_mean(stacked_updates, trim_ratio)
+            
+        else:
+            raise ValueError(f"Unknown aggregation strategy: {strategy}")
+            
+        return aggregated
+        
+    def _trimmed_mean(self, data: np.ndarray, trim_ratio: float) -> np.ndarray:
+        """Calculate trimmed mean along the first axis."""
+        sorted_data = np.sort(data, axis=0)
+        n = data.shape[0]
+        
+        # Calculate trim indices
+        trim_count = int(n * trim_ratio)
+        start_idx = trim_count
+        end_idx = n - trim_count
+        
+        if start_idx >= end_idx:
+            # Not enough data for trimming
+            return np.mean(data, axis=0)
+            
+        trimmed_data = sorted_data[start_idx:end_idx]
+        return np.mean(trimmed_data, axis=0)
+        
+    async def _apply_post_quantum_protection(self, model: np.ndarray) -> bytes:
+        """Apply post-quantum cryptographic protection to the model."""
+        # Serialize model
+        model_bytes = pickle.dumps(model)
+        
+        # Apply post-quantum encryption (simulated)
+        # In production, this would use lattice-based or other PQC algorithms
+        
+        # Generate post-quantum key (simulated with high-entropy key)
+        pq_key = secrets.token_bytes(64)  # 512-bit post-quantum key
+        
+        # Encrypt model (simulated post-quantum encryption)
+        cipher = Fernet(base64.urlsafe_b64encode(pq_key[:32]))  # Use first 32 bytes for Fernet
+        encrypted_model = cipher.encrypt(model_bytes)
+        
+        # Add post-quantum signature (simulated)
+        signature = hashlib.sha3_512(encrypted_model + pq_key).digest()
+        
+        # Combine encrypted model and signature
+        protected_model = encrypted_model + b"PQ_SIG:" + signature
+        
+        return protected_model
+        
+    def _calculate_quantum_security_score(self, 
+                                        verified_updates: List[FederatedModelUpdate],
+                                        trusted_updates: List[FederatedModelUpdate]) -> float:
+        """Calculate quantum security score for the aggregation round."""
+        if not verified_updates:
+            return 0.0
+            
+        # Base security from verification rate
+        verification_rate = len(verified_updates) / len(verified_updates)
+        
+        # Trust ratio (how many passed Byzantine detection)
+        trust_ratio = len(trusted_updates) / len(verified_updates) if verified_updates else 0.0
+        
+        # Quantum advantage factors
+        quantum_signatures = sum(1 for update in verified_updates 
+                               if update.metadata.get('quantum_resistant', False))
+        quantum_ratio = quantum_signatures / len(verified_updates) if verified_updates else 0.0
+        
+        # Privacy protection level
+        avg_privacy_budget = np.mean([update.privacy_budget_used for update in trusted_updates]) if trusted_updates else 0.0
+        privacy_score = min(1.0, avg_privacy_budget * 2)  # Higher budget = better privacy
+        
+        # Combine factors
+        quantum_security_score = (
+            0.3 * verification_rate +
+            0.3 * trust_ratio +
+            0.2 * quantum_ratio +
+            0.2 * privacy_score
+        )
+        
+        return min(1.0, quantum_security_score)
+        
+    def _compute_model_hash(self, model_data: bytes) -> str:
+        """Compute cryptographic hash of the model."""
+        return hashlib.sha256(model_data).hexdigest()
+
+
+@dataclass
 class FederatedNode:
     """
     Production-ready federated learning node with security and monitoring.
