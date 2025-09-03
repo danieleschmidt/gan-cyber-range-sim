@@ -1,5 +1,5 @@
 # Multi-stage Dockerfile for GAN Cyber Range Simulator
-FROM python:3.12-slim-bookworm AS builder
+FROM python:3.13-slim-bookworm AS builder
 
 # Build dependencies
 RUN apt-get update && apt-get install -y \
@@ -18,7 +18,7 @@ COPY requirements.txt ./
 RUN pip install --user --no-cache-dir -r requirements.txt
 
 # Production stage
-FROM python:3.12-slim-bookworm AS production
+FROM python:3.13-slim-bookworm AS production
 
 # Security updates and runtime dependencies
 RUN apt-get update && apt-get install -y \
