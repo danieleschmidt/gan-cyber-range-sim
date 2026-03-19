@@ -1,512 +1,140 @@
 # GAN Cyber Range Simulator
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Kubernetes](https://img.shields.io/badge/Kubernetes-1.29+-blue.svg)](https://kubernetes.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Security](https://img.shields.io/badge/Security-Hardened-green.svg)](https://github.com/danieleschmidt/photonic-mlir-synth-bridge)
-[![Performance](https://img.shields.io/badge/Performance-Optimized-brightgreen.svg)](DEPLOYMENT.md)
-[![Documentation](https://img.shields.io/badge/Documentation-Complete-blue.svg)](ARCHITECTURE.md)
+Generate realistic synthetic network attack traffic for cybersecurity training, red team exercises, and IDS/ML model development — without exposing real production infrastructure.
 
-🎯 **Production-Ready** generative adversarial cyber-range where attacker LLMs evolve exploits while defender LLMs adapt defenses in real-time. First complete open-source implementation of GAN-style adversarial security training with enterprise-grade reliability, security, and performance.
+## What it does
 
-## ✨ **AUTONOMOUS IMPLEMENTATION COMPLETE**
+A **Conditional GAN** (cGAN) learns the statistical distributions of real network flows for five attack categories. Once trained, it generates unlimited synthetic traffic that matches those distributions — complete with realistic IP addresses, ports, protocols, byte counts, and TCP flags.
 
-**🚀 All SDLC phases successfully implemented:**
-- ✅ **Generation 1**: Core functionality working
-- ✅ **Generation 2**: Enterprise reliability & error handling
-- ✅ **Generation 3**: Performance optimization & auto-scaling
-- ✅ **Quality Gates**: Security hardened, performance validated
-- ✅ **Production Ready**: Complete deployment documentation
+### Attack Types
 
-## 🎯 Overview
+| Type | Description |
+|------|-------------|
+| `NORMAL` | Legitimate web/DNS/SSH traffic |
+| `PORT_SCAN` | Stealthy SYN probe sequences targeting low ports |
+| `DDOS` | High-volume flood traffic (SYN, UDP, ICMP) |
+| `EXFILTRATION` | Large outbound data transfers on covert channels |
+| `BRUTE_FORCE` | Repeated auth attempts on SSH/RDP/FTP/Telnet |
 
-Industry analyses show generative AI is tipping the offense-defense balance in cybersecurity. This simulator provides:
+## Architecture
 
-- **Kubernetes-native range** with vulnerable microservices
-- **Red/Blue agent scaffolds** powered by LLMs
-- **Real-time attack/defense** visualization
-- **Reward shaping API** for agent training
-- **Reproducible scenarios** for research
-
-## ⚔️ Key Features
-
-- **Dynamic Battleground**: Attacker and defender agents evolve strategies in real-time
-- **Realistic Vulnerabilities**: OWASP Top 10, supply chain attacks, zero-days
-- **Multi-Stage Attacks**: Reconnaissance → Exploitation → Persistence → Exfiltration
-- **Automated Patching**: Defender agents generate and deploy fixes
-- **Metrics Dashboard**: Track compromise rate, MTTR, attack sophistication
-
-## 📋 Requirements
-
-```bash
-# Core dependencies
-python>=3.10
-kubernetes>=29.0.0
-docker>=24.0.0
-helm>=3.14.0
-
-# AI/ML frameworks
-openai>=1.35.0
-anthropic>=0.30.0
-langchain>=0.2.0
-gym>=0.26.0
-stable-baselines3>=2.3.0
-
-# Security tools
-metasploit-framework>=6.3
-nmap>=7.94
-nikto>=2.5.0
-sqlmap>=1.8
-
-# Monitoring
-prometheus>=2.45.0
-grafana>=10.4.0
-elasticsearch>=8.13.0
-kibana>=8.13.0
+```
+NetworkFlowGenerator          → baseline synthetic training data
+         ↓
+    TrafficGAN
+    ├── Generator(noise + attack_type → flow features)
+    └── Discriminator(flow features + attack_type → real/fake)
+         ↓
+  CyberRangeSimulator         → orchestrates training + scenario generation
+         ↓
+    FlowEvaluator             → KL divergence metrics vs reference distributions
 ```
 
-## 🛠️ Installation
+### TrafficGAN (Conditional GAN)
 
-### Quick Deploy
+- **Generator**: `(noise_dim + num_classes) → [hidden] → feature_dim` with LayerNorm + LeakyReLU
+- **Discriminator**: `(feature_dim + num_classes) → [hidden] → 1 logit` with Dropout
+- **Conditioning**: one-hot attack type embedding concatenated to input
+- **Training**: standard GAN loss (BCE) with Adam optimizer (β₁=0.5)
 
-```bash
-# Clone repository
-git clone https://github.com/yourusername/gan-cyber-range-sim.git
-cd gan-cyber-range-sim
+### NetworkFlow
 
-# Deploy cyber range
-./scripts/deploy-range.sh
+Each flow has 7 features: `src_ip`, `dst_ip`, `port`, `protocol`, `bytes`, `duration`, `flags`
 
-# Initialize agents
-./scripts/init-agents.sh --red-team gpt-4 --blue-team claude-3
+All features are normalised to `[0, 1]` for the GAN and decoded back to human-readable form on output.
 
-# Start simulation
-kubectl apply -f deployments/simulation.yaml
-```
-
-### Development Setup
+## Quick Start
 
 ```bash
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate
-
-# Install dependencies
 pip install -r requirements.txt
-pip install -e .
-
-# Setup local Kubernetes (k3s)
-curl -sfL https://get.k3s.io | sh -
-sudo chmod 644 /etc/rancher/k3s/k3s.yaml
-export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 ```
-
-## 🚀 Quick Start
-
-### Basic Simulation
 
 ```python
-from gan_cyber_range import CyberRange, RedTeamAgent, BlueTeamAgent
+from gan_cyber_range import CyberRangeSimulator, AttackType
 
-# Initialize cyber range
-range_env = CyberRange(
-    vulnerable_services=["webapp", "database", "api-gateway"],
-    network_topology="multi-tier",
-    difficulty="medium"
-)
+sim = CyberRangeSimulator()
+sim.train(epochs=100, n_per_class=500)
 
-# Create adversarial agents
-red_team = RedTeamAgent(
-    llm_model="gpt-4",
-    skill_level="advanced",
-    tools=["metasploit", "custom_exploits"]
-)
+# Generate 100 flows of each attack type
+flows_by_type = sim.generate_all_types(n_per_type=100)
+for name, flows in flows_by_type.items():
+    print(f"{name}: {flows[0].to_dict()}")
 
-blue_team = BlueTeamAgent(
-    llm_model="claude-3",
-    defense_strategy="proactive",
-    tools=["ids", "auto_patcher", "honeypots"]
-)
-
-# Run simulation
-results = range_env.simulate(
-    red_team=red_team,
-    blue_team=blue_team,
-    duration_hours=24,
-    realtime_factor=60  # 1 minute = 1 hour
-)
-
-print(f"Attacker success rate: {results.compromise_rate:.2%}")
-print(f"Average time to detection: {results.avg_detection_time}")
-print(f"Patches deployed: {results.patches_deployed}")
+# Run a multi-stage attack scenario
+scenario = sim.generate_scenario("port_scan_then_exfil")
 ```
 
-## 🏗️ Architecture
+## Demo
 
-```
-┌─────────────────┐     ┌──────────────┐     ┌─────────────────┐
-│   Red Team LLM  │────▶│ Attack Agent │────▶│ Exploit Engine  │
-│    (Attacker)   │     │              │     │                 │
-└─────────────────┘     └──────────────┘     └─────────────────┘
-         │                      │                      │
-         ▼                      ▼                      ▼
-┌─────────────────┐     ┌──────────────┐     ┌─────────────────┐
-│  Cyber Range    │◀────│   K8s Mesh   │────▶│ Vulnerable Apps │
-│  Environment    │     │              │     │                 │
-└─────────────────┘     └──────────────┘     └─────────────────┘
-         ▲                      ▲                      ▲
-         │                      │                      │
-┌─────────────────┐     ┌──────────────┐     ┌─────────────────┐
-│  Blue Team LLM  │────▶│Defense Agent │────▶│ Patch Engine    │
-│   (Defender)    │     │              │     │                 │
-└─────────────────┘     └──────────────┘     └─────────────────┘
+```bash
+python demo.py
 ```
 
-## 🎮 Vulnerable Services
+Trains the GAN (100 epochs), generates 100 flows per attack type, evaluates KL divergence against reference distributions, and runs a `port_scan_then_exfil` scenario.
 
-### Pre-built Targets
+## Scenarios
 
-```yaml
-# deployments/vulnerable-apps.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: vulnerable-webapp
-spec:
-  replicas: 3
-  template:
-    spec:
-      containers:
-      - name: webapp
-        image: gan-cyber-range/vuln-webapp:latest
-        env:
-        - name: VULNERABILITIES
-          value: "sqli,xss,xxe,ssrf,idor"
-        - name: DIFFICULTY
-          value: "variable"  # Adapts to attacker skill
-```
+Pre-built multi-stage attack scenarios:
 
-### Custom Vulnerabilities
+| Scenario | Description |
+|----------|-------------|
+| `port_scan_then_exfil` | Reconnaissance → blend in → data theft |
+| `ddos_campaign` | Normal → flood → recovery |
+| `brute_force_then_exfil` | Password spray → exfiltration |
+| `mixed_threat` | All five attack types simultaneously |
 
 ```python
-from gan_cyber_range.vulnerabilities import VulnerableService
-
-@VulnerableService.register("custom-api")
-class CustomVulnAPI:
-    """API with evolving vulnerabilities"""
-    
-    def __init__(self, initial_vulns=None):
-        self.vulns = initial_vulns or ["auth_bypass", "data_leak"]
-        self.patches_applied = []
-    
-    def expose_vulnerability(self, vuln_type):
-        """Dynamically add vulnerabilities"""
-        if vuln_type == "supply_chain":
-            self.add_malicious_dependency()
-        elif vuln_type == "zero_day":
-            self.create_buffer_overflow()
-    
-    def apply_patch(self, patch):
-        """Blue team patches vulnerabilities"""
-        self.patches_applied.append(patch)
-        self.rebuild_service()
+sim.generate_scenario("mixed_threat")
 ```
 
-## 🤖 Agent Development
+## Evaluation
 
-### Red Team Agent
+`FlowEvaluator` measures statistical similarity via per-feature KL divergence:
 
 ```python
-from gan_cyber_range.agents import AttackAgent
+from gan_cyber_range import FlowEvaluator
 
-class AdvancedRedTeam(AttackAgent):
-    """Sophisticated attacker with learning capabilities"""
-    
-    def __init__(self, llm_model="gpt-4"):
-        super().__init__(llm_model)
-        self.attack_memory = []
-        self.success_patterns = []
-    
-    async def plan_attack(self, target_info):
-        # LLM generates attack strategy
-        prompt = f"""
-        Target: {target_info}
-        Previous successes: {self.success_patterns}
-        
-        Generate a multi-stage attack plan that:
-        1. Performs reconnaissance
-        2. Identifies vulnerabilities
-        3. Exploits with minimal detection
-        4. Establishes persistence
-        5. Exfiltrates data
-        """
-        
-        plan = await self.llm.generate(prompt)
-        return self.parse_attack_plan(plan)
-    
-    async def execute_stage(self, stage):
-        # Execute attack stage with real tools
-        if stage.type == "recon":
-            results = await self.run_nmap(stage.target)
-        elif stage.type == "exploit":
-            results = await self.run_metasploit(stage.exploit)
-        
-        # Learn from results
-        self.update_strategy(results)
-        return results
+evaluator = FlowEvaluator(bins=30)
+result = evaluator.evaluate(generated_flows, reference_flows)
+print(f"Mean KL divergence: {result['mean_kl']:.4f}")
+print(evaluator.summarize(result))
 ```
 
-### Blue Team Agent
+Lower KL → generated flows more closely match real distributions.
+
+## Save / Load
 
 ```python
-from gan_cyber_range.agents import DefenseAgent
+sim.save_model("checkpoints/traffic_gan.pt")
 
-class ProactiveBlueTeam(DefenseAgent):
-    """Defender that learns and adapts"""
-    
-    async def monitor_and_respond(self):
-        while True:
-            # Continuous monitoring
-            threats = await self.detect_threats()
-            
-            if threats:
-                # LLM analyzes and responds
-                response_plan = await self.plan_defense(threats)
-                
-                # Execute defensive actions
-                for action in response_plan:
-                    if action.type == "patch":
-                        await self.deploy_patch(action.target, action.fix)
-                    elif action.type == "isolate":
-                        await self.quarantine_service(action.target)
-                    elif action.type == "honeypot":
-                        await self.deploy_honeypot(action.config)
-            
-            await asyncio.sleep(self.scan_interval)
+# Later:
+sim2 = CyberRangeSimulator()
+sim2.load_model("checkpoints/traffic_gan.pt")
+flows = sim2.generate_flows(AttackType.EXFILTRATION, n=500)
 ```
 
-## 📊 Training Framework
+## Tests
 
-### Reinforcement Learning
-
-```python
-from gan_cyber_range.training import GANTrainer
-
-trainer = GANTrainer(
-    environment=range_env,
-    red_team_policy="PPO",
-    blue_team_policy="SAC"
-)
-
-# Train adversarial agents
-trainer.train(
-    episodes=1000,
-    red_team_rewards={
-        "compromise": 10,
-        "persistence": 5,
-        "stealth": 3,
-        "data_exfil": 8
-    },
-    blue_team_rewards={
-        "prevent_compromise": 10,
-        "quick_detection": 7,
-        "successful_patch": 5,
-        "false_positive_penalty": -2
-    }
-)
-
-# Save trained models
-trainer.save_agents("trained_models/")
+```bash
+~/anaconda3/bin/python3 -m pytest tests/test_flows.py tests/test_models.py tests/test_simulator.py tests/test_evaluator.py -v
 ```
 
-### Curriculum Learning
+## Use Cases
 
-```python
-from gan_cyber_range.curriculum import AdversarialCurriculum
+- **IDS training data**: augment sparse attack datasets for ML-based intrusion detection
+- **Red team exercises**: generate realistic traffic patterns for detection team drills  
+- **Tabletop simulations**: replay attack scenarios without live infrastructure risk
+- **Model evaluation**: benchmark classifiers against GAN-generated adversarial flows
+- **Privacy-preserving research**: share synthetic datasets derived from real captures
 
-# Gradually increase difficulty
-curriculum = AdversarialCurriculum(
-    stages=[
-        {"name": "basic_vulns", "services": ["simple_webapp"]},
-        {"name": "real_world", "services": ["wordpress", "jenkins"]},
-        {"name": "advanced", "services": ["custom_api", "microservices"]},
-        {"name": "zero_day", "services": ["novel_vulnerabilities"]}
-    ]
-)
+## Requirements
 
-# Train through curriculum
-for stage in curriculum:
-    print(f"Training on: {stage.name}")
-    trainer.train_on_stage(stage, episodes=100)
-```
+- Python ≥ 3.9
+- PyTorch ≥ 2.0
+- NumPy ≥ 1.24
 
-## 📈 Metrics & Visualization
+GPU is supported automatically (`cuda` if available, else `cpu`).
 
-### Real-time Dashboard
+## License
 
-```python
-from gan_cyber_range.dashboard import SimulationDashboard
-
-dashboard = SimulationDashboard(port=8080)
-
-# Track live metrics
-dashboard.add_metrics([
-    "attacks_attempted",
-    "attacks_successful", 
-    "patches_deployed",
-    "services_compromised",
-    "mean_time_to_detection",
-    "mean_time_to_remediation"
-])
-
-# Visualize attack paths
-dashboard.show_attack_graph()
-dashboard.show_defense_timeline()
-```
-
-### Attack Chain Visualization
-
-```python
-from gan_cyber_range.visualization import AttackChainVisualizer
-
-visualizer = AttackChainVisualizer()
-
-# Generate MITRE ATT&CK mapping
-attack_chain = results.get_attack_chain()
-visualizer.map_to_mitre(attack_chain)
-
-# Export for analysis
-visualizer.export_graph("attack_chain.svg")
-visualizer.export_timeline("attack_timeline.json")
-```
-
-## 🔒 Security Considerations
-
-### Isolation
-
-```yaml
-# Network policies for range isolation
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: cyber-range-isolation
-spec:
-  podSelector:
-    matchLabels:
-      environment: cyber-range
-  policyTypes:
-  - Ingress
-  - Egress
-  egress:
-  - to:
-    - namespaceSelector:
-        matchLabels:
-          name: cyber-range
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: cyber-range
-```
-
-### Resource Limits
-
-```python
-# Prevent resource exhaustion
-range_config = {
-    "resource_limits": {
-        "cpu_per_service": "2",
-        "memory_per_service": "4Gi",
-        "storage_per_service": "10Gi",
-        "max_services": 50
-    },
-    "rate_limits": {
-        "api_calls_per_minute": 1000,
-        "exploit_attempts_per_minute": 100
-    }
-}
-```
-
-## 🧪 Scenarios
-
-### APT Simulation
-
-```python
-from gan_cyber_range.scenarios import APTScenario
-
-# Advanced Persistent Threat scenario
-apt_scenario = APTScenario(
-    threat_actor="nation_state",
-    objectives=["espionage", "sabotage"],
-    techniques=["living_off_the_land", "supply_chain", "zero_days"],
-    duration_days=90
-)
-
-results = range_env.run_scenario(apt_scenario)
-```
-
-### Ransomware Simulation
-
-```python
-from gan_cyber_range.scenarios import RansomwareScenario
-
-ransomware = RansomwareScenario(
-    variant="custom_cryptolocker",
-    propagation_methods=["email", "rdp", "smb"],
-    encryption_targets=["databases", "file_shares"],
-    ransom_behavior="double_extortion"
-)
-
-# Test defense against ransomware
-defense_results = blue_team.defend_against(ransomware)
-```
-
-## 🤝 Contributing
-
-We welcome contributions! Priority areas:
-- New vulnerability types
-- Advanced agent strategies
-- Realistic network topologies
-- Integration with security tools
-- Research reproductions
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-## ⚠️ Responsible Use
-
-This tool is for security research and training only. Users must:
-- Obtain proper authorization
-- Use only in isolated environments
-- Not deploy against production systems
-- Follow ethical guidelines
-
-See [SECURITY.md](SECURITY.md) for details.
-
-## 📄 Citation
-
-```bibtex
-@software{gan_cyber_range_sim,
-  title={GAN Cyber Range Simulator: Adversarial Security Training with LLMs},
-  author={Daniel Schmidt},
-  year={2025},
-  url={https://github.com/yourusername/gan-cyber-range-sim}
-}
-```
-
-## 📝 License
-
-Apache License 2.0 - See [LICENSE](LICENSE) for details.
-
-## 🔗 Resources
-
-- [Documentation](https://gan-cyber-range.readthedocs.io)
-- [Scenario Library](https://github.com/gan-cyber-range/scenarios)
-- [Agent Examples](https://github.com/gan-cyber-range/agents)
-- [Video Tutorials](https://youtube.com/gan-cyber-range)
-- [Discord Community](https://discord.gg/gan-cyber-range)
-
-## 📧 Contact
-
-- **Security Issues**: security@gan-cyber-range.org
-- **GitHub Issues**: Bug reports and features
-- **Email**: info@gan-cyber-range.org
+MIT
